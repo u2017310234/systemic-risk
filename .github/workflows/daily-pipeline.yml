@@ -1,0 +1,39 @@
+name: Daily Systemic Risk Pipeline
+
+on:
+  schedule:
+    - cron: '0 22 * * 1-5'  # 22:00 UTC Mon–Fri (after US market close)
+  workflow_dispatch:         # allow manual trigger at any time
+
+permissions:
+  contents: write
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline (today's date)
+        env:
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_BRANCH: ${{ github.ref_name }}
+        run: python src/pipeline.py
+
+      - name: Commit and push data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || (git commit -m "data: daily risk metrics $(date -u +%Y-%m-%d)" && git push)
