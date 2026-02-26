@@ -54,6 +54,7 @@ def run_pipeline(
     logger.info(f"Pipeline start: {start_str} → {end_str}, {len(banks)} banks")
 
     all_results: dict[str, dict] = {}  # bank_id → {date → metrics}
+    failed_banks: list[str] = []
 
     for bank in banks:
         logger.info(f"Processing {bank.id} ({bank.name})")
@@ -63,46 +64,54 @@ def run_pipeline(
                 all_results[bank.id] = bank_data
                 publish_bank_csv(bank, bank_data)
                 logger.info(f"  ✓ {bank.id} completed")
+            else:
+                failed_banks.append(bank.id)
         except Exception as e:
+            failed_banks.append(bank.id)
             logger.error(f"  ✗ {bank.id} failed: {e}", exc_info=True)
 
     # Publish daily snapshots
-    if all_results:
-        snapshot_dates = sorted(
-            set().union(*[set(v.keys()) for v in all_results.values()])
+    if not all_results:
+        raise RuntimeError(
+            f"Pipeline produced no data: all {len(banks)} banks failed "
+            f"({', '.join(failed_banks)})"
         )
-        for snap_date in snapshot_dates:
-            day_data = {
-                bid: metrics[snap_date]
-                for bid, metrics in all_results.items()
-                if snap_date in metrics
-            }
-            if day_data:
-                # Add SRISK shares for the day
-                srisk_vals = {bid: day_data[bid].get("srisk_usd_bn", float("nan"))
-                              for bid in day_data}
-                shares = calc_srisk_shares(srisk_vals)
-                sys_srisk = system_srisk(srisk_vals)
-                for bid in day_data:
-                    day_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
-                publish_snapshot(snap_date, day_data, sys_srisk)
 
-        # Update latest.json from target_date
-        target_str = target_date.isoformat()
-        latest_data = {
-            bid: metrics.get(target_str, {})
+    snapshot_dates = sorted(
+        set().union(*[set(v.keys()) for v in all_results.values()])
+    )
+    for snap_date in snapshot_dates:
+        day_data = {
+            bid: metrics[snap_date]
             for bid, metrics in all_results.items()
-            if target_str in metrics
+            if snap_date in metrics
         }
-        if latest_data:
-            srisk_vals = {bid: v.get("srisk_usd_bn", float("nan"))
-                          for bid, v in latest_data.items()}
+        if day_data:
+            # Add SRISK shares for the day
+            srisk_vals = {bid: day_data[bid].get("srisk_usd_bn", float("nan"))
+                          for bid in day_data}
             shares = calc_srisk_shares(srisk_vals)
             sys_srisk = system_srisk(srisk_vals)
-            for bid in latest_data:
-                latest_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
-            publish_latest(target_date, latest_data, sys_srisk)
-            logger.info(f"Published latest.json for {target_str}")
+            for bid in day_data:
+                day_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
+            publish_snapshot(snap_date, day_data, sys_srisk)
+
+    # Update latest.json from target_date
+    target_str = target_date.isoformat()
+    latest_data = {
+        bid: metrics.get(target_str, {})
+        for bid, metrics in all_results.items()
+        if target_str in metrics
+    }
+    if latest_data:
+        srisk_vals = {bid: v.get("srisk_usd_bn", float("nan"))
+                      for bid, v in latest_data.items()}
+        shares = calc_srisk_shares(srisk_vals)
+        sys_srisk = system_srisk(srisk_vals)
+        for bid in latest_data:
+            latest_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
+        publish_latest(target_date, latest_data, sys_srisk)
+        logger.info(f"Published latest.json for {target_str}")
 
     logger.info("Pipeline complete.")
 
@@ -213,7 +222,11 @@ def main():
 
     bank_ids = [b.strip().upper() for b in args.banks.split(",")] if args.banks else None
 
-    run_pipeline(target_date=target, start_date=start, bank_ids=bank_ids)
+    try:
+        run_pipeline(target_date=target, start_date=start, bank_ids=bank_ids)
+    except RuntimeError as e:
+        logger.error(f"Pipeline failed: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
