@@ -127,7 +127,7 @@ def _fetch_yf(ticker: str, start: str, end: str) -> pd.Series | None:
             df.columns = df.columns.droplevel(1)
         return df[col].dropna()
     except Exception as e:
-        logger.warning(f"yfinance error for {ticker}: {e}")
+        logger.error(f"yfinance error for {ticker}: {e}", exc_info=True)
         return None
 
 
@@ -147,7 +147,7 @@ def _fetch_ak(ak_ticker: str, start: str, end: str) -> pd.Series | None:
         df.index = pd.to_datetime(df["日期"])
         return df["收盘"].astype(float)
     except Exception as e:
-        logger.warning(f"AkShare error for {ak_ticker}: {e}")
+        logger.error(f"AkShare error for {ak_ticker}: {e}", exc_info=True)
         return None
 
 
@@ -164,17 +164,13 @@ def fetch_market_cap_series(bank: Bank, start: str, end: str) -> pd.Series:
     if prices.empty:
         return pd.Series(dtype=float, name=f"{bank.id}_mcap")
 
-    try:
-        yf = _yf()
-        info = yf.Ticker(bank.yf_ticker).fast_info
-        shares = getattr(info, "shares", None) or getattr(info, "shares_outstanding", None)
-        if not shares:
-            logger.warning(f"No shares outstanding for {bank.id}")
-            return pd.Series(dtype=float)
-        mcap = prices * shares / 1e9  # convert to billions
-    except Exception as e:
-        logger.warning(f"Market cap fetch error {bank.id}: {e}")
+    yf = _yf()
+    info = yf.Ticker(bank.yf_ticker).fast_info
+    shares = getattr(info, "shares", None) or getattr(info, "shares_outstanding", None)
+    if not shares:
+        logger.warning(f"No shares outstanding for {bank.id}")
         return pd.Series(dtype=float)
+    mcap = prices * shares / 1e9  # convert to billions
 
     # FX conversion to USD for non-USD listed banks
     mcap_usd = _to_usd(mcap, bank.yf_ticker)
@@ -229,42 +225,38 @@ def fetch_debt_series(bank: Bank, start: str, end: str) -> pd.Series:
     Return daily total liabilities in USD billions (forward-filled from quarterly data).
     Uses yfinance quarterly balance sheet.
     """
-    try:
-        yf = _yf()
-        tkr = yf.Ticker(bank.yf_ticker)
-        bs = tkr.quarterly_balance_sheet
-        if bs is None or bs.empty:
-            logger.warning(f"Empty balance sheet for {bank.id}")
-            return pd.Series(dtype=float)
-
-        # Try common row names for total liabilities
-        candidates = [
-            "Total Liabilities Net Minority Interest",
-            "Total Liabilities",
-            "TotalLiabilities",
-        ]
-        debt_row = None
-        for c in candidates:
-            if c in bs.index:
-                debt_row = bs.loc[c]
-                break
-
-        if debt_row is None:
-            logger.warning(f"No liabilities row found for {bank.id}")
-            return pd.Series(dtype=float)
-
-        debt_row = debt_row.dropna().sort_index()
-        debt_bn = debt_row / 1e9  # to billions
-
-        # Reindex to daily frequency and forward-fill
-        idx = pd.date_range(start, end, freq="B")
-        daily = debt_bn.reindex(idx.union(debt_bn.index)).sort_index()
-        daily = daily.ffill().reindex(idx)
-        daily.name = f"{bank.id}_debt_usd_bn"
-        return daily
-    except Exception as e:
-        logger.warning(f"Debt fetch error {bank.id}: {e}")
+    yf = _yf()
+    tkr = yf.Ticker(bank.yf_ticker)
+    bs = tkr.quarterly_balance_sheet
+    if bs is None or bs.empty:
+        logger.warning(f"Empty balance sheet for {bank.id}")
         return pd.Series(dtype=float)
+
+    # Try common row names for total liabilities
+    candidates = [
+        "Total Liabilities Net Minority Interest",
+        "Total Liabilities",
+        "TotalLiabilities",
+    ]
+    debt_row = None
+    for c in candidates:
+        if c in bs.index:
+            debt_row = bs.loc[c]
+            break
+
+    if debt_row is None:
+        logger.warning(f"No liabilities row found for {bank.id}")
+        return pd.Series(dtype=float)
+
+    debt_row = debt_row.dropna().sort_index()
+    debt_bn = debt_row / 1e9  # to billions
+
+    # Reindex to daily frequency and forward-fill
+    idx = pd.date_range(start, end, freq="B")
+    daily = debt_bn.reindex(idx.union(debt_bn.index)).sort_index()
+    daily = daily.ffill().reindex(idx)
+    daily.name = f"{bank.id}_debt_usd_bn"
+    return daily
 
 
 # ---------------------------------------------------------------------------

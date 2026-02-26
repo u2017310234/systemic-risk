@@ -54,6 +54,7 @@ def run_pipeline(
     logger.info(f"Pipeline start: {start_str} → {end_str}, {len(banks)} banks")
 
     all_results: dict[str, dict] = {}  # bank_id → {date → metrics}
+    failed_banks: list[str] = []
 
     for bank in banks:
         logger.info(f"Processing {bank.id} ({bank.name})")
@@ -63,10 +64,19 @@ def run_pipeline(
                 all_results[bank.id] = bank_data
                 publish_bank_csv(bank, bank_data)
                 logger.info(f"  ✓ {bank.id} completed")
+            else:
+                failed_banks.append(bank.id)
         except Exception as e:
+            failed_banks.append(bank.id)
             logger.error(f"  ✗ {bank.id} failed: {e}", exc_info=True)
 
     # Publish daily snapshots
+    if not all_results:
+        raise RuntimeError(
+            f"Pipeline produced no data: all {len(banks)} banks failed "
+            f"({', '.join(failed_banks)})"
+        )
+
     if all_results:
         snapshot_dates = sorted(
             set().union(*[set(v.keys()) for v in all_results.values()])
@@ -213,7 +223,11 @@ def main():
 
     bank_ids = [b.strip().upper() for b in args.banks.split(",")] if args.banks else None
 
-    run_pipeline(target_date=target, start_date=start, bank_ids=bank_ids)
+    try:
+        run_pipeline(target_date=target, start_date=start, bank_ids=bank_ids)
+    except RuntimeError as e:
+        logger.error(f"Pipeline failed: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
