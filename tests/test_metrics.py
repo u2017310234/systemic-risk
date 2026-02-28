@@ -293,8 +293,9 @@ class TestPaperCompliance:
                          index=idx.index)
 
         lrmes = calc_lrmes(bank, idx, market_drop=D)
-        # Result should be close to the analytical value
-        assert abs(lrmes - expected) < 0.10, (
+        # Tolerance accounts for tail-adjusted beta (max(β_OLS, β_tail))
+        # which can shift the result slightly above the pure OLS-based value
+        assert abs(lrmes - expected) < 0.06, (
             f"LRMES {lrmes:.4f} deviates from analytical {expected:.4f} for β={beta}"
         )
 
@@ -345,13 +346,18 @@ class TestPaperCompliance:
     def test_lrmes_h_config_documents_six_month_horizon(self):
         """
         Brownlees & Engle (2017) use a 6-month crisis horizon (~126 trading days)
-        for the 40% market drop scenario. The cfg.lrmes_h should reflect this.
+        for the 40% market drop scenario. The default lrmes_h should reflect this.
         """
-        from src.config import cfg
-        assert cfg.lrmes_h == 126, (
-            f"lrmes_h should be 126 (≈ 6 months) per Brownlees & Engle (2017), "
-            f"got {cfg.lrmes_h}"
-        )
+        from src.config import _int
+        # Check the hardcoded default (not the runtime value which can be
+        # overridden via LRMES_H env var)
+        import os
+        if "LRMES_H" not in os.environ:
+            from src.config import cfg
+            assert cfg.lrmes_h == 126, (
+                f"Default lrmes_h should be 126 (≈ 6 months) per "
+                f"Brownlees & Engle (2017), got {cfg.lrmes_h}"
+            )
 
     def test_gsib_count_matches_universe(self):
         """Universe should contain exactly 29 G-SIBs (FSB 2023 list)."""
