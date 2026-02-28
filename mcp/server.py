@@ -342,12 +342,16 @@ def get_methodology() -> dict:
             "LRMES": {
                 "full_name": "Long-Run Marginal Expected Shortfall",
                 "reference": "Brownlees & Engle (2017)",
-                "formula": "LRMES ≈ 1 - exp(log(1-D) · ρ · β · √h)",
+                "formula": "LRMES ≈ 1 - exp(log(1-D) · β_OLS)",
+                "description": (
+                    "β_OLS = Cov(r_i, r_m) / Var(r_m) already encodes "
+                    "ρ · σ_i/σ_m, so ρ must NOT be multiplied separately "
+                    "and no √h scaling is applied."
+                ),
                 "parameters": {
                     "D": f"Market drop scenario = {cfg.lrmes_market_drop:.0%}",
-                    "h": f"Horizon = {cfg.lrmes_h} trading days",
-                    "ρ": "Rolling Pearson correlation (bank, market index)",
-                    "β": "Rolling OLS beta",
+                    "β_OLS": "OLS market beta = Cov(r_i, r_m) / Var(r_m) — encodes ρ·σ_i/σ_m",
+                    "h": f"Horizon = {cfg.lrmes_h} trading days (implicit in D, not a separate multiplier)",
                 },
             },
             "CoVaR": {
