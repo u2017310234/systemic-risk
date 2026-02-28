@@ -122,6 +122,33 @@ class TestLRMES:
             "check for incorrect rho * sqrt(h) inflation"
         )
 
+    def test_lrmes_tail_beta_captures_asymmetry(self):
+        """
+        For a bank with higher sensitivity during market downturns
+        (asymmetric tail dependence), LRMES should be higher than the
+        OLS-only estimate.  This is critical for preventing unrealistic
+        SRISK = 0 for large G-SIBs.
+        """
+        rng = np.random.default_rng(123)
+        n = 500
+        idx = pd.Series(rng.normal(0, 0.012, n),
+                        index=pd.date_range("2022-01-01", periods=n, freq="B"))
+        # Asymmetric returns: beta ≈ 1.8 on down days, ≈ 1.0 on up days
+        bank_returns = np.where(
+            idx.values < 0,
+            1.8 * idx.values + rng.normal(0, 0.003, n),
+            1.0 * idx.values + rng.normal(0, 0.003, n),
+        )
+        bank = pd.Series(bank_returns, index=idx.index)
+        lrmes = calc_lrmes(bank, idx)
+        # OLS beta averages up/down-day betas ≈ 1.4
+        # LRMES with OLS-only β=1.4: 1 - 0.6^1.4 ≈ 0.49
+        lrmes_ols_only = 1 - np.exp(np.log(0.6) * 1.4)
+        assert lrmes > lrmes_ols_only, (
+            f"LRMES {lrmes:.4f} should exceed OLS-only estimate "
+            f"{lrmes_ols_only:.4f} when bank has asymmetric tail dependence"
+        )
+
 
 # ---------------------------------------------------------------------------
 # CoVaR tests
@@ -170,6 +197,36 @@ class TestSRISK:
     def test_srisk_nan_on_invalid_inputs(self):
         assert math.isnan(calc_srisk(float("nan"), 1000, 0.3))
         assert math.isnan(calc_srisk(0, 1000, 0.3))  # zero mcap
+
+    def test_srisk_positive_for_large_gsib_with_tail_dependence(self):
+        """
+        Top G-SIBs like JPM (mcap ~600B, debt ~3400B) should have positive
+        SRISK when the bank exhibits asymmetric tail dependence (higher
+        co-movement during market downturns).  Previously, using OLS beta
+        alone underestimated LRMES and produced SRISK = 0 for these banks,
+        which is unrealistic.
+        """
+        rng = np.random.default_rng(42)
+        n = 500
+        idx = pd.Series(rng.normal(0, 0.012, n),
+                        index=pd.date_range("2022-01-01", periods=n, freq="B"))
+        # Asymmetric returns: beta ≈ 1.6 on down days, ≈ 1.1 on up days
+        bank_returns = np.where(
+            idx.values < 0,
+            1.6 * idx.values + rng.normal(0, 0.005, n),
+            1.1 * idx.values + rng.normal(0, 0.005, n),
+        )
+        bank = pd.Series(bank_returns, index=idx.index)
+        lrmes = calc_lrmes(bank, idx)
+
+        # JPM-like parameters
+        srisk = calc_srisk(
+            market_cap_usd_bn=600, debt_usd_bn=3400, lrmes=lrmes, k=0.08
+        )
+        assert srisk > 0, (
+            f"SRISK={srisk:.2f} should be > 0 for JPM-like G-SIB with "
+            f"asymmetric tail dependence; LRMES={lrmes:.4f}"
+        )
 
 
 # ---------------------------------------------------------------------------

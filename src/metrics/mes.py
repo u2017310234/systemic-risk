@@ -16,9 +16,17 @@ LRMES (Long-Run MES) — approximation via Brownlees & Engle (2017):
 
     where:
         D   = hypothetical cumulative market decline (default 40%)
-        β_i = OLS market beta of bank i vs regional index
-              = Cov(r_i, r_m) / Var(r_m)  [encodes ρ · σ_i/σ_m]
+        β_i = max(β_OLS, β_tail), effective beta accounting for
+              asymmetric tail dependence:
+              β_OLS = Cov(r_i, r_m) / Var(r_m)  [encodes ρ · σ_i/σ_m]
+              β_tail = E[r_i | r_m ≤ q] / E[r_m | r_m ≤ q]
         h   = implicit horizon encoded in D (default 22 trading days)
+
+    Using the tail-conditional beta alongside OLS beta is essential for
+    G-SIBs because bank-market correlations increase during stress periods
+    (asymmetric dependence).  With OLS beta alone, LRMES is underestimated,
+    causing unrealistic SRISK = 0 for highly-leveraged institutions such
+    as JPMorgan, Bank of America, etc.
 
     Derivation: under bivariate GBM, E[R_i^h | R_m^h = log(1-D)] ≈ β_OLS · log(1-D),
     so LRMES = 1 - exp(β_OLS · log(1-D)).  β_OLS already incorporates
@@ -129,17 +137,21 @@ def calc_lrmes(
     """
     Compute Long-Run MES approximation (Brownlees & Engle 2017).
 
-        LRMES_i ≈ 1 - exp(log(1 - D) * β_OLS)
+        LRMES_i ≈ 1 - exp(log(1 - D) * β)
 
     where:
-        D      = market_drop (40% default) — the cumulative crisis loss
-                 that implicitly defines the horizon h
-        β_OLS  = OLS market beta = Cov(r_b, r_m) / Var(r_m)
-                 (already encodes the correlation ρ · σ_i/σ_m)
+        D    = market_drop (40% default) — the cumulative crisis loss
+               that implicitly defines the horizon h
+        β    = max(β_OLS, β_tail), effective beta accounting for
+               asymmetric tail dependence:
+               β_OLS = Cov(r_b, r_m) / Var(r_m)
+               β_tail = E[r_b | r_m ≤ q] / E[r_m | r_m ≤ q]
+
+    Using the tail-conditional beta alongside OLS beta prevents
+    underestimation of LRMES for G-SIBs whose bank-market correlations
+    increase during stress periods, avoiding unrealistic SRISK = 0.
 
     Note: β_OLS = ρ · σ_i/σ_m, so ρ must NOT be multiplied separately.
-    The horizon h is implicit in the market_drop parameter and does not
-    appear as an explicit multiplier in the formula.
 
     Args:
         bank_returns  : Daily returns series for the bank.
@@ -166,15 +178,16 @@ def calc_lrmes(
     r_m = data["index"].values
 
     # OLS market beta = Cov(r_b, r_m) / Var(r_m)
-    # β_OLS = ρ · σ_b/σ_m, so it already encodes correlation
     cov = np.cov(r_b, r_m)
     var_m = cov[1, 1]
     if var_m == 0:
         return float("nan")
-    beta = cov[0, 1] / var_m
+    beta_ols = cov[0, 1] / var_m
 
-    # LRMES = 1 - exp(log(1-D) * β_OLS)
-    # Correct B&E 2017 formula: no separate ρ factor, no √h scaling
+    # Effective beta = max(β_OLS, β_tail) to capture asymmetric dependence
+    beta = _tail_adjusted_beta(r_b, r_m, beta_ols)
+
+    # LRMES = 1 - exp(log(1-D) * β)
     lrmes = 1 - np.exp(np.log(1 - market_drop) * beta)
     # Clamp to [0, 1] range — by definition a loss fraction
     return float(np.clip(lrmes, 0.0, 1.0))
@@ -206,8 +219,9 @@ def calc_lrmes_rolling(
         if var_m == 0:
             results[aligned.index[i]] = float("nan")
             continue
-        beta = cov[0, 1] / var_m
-        # LRMES = 1 - exp(log(1-D) * β_OLS); no separate ρ, no √h
+        beta_ols = cov[0, 1] / var_m
+        # Effective beta = max(β_OLS, β_tail) for asymmetric dependence
+        beta = _tail_adjusted_beta(r_b, r_m, beta_ols)
         val = 1 - np.exp(np.log(1 - market_drop) * beta)
         results[aligned.index[i]] = float(np.clip(val, 0.0, 1.0))
 
@@ -217,6 +231,43 @@ def calc_lrmes_rolling(
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+def _tail_adjusted_beta(
+    r_b: np.ndarray, r_m: np.ndarray, beta_ols: float,
+) -> float:
+    """
+    Return max(β_OLS, β_tail) to capture asymmetric tail dependence.
+
+    β_tail = E[r_b | r_m ≤ q] / E[r_m | r_m ≤ q]
+
+    During market crises, bank-market correlations typically increase.
+    Using only the unconditional OLS beta underestimates LRMES for G-SIBs,
+    producing unrealistic SRISK = 0.  The tail beta reflects the amplified
+    co-movement observed on the worst market days.
+    """
+    tail_pct = cfg.mes_tail_pct  # default 0.05
+    threshold = np.percentile(r_m, tail_pct * 100)
+    tail_mask = r_m <= threshold
+
+    if tail_mask.sum() < 5:
+        return beta_ols
+
+    mean_bank_tail = r_b[tail_mask].mean()
+    mean_market_tail = r_m[tail_mask].mean()
+
+    # Market tail mean must be negative for the ratio to be meaningful
+    if mean_market_tail >= 0:
+        return beta_ols
+
+    beta_tail = mean_bank_tail / mean_market_tail
+
+    # Negative tail beta means bank gains when market crashes; unusual,
+    # fall back to OLS beta
+    if beta_tail < 0:
+        return beta_ols
+
+    return max(beta_ols, beta_tail)
+
+
 def _align(bank: pd.Series, index: pd.Series) -> pd.DataFrame:
     """Inner-join bank and index return series on date."""
     df = pd.DataFrame({"bank": bank, "index": index}).dropna()
