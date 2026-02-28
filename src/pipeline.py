@@ -142,6 +142,21 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
     mcap = fetch_market_cap_series(bank, start_str, end_str)
     debt = fetch_debt_series(bank, start_str, end_str)
 
+    # ----- Data quality warnings -----
+    warnings_list: list[str] = []
+    _MCAP_UPPER_BOUND_USD_BN = 3000
+    if not mcap.empty:
+        median_mcap = float(mcap.median())
+        if not np.isnan(median_mcap) and median_mcap > _MCAP_UPPER_BOUND_USD_BN:
+            warnings_list.append(
+                f"market_cap_usd_bn ({median_mcap:.1f}) exceeds "
+                f"{_MCAP_UPPER_BOUND_USD_BN} USD bn — possible shares/FX unit error"
+            )
+    if not debt.empty:
+        median_debt = float(debt.median())
+        if not np.isnan(median_debt) and median_debt <= 0:
+            warnings_list.append("debt_usd_bn is non-positive — check balance sheet data")
+
     # ----- Rolling metrics -----
     window = cfg.covar_window
 
@@ -177,6 +192,8 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
             "market_cap_usd_bn": _safe_float(mcap.get(dt) if not mcap.empty else None),
             "debt_usd_bn": _safe_float(debt.get(dt) if not debt.empty else None),
         }
+        if warnings_list:
+            record["data_quality_warnings"] = warnings_list
         result[dt_str] = record
 
     return result if result else None
