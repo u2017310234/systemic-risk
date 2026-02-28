@@ -36,8 +36,9 @@ class Config:
     mes_tail_pct: float = _float("MES_TAIL_PCT", 0.05)
     """Percentile threshold for MES tail days. Default 5th percentile."""
 
-    lrmes_h: int = _int("LRMES_H", 22)
-    """Horizon (trading days) for LRMES projection. Default 22 ≈ 1 month."""
+    lrmes_h: int = _int("LRMES_H", 126)
+    """Horizon (trading days) for LRMES projection. Default 126 ≈ 6 months
+    (Brownlees & Engle 2017 standard crisis scenario: 40% drop over 6 months)."""
 
     lrmes_market_drop: float = _float("LRMES_MARKET_DROP", 0.40)
     """Hypothetical market decline for LRMES scenario. Default 40%."""

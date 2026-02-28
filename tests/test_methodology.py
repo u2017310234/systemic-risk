@@ -49,3 +49,29 @@ class TestLRMESMethodology:
             "LRMES parameters should not list ρ as a separate input; "
             "it is already encoded in β_OLS"
         )
+
+    def test_methodology_documents_tail_adjusted_beta(self):
+        """
+        The LRMES methodology should document the tail-adjusted beta
+        (β_tail) used in the actual implementation: β = max(β_OLS, β_tail).
+        """
+        formula_file = Path(__file__).parent.parent / "mcp" / "server.py"
+        source = formula_file.read_text(encoding="utf-8")
+
+        assert "β_tail" in source, (
+            "Methodology should document β_tail (tail-adjusted beta) "
+            "used in the LRMES implementation"
+        )
+
+    def test_methodology_lrmes_six_month_horizon(self):
+        """
+        The LRMES/SRISK methodology should reference a 6-month horizon
+        for the 40% market drop scenario (Brownlees & Engle 2017).
+        """
+        formula_file = Path(__file__).parent.parent / "mcp" / "server.py"
+        source = formula_file.read_text(encoding="utf-8")
+
+        assert "6-month" in source, (
+            "Methodology should reference the 6-month crisis horizon "
+            "per Brownlees & Engle (2017)"
+        )
