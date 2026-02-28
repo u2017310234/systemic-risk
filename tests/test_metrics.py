@@ -248,3 +248,114 @@ class TestSRISKAggregation:
     def test_system_srisk(self):
         vals = {"A": 50.0, "B": 30.0, "C": 0.0, "D": float("nan")}
         assert system_srisk(vals) == 80.0
+
+
+# ---------------------------------------------------------------------------
+# Paper compliance tests — verify formulas match referenced papers
+# ---------------------------------------------------------------------------
+class TestPaperCompliance:
+    """Verify computed results match the formulas from referenced papers."""
+
+    def test_srisk_formula_matches_brownlees_engle_2017(self):
+        """
+        Brownlees & Engle (2017) eq. (2):
+            SRISK_i = max(0, k·D - (1-k)·W·(1-LRMES))
+
+        where capital shortfall = k·(D + W*) - W*,  W* = W·(1 - LRMES).
+        Verify the code gives the exact analytical result.
+        """
+        D, W, L, k = 1000.0, 50.0, 0.5, 0.08
+        expected = max(0.0, k * D - (1 - k) * W * (1 - L))
+        # 0.08*1000 - 0.92*50*0.5 = 80 - 23 = 57
+        assert expected == 57.0
+        result = calc_srisk(market_cap_usd_bn=W, debt_usd_bn=D, lrmes=L, k=k)
+        assert result == expected
+
+    def test_lrmes_formula_matches_brownlees_engle_2017(self):
+        """
+        Brownlees & Engle (2017) closed-form approximation:
+            LRMES ≈ 1 - exp(log(1-D) · β)
+
+        For known β and D, verify the exact analytical result.
+        """
+        D = 0.40   # 40% market drop
+        beta = 1.2
+        expected = 1 - np.exp(np.log(1 - D) * beta)
+        # 1 - exp(log(0.6) * 1.2) ≈ 0.474
+        assert 0.40 < expected < 0.55
+
+        # Generate synthetic returns with known beta
+        rng = np.random.default_rng(314)
+        n = 500
+        idx = pd.Series(rng.normal(0, 0.01, n),
+                        index=pd.date_range("2020-01-01", periods=n, freq="B"))
+        bank = pd.Series(beta * idx.values + rng.normal(0, 0.0005, n),
+                         index=idx.index)
+
+        lrmes = calc_lrmes(bank, idx, market_drop=D)
+        # Result should be close to the analytical value
+        assert abs(lrmes - expected) < 0.10, (
+            f"LRMES {lrmes:.4f} deviates from analytical {expected:.4f} for β={beta}"
+        )
+
+    def test_covar_quantile_regression_direction(self):
+        """
+        Adrian & Brunnermeier (2011): CoVaR is estimated by regressing
+        system returns on bank returns at quantile τ:
+            q_τ(r_system | r_bank = x) = α + β·x
+
+        Verify that β > 0 for positively correlated bank-system pairs
+        and that ΔCoVaR is negative (more negative = more systemic).
+        """
+        rng = np.random.default_rng(42)
+        n = 300
+        idx = pd.Series(rng.normal(0, 0.01, n),
+                        index=pd.date_range("2022-01-01", periods=n, freq="B"))
+        bank = pd.Series(1.5 * idx.values + rng.normal(0, 0.005, n),
+                         index=idx.index)
+
+        result = calc_covar(bank, idx)
+        assert result["beta"] > 0, "CoVaR β should be positive for co-moving pair"
+        assert result["delta_covar"] < 0, "ΔCoVaR should be negative (systemic contribution)"
+
+    def test_mes_consistent_with_acharya_2010(self):
+        """
+        Acharya et al. (2010): MES = E[r_i | r_m ≤ VaR_τ(r_m)]
+        MES should be negative during market tail days for positively
+        correlated banks, and more negative for higher-beta banks.
+        """
+        rng = np.random.default_rng(42)
+        n = 300
+        idx = pd.Series(rng.normal(0, 0.01, n),
+                        index=pd.date_range("2022-01-01", periods=n, freq="B"))
+        bank_low = pd.Series(0.8 * idx.values + rng.normal(0, 0.003, n),
+                             index=idx.index)
+        bank_high = pd.Series(2.0 * idx.values + rng.normal(0, 0.003, n),
+                              index=idx.index)
+
+        mes_low = calc_mes(bank_low, idx)
+        mes_high = calc_mes(bank_high, idx)
+        assert mes_low < 0, "MES should be negative"
+        assert mes_high < 0, "MES should be negative"
+        assert mes_high < mes_low, (
+            f"Higher-beta bank should have more negative MES: "
+            f"high={mes_high:.4f} vs low={mes_low:.4f}"
+        )
+
+    def test_lrmes_h_config_documents_six_month_horizon(self):
+        """
+        Brownlees & Engle (2017) use a 6-month crisis horizon (~126 trading days)
+        for the 40% market drop scenario. The cfg.lrmes_h should reflect this.
+        """
+        from src.config import cfg
+        assert cfg.lrmes_h == 126, (
+            f"lrmes_h should be 126 (≈ 6 months) per Brownlees & Engle (2017), "
+            f"got {cfg.lrmes_h}"
+        )
+
+    def test_gsib_count_matches_universe(self):
+        """Universe should contain exactly 29 G-SIBs (FSB 2023 list)."""
+        from src.universe import BANKS
+        assert len(BANKS) == 29, (
+            f"Expected 29 G-SIBs (FSB 2023 list), got {len(BANKS)}"
+        )

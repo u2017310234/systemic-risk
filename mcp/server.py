@@ -1,7 +1,7 @@
 """
 server.py — G-SIBs Systemic Risk MCP Server (FastAPI + SSE transport)
 
-Exposes systemic risk metrics for all 30 G-SIBs via the Model Context Protocol.
+Exposes systemic risk metrics for all 29 G-SIBs via the Model Context Protocol.
 
 Transport:
     HTTP/SSE (Server-Sent Events) — suitable for remote deployment.
@@ -50,7 +50,7 @@ mcp = FastMCP(
     name="gsib-systemic-risk",
     description=(
         "Daily systemic risk metrics (MES, CoVaR/ΔCoVaR, SRISK) "
-        "for all 30 FSB-designated Global Systemically Important Banks."
+        "for all 29 FSB-designated Global Systemically Important Banks."
     ),
 )
 
@@ -342,8 +342,9 @@ def get_methodology() -> dict:
             "LRMES": {
                 "full_name": "Long-Run Marginal Expected Shortfall",
                 "reference": "Brownlees & Engle (2017)",
-                "formula": "LRMES ≈ 1 - exp(log(1-D) · β_OLS)",
+                "formula": "LRMES ≈ 1 - exp(log(1-D) · β)",
                 "description": (
+                    "β = max(β_OLS, β_tail) to capture asymmetric tail dependence. "
                     "β_OLS = Cov(r_i, r_m) / Var(r_m) already encodes "
                     "ρ · σ_i/σ_m, so ρ must NOT be multiplied separately "
                     "and no √h scaling is applied."
@@ -351,7 +352,8 @@ def get_methodology() -> dict:
                 "parameters": {
                     "D": f"Market drop scenario = {cfg.lrmes_market_drop:.0%}",
                     "β_OLS": "OLS market beta = Cov(r_i, r_m) / Var(r_m) — encodes ρ·σ_i/σ_m",
-                    "h": f"Horizon = {cfg.lrmes_h} trading days (implicit in D, not a separate multiplier)",
+                    "β_tail": "Tail beta = E[r_i | r_m ≤ q] / E[r_m | r_m ≤ q] — captures crisis amplification",
+                    "h": f"Horizon = {cfg.lrmes_h} trading days ≈ 6 months (implicit in D, not a separate multiplier)",
                 },
             },
             "CoVaR": {
@@ -374,7 +376,7 @@ def get_methodology() -> dict:
                     "k": f"Prudential capital ratio = {cfg.srisk_k:.0%} (configurable via SRISK_K env var)",
                     "Debt": "Total liabilities (USD bn, quarterly balance sheet)",
                     "W": "Market capitalisation (USD bn)",
-                    "LRMES": "Long-Run MES (40% market drop, 22-day horizon)",
+                    "LRMES": "Long-Run MES (40% market drop, 6-month horizon)",
                 },
             },
         },
@@ -401,7 +403,7 @@ def get_methodology() -> dict:
 # ---------------------------------------------------------------------------
 app = FastAPI(
     title="G-SIBs Systemic Risk MCP",
-    description="MCP server for daily systemic risk metrics of all 30 G-SIBs",
+    description="MCP server for daily systemic risk metrics of all 29 G-SIBs",
     version="1.0.0",
 )
 
