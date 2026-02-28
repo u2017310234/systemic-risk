@@ -1,11 +1,11 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "gsib-systemic-risk"
 version = "1.0.0"
-description = "Daily systemic risk metrics (MES, CoVaR, SRISK) for all 30 G-SIBs"
+description = "Daily systemic risk metrics (MES, CoVaR, SRISK) for all 29 G-SIBs"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

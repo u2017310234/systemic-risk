@@ -1,7 +1,7 @@
 """
 server.py — G-SIBs Systemic Risk MCP Server (FastAPI + SSE transport)
 
-Exposes systemic risk metrics for all 30 G-SIBs via the Model Context Protocol.
+Exposes systemic risk metrics for all 29 G-SIBs via the Model Context Protocol.
 
 Transport:
     HTTP/SSE (Server-Sent Events) — suitable for remote deployment.
@@ -50,7 +50,7 @@ mcp = FastMCP(
     name="gsib-systemic-risk",
     description=(
         "Daily systemic risk metrics (MES, CoVaR/ΔCoVaR, SRISK) "
-        "for all 30 FSB-designated Global Systemically Important Banks."
+        "for all 29 FSB-designated Global Systemically Important Banks."
     ),
 )
 
@@ -90,8 +90,16 @@ def _load_json(rel_path: str) -> dict | None:
 def _load_bank_csv(bank_id: str) -> pd.DataFrame | None:
     """Load per-bank CSV time series."""
     local = DATA_DIR / "banks" / f"{bank_id}.csv"
-    if local.exists():
-        return pd.read_csv(local, parse_dates=["date"])
+    # Prevent path traversal: ensure the resolved path stays inside DATA_DIR
+    try:
+        resolved = local.resolve()
+        data_root = DATA_DIR.resolve()
+        resolved.relative_to(data_root)
+    except ValueError:
+        logger.warning(f"Blocked path traversal attempt in bank CSV: {bank_id[:50]!r}")
+        return None
+    if resolved.exists():
+        return pd.read_csv(resolved, parse_dates=["date"])
 
     base = cfg.raw_base_url()
     if base:
@@ -401,7 +409,7 @@ def get_methodology() -> dict:
 # ---------------------------------------------------------------------------
 app = FastAPI(
     title="G-SIBs Systemic Risk MCP",
-    description="MCP server for daily systemic risk metrics of all 30 G-SIBs",
+    description="MCP server for daily systemic risk metrics of all 29 G-SIBs",
     version="1.0.0",
 )
 

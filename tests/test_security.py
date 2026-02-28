@@ -34,6 +34,19 @@ def _load_json_safe(data_dir: Path, rel_path: str) -> dict | None:
     return None
 
 
+def _load_bank_csv_safe(data_dir: Path, bank_id: str) -> bool:
+    """Mirror of the path-traversal guard in mcp/server.py _load_bank_csv.
+    Returns True if the path is allowed, False if blocked."""
+    local = data_dir / "banks" / f"{bank_id}.csv"
+    try:
+        resolved = local.resolve()
+        data_root = data_dir.resolve()
+        resolved.relative_to(data_root)
+    except ValueError:
+        return False
+    return True
+
+
 # ---------------------------------------------------------------------------
 # Date validation tests
 # ---------------------------------------------------------------------------
@@ -108,3 +121,17 @@ class TestLoadJsonPathTraversal:
         """A valid path that does not exist returns None."""
         result = _load_json_safe(tmp_path, "latest.json")
         assert result is None
+
+
+# ---------------------------------------------------------------------------
+# Bank CSV path traversal prevention tests
+# ---------------------------------------------------------------------------
+class TestLoadBankCsvPathTraversal:
+    def test_traversal_blocked(self, tmp_path):
+        """Traversal sequences in bank_id must be blocked."""
+        assert _load_bank_csv_safe(tmp_path, "../../etc/passwd") is False
+
+    def test_valid_bank_id_allowed(self, tmp_path):
+        """Normal bank IDs must be allowed."""
+        assert _load_bank_csv_safe(tmp_path, "JPM") is True
+        assert _load_bank_csv_safe(tmp_path, "ICBC") is True
