@@ -26,6 +26,10 @@ from src.universe import Bank, BANK_BY_ID, ALL_INDICES
 
 logger = logging.getLogger(__name__)
 
+# Maximum reasonable market cap (USD bn) for a single bank.
+# Values above this threshold trigger data quality warnings and fallback logic.
+MCAP_UPPER_BOUND_USD_BN = 3000
+
 # ---------------------------------------------------------------------------
 # Lazy imports — avoid hard import errors if optional deps missing
 # ---------------------------------------------------------------------------
@@ -188,12 +192,11 @@ def fetch_market_cap_series(bank: Bank, start: str, end: str) -> pd.Series:
     mcap_usd.name = f"{bank.id}_mcap_usd_bn"
 
     # --- Anomaly detection: sanity-check computed market cap ---------------
-    _MCAP_UPPER_BOUND_USD_BN = 3000  # no single bank should exceed this
     median_mcap = mcap_usd.median()
-    if not np.isnan(median_mcap) and median_mcap > _MCAP_UPPER_BOUND_USD_BN:
+    if not np.isnan(median_mcap) and median_mcap > MCAP_UPPER_BOUND_USD_BN:
         logger.warning(
             f"[DATA QUALITY] {bank.id}: computed market cap "
-            f"({median_mcap:.1f} USD bn) exceeds {_MCAP_UPPER_BOUND_USD_BN} USD bn — "
+            f"({median_mcap:.1f} USD bn) exceeds {MCAP_UPPER_BOUND_USD_BN} USD bn — "
             f"possible shares/FX unit error. "
             f"Attempting fallback via yfinance marketCap field."
         )
@@ -201,7 +204,7 @@ def fetch_market_cap_series(bank: Bank, start: str, end: str) -> pd.Series:
         fallback_mcap = getattr(info, "market_cap", None)
         if fallback_mcap and fallback_mcap > 0:
             fb_usd_bn = fallback_mcap / 1e9
-            if fb_usd_bn <= _MCAP_UPPER_BOUND_USD_BN:
+            if fb_usd_bn <= MCAP_UPPER_BOUND_USD_BN:
                 logger.info(
                     f"[DATA QUALITY] {bank.id}: using yfinance marketCap fallback "
                     f"({fb_usd_bn:.1f} USD bn)"
