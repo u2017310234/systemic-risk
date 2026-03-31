@@ -210,6 +210,27 @@ All parameters are configurable via environment variables:
 
 ---
 
+## Development & Testing
+
+This project includes a comprehensive test suite covering unit tests, integration tests, and end-to-end tests.
+
+### Running Tests
+
+```bash
+# Install test dependencies
+pip install -r requirements-dev.txt
+
+# Run all tests
+pytest tests/
+
+# Run with coverage
+pytest tests/ --cov=src --cov-report=term-missing
+```
+
+For detailed testing documentation, see [TESTING.md](TESTING.md).
+
+---
+
 ## License
 
 MIT
