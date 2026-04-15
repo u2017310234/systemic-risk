@@ -21,7 +21,7 @@ export const REGION_COLORS: Record<Region, string> = {
 export const EMPHASIS_LABELS: Record<MetricEmphasis, string> = {
   balanced: "Balanced",
   srisk: "SRISK emphasis",
-  delta: "ΔCoVaR emphasis"
+  delta: "Delta CoVaR emphasis"
 };
 
 export const LOOKBACK_WINDOWS = [30, 60, 90] as const;

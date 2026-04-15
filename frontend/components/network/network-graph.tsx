@@ -30,10 +30,10 @@ export function NetworkGraph({
         borderColor: "#1c3851",
         formatter: (params: { dataType: string; data: Record<string, unknown> }) => {
           if (params.dataType === "node") {
-            return `${params.data.label}<br/>SRISK: ${Number(params.data.srisk).toFixed(1)} bn<br/>ΔCoVaR: ${Number(params.data.deltaCoVar).toFixed(4)}`;
+            return `${params.data.label}<br/>SRISK: ${Number(params.data.srisk).toFixed(1)} bn<br/>Delta CoVaR: ${Number(params.data.deltaCoVar).toFixed(4)}`;
           }
           const edgeData = params.data as unknown as { weight: number; components: GraphEdge["components"] };
-          return `Edge weight: ${edgeData.weight.toFixed(3)}<br/>SRISK corr: ${edgeData.components.sriskCorr.toFixed(3)}<br/>ΔCoVaR corr: ${edgeData.components.deltaCoVarCorr.toFixed(3)}<br/>Same region: ${edgeData.components.sameRegion}`;
+          return `Edge weight: ${edgeData.weight.toFixed(3)}<br/>SRISK corr: ${edgeData.components.sriskCorr.toFixed(3)}<br/>Delta CoVaR corr: ${edgeData.components.deltaCoVarCorr.toFixed(3)}<br/>Same region: ${edgeData.components.sameRegion}`;
         }
       },
       series: [

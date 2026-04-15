@@ -12,46 +12,20 @@ import { NetworkSummary } from "@/components/network/network-summary";
 import { TimelinePlayer } from "@/components/network/timeline-player";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
+import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
 import { buildInterpretiveGraph } from "@/lib/network-builder";
-import type { BankMetric, MetricEmphasis, NetworkViewMode, SystemSnapshot } from "@/lib/types";
+import { fetchManifest, fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
+import type { BankMetric, MetricEmphasis, NetworkViewMode } from "@/lib/types";
 
-async function fetchSnapshot(date?: string, region?: string) {
-  const params = new URLSearchParams();
-  if (date) {
-    params.set("date", date);
-  }
-  if (region && region !== "ALL") {
-    params.set("region", region);
-  }
-  const response = await fetch(`/api/system/history?${params.toString()}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch snapshot");
-  }
-  return (await response.json()) as SystemSnapshot;
-}
-
-async function fetchSeries(date?: string, region?: string, lookback = 30) {
-  const params = new URLSearchParams({
-    series: "true",
-    lookback: String(lookback)
-  });
-  if (date) {
-    params.set("date", date);
-  }
-  if (region && region !== "ALL") {
-    params.set("region", region);
-  }
-  const response = await fetch(`/api/system/history?${params.toString()}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch history");
-  }
-  return (await response.json()) as { snapshots: SystemSnapshot[] };
-}
-
-export function NetworkView({ dates }: { dates: string[] }) {
+export function NetworkView() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const manifestQuery = useQuery({
+    queryKey: ["data-manifest"],
+    queryFn: fetchManifest
+  });
+  const dates = manifestQuery.data?.dates ?? [];
   const selectedDate = searchParams.get("date") ?? dates.at(-1) ?? "";
   const region = searchParams.get("region") ?? undefined;
   const thresholdFromUrl = Number(searchParams.get("threshold") ?? 0.6);
@@ -65,11 +39,13 @@ export function NetworkView({ dates }: { dates: string[] }) {
 
   const snapshotQuery = useQuery({
     queryKey: ["network-snapshot", selectedDate, region],
-    queryFn: () => fetchSnapshot(selectedDate, region)
+    queryFn: () => fetchSnapshotByDate(selectedDate, region),
+    enabled: Boolean(selectedDate)
   });
   const historyQuery = useQuery({
     queryKey: ["network-history", selectedDate, region, lookbackFromUrl],
-    queryFn: () => fetchSeries(selectedDate, region, lookbackFromUrl)
+    queryFn: () => fetchSnapshotSeries(selectedDate, lookbackFromUrl, region),
+    enabled: Boolean(selectedDate)
   });
 
   useEffect(() => {
@@ -110,13 +86,18 @@ export function NetworkView({ dates }: { dates: string[] }) {
     router.replace(`/network?${params.toString()}`, { scroll: false });
   }
 
-  if (snapshotQuery.isError || historyQuery.isError) {
+  if (manifestQuery.isLoading || snapshotQuery.isLoading || historyQuery.isLoading) {
+    return <NetworkLoadingFallback />;
+  }
+
+  if (manifestQuery.isError || snapshotQuery.isError || historyQuery.isError) {
     return (
       <div className="mt-6">
         <ErrorState
           title="Network data failed to load"
           description="The propagation view could not compute the graph from the selected history window."
           onRetry={() => {
+            manifestQuery.refetch();
             snapshotQuery.refetch();
             historyQuery.refetch();
           }}
@@ -125,8 +106,8 @@ export function NetworkView({ dates }: { dates: string[] }) {
     );
   }
 
-  if (!snapshotQuery.data || !historyQuery.data || !graph) {
-    return <div className="mt-6" />;
+  if (!snapshotQuery.data || !historyQuery.data || !graph || !manifestQuery.data) {
+    return <NetworkLoadingFallback />;
   }
 
   if (!graph.nodes.length) {
@@ -197,4 +178,8 @@ export function NetworkView({ dates }: { dates: string[] }) {
       </div>
     </div>
   );
+}
+
+function NetworkLoadingFallback() {
+  return <PageSkeleton chartCount={2} />;
 }

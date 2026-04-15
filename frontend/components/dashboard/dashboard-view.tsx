@@ -9,40 +9,12 @@ import { ChartCard } from "@/components/shared/chart-card";
 import { EChartsClient } from "@/components/shared/echarts-client";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
+import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
 import { formatDate, formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
+import { fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
 import type { Region, SystemSnapshot } from "@/lib/types";
 import { REGION_COLORS, REGION_LABELS, REGION_OPTIONS } from "@/lib/constants";
-
-async function fetchSnapshot(date?: string, region?: string) {
-  const params = new URLSearchParams();
-  if (date) {
-    params.set("date", date);
-  }
-  if (region && region !== "ALL") {
-    params.set("region", region);
-  }
-  const response = await fetch(`/api/system/history?${params.toString()}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch snapshot");
-  }
-  return (await response.json()) as SystemSnapshot;
-}
-
-async function fetchSeries(date?: string, region?: string) {
-  const params = new URLSearchParams({ series: "true", lookback: "30" });
-  if (date) {
-    params.set("date", date);
-  }
-  if (region && region !== "ALL") {
-    params.set("region", region);
-  }
-  const response = await fetch(`/api/system/history?${params.toString()}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch history");
-  }
-  return (await response.json()) as { snapshots: SystemSnapshot[] };
-}
 
 export function DashboardView() {
   const searchParams = useSearchParams();
@@ -51,11 +23,11 @@ export function DashboardView() {
 
   const snapshotQuery = useQuery({
     queryKey: ["snapshot", selectedDate, selectedRegion],
-    queryFn: () => fetchSnapshot(selectedDate, selectedRegion)
+    queryFn: () => fetchSnapshotByDate(selectedDate, selectedRegion)
   });
   const historyQuery = useQuery({
     queryKey: ["snapshot-series", selectedDate, selectedRegion],
-    queryFn: () => fetchSeries(selectedDate, selectedRegion)
+    queryFn: () => fetchSnapshotSeries(selectedDate, 30, selectedRegion)
   });
 
   const derived = useMemo(() => {
@@ -86,7 +58,7 @@ export function DashboardView() {
   }, [historyQuery.data?.snapshots, snapshotQuery.data]);
 
   if (snapshotQuery.isLoading || historyQuery.isLoading) {
-    return <div className="mt-6" />;
+    return <PageSkeleton chartCount={2} />;
   }
 
   if (snapshotQuery.isError || historyQuery.isError) {
@@ -231,7 +203,7 @@ export function DashboardView() {
       hint: formatUsdBn(derived.topSrisk.srisk_usd_bn)
     },
     {
-      label: "Most Systemic by ΔCoVaR",
+      label: "Most Systemic by Delta CoVaR",
       value: `${derived.topDelta.bank_name} (${derived.topDelta.bank_id})`,
       hint: formatDelta(derived.topDelta.delta_covar)
     },
@@ -257,7 +229,7 @@ export function DashboardView() {
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_360px]">
         <div className="space-y-6">
           <ChartCard
-            title="Today’s Systemic Ranking"
+            title="Today's Systemic Ranking"
             description="Top banks by current SRISK. Node drill-down routes to the reserved bank detail page."
           >
             <EChartsClient option={rankingOption} className="h-[420px] w-full" />
@@ -294,7 +266,7 @@ export function DashboardView() {
                 <span className="text-text">SRISK</span> measures expected capital shortfall in a systemic crisis.
               </p>
               <p>
-                <span className="text-text">ΔCoVaR</span> captures how much broader system stress worsens when a bank is distressed.
+                <span className="text-text">Delta CoVaR</span> captures how much broader system stress worsens when a bank is distressed.
               </p>
               <p>
                 <span className="text-text">MES / LRMES</span> quantify short-horizon and longer-horizon market tail exposure.

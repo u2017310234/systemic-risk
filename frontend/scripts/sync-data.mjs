@@ -3,11 +3,12 @@ import path from "node:path";
 
 const repoRoot = path.resolve(process.cwd(), "..");
 const sourceDir = path.join(repoRoot, "data");
-const targetDir = path.join(process.cwd(), "data");
+const targetDir = path.join(process.cwd(), "public", "data");
 
 async function main() {
   await fs.rm(targetDir, { recursive: true, force: true });
   await copyDir(sourceDir, targetDir);
+  await writeManifest(targetDir);
   console.log(`Synced data from ${sourceDir} to ${targetDir}`);
 }
 
@@ -24,6 +25,26 @@ async function copyDir(source, target) {
       await fs.copyFile(sourcePath, targetPath);
     }
   }
+}
+
+async function writeManifest(dataDir) {
+  const historyDir = path.join(dataDir, "history");
+  const dates = (await fs.readdir(historyDir))
+    .filter((entry) => entry.endsWith(".json"))
+    .map((entry) => entry.replace(".json", ""))
+    .sort();
+  const latestPath = path.join(dataDir, "latest.json");
+  let lastUpdated = dates.at(-1) ?? "";
+  try {
+    const latest = JSON.parse(await fs.readFile(latestPath, "utf8"));
+    if (latest?.date) {
+      lastUpdated = latest.date;
+    }
+  } catch {}
+  await fs.writeFile(
+    path.join(dataDir, "manifest.json"),
+    JSON.stringify({ dates, lastUpdated }, null, 2)
+  );
 }
 
 main().catch((error) => {

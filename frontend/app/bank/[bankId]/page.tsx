@@ -1,32 +1,75 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useMemo } from "react";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 import { ChartCard } from "@/components/shared/chart-card";
 import { AppShell } from "@/components/shared/app-shell";
 import { EChartsClient } from "@/components/shared/echarts-client";
+import { EmptyState } from "@/components/shared/empty-state";
+import { ErrorState } from "@/components/shared/error-state";
+import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
-import { getAvailableDates, getBankHistory, getLatestSnapshot } from "@/lib/data-adapter";
-import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
 import { REGION_LABELS } from "@/lib/constants";
-import type { BankHistoryRow, BankMetric } from "@/lib/types";
+import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
+import { fetchBankHistory, fetchLatestSnapshot } from "@/lib/public-data";
+import type { BankMetric } from "@/lib/types";
 
-type Props = {
-  params: Promise<{ bankId: string }>;
-};
+export default function BankPage() {
+  const params = useParams<{ bankId: string }>();
+  const bankId = params.bankId.toUpperCase();
 
-export default async function BankPage({ params }: Props) {
-  const { bankId } = await params;
-  const [dates, latest, history]: [string[], { date: string; banks: BankMetric[] }, BankHistoryRow[]] =
-    await Promise.all([
-    getAvailableDates(),
-    getLatestSnapshot(),
-    getBankHistory(bankId)
-    ]);
+  const latestQuery = useQuery({
+    queryKey: ["latest-snapshot"],
+    queryFn: () => fetchLatestSnapshot()
+  });
+  const historyQuery = useQuery({
+    queryKey: ["bank-history-page", bankId],
+    queryFn: () => fetchBankHistory(bankId)
+  });
 
-  const snapshotBank = latest.banks.find(
-    (bank: BankMetric) => bank.bank_id === bankId.toUpperCase()
+  const snapshotBank = useMemo(
+    () => latestQuery.data?.banks.find((bank: BankMetric) => bank.bank_id === bankId) ?? null,
+    [bankId, latestQuery.data]
   );
-  if (!snapshotBank || !history.length) {
-    notFound();
+
+  if (latestQuery.isLoading || historyQuery.isLoading) {
+    return (
+      <AppShell>
+        <PageSkeleton chartCount={1} />
+      </AppShell>
+    );
+  }
+
+  if (latestQuery.isError || historyQuery.isError) {
+    return (
+      <AppShell>
+        <div className="mt-6">
+          <ErrorState
+            title="Bank page failed to load"
+            description="The app could not load the selected bank snapshot or history."
+            onRetry={() => {
+              latestQuery.refetch();
+              historyQuery.refetch();
+            }}
+          />
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (!snapshotBank || !historyQuery.data?.length) {
+    return (
+      <AppShell>
+        <div className="mt-6">
+          <EmptyState
+            title="Bank not found"
+            description="The requested bank ID is missing from the current dataset."
+          />
+        </div>
+      </AppShell>
+    );
   }
 
   const trendOption = {
@@ -42,7 +85,7 @@ export default async function BankPage({ params }: Props) {
     grid: { top: 36, left: 18, right: 18, bottom: 18, containLabel: true },
     xAxis: {
       type: "category",
-      data: history.map((row: BankHistoryRow) => row.date),
+      data: historyQuery.data.map((row) => row.date),
       axisLabel: { color: "#8ea7bc", formatter: (value: string) => value.slice(5) }
     },
     yAxis: [
@@ -62,27 +105,27 @@ export default async function BankPage({ params }: Props) {
         name: "SRISK",
         smooth: true,
         showSymbol: false,
-        data: history.map((row: BankHistoryRow) => row.srisk_usd_bn),
+        data: historyQuery.data.map((row) => row.srisk_usd_bn),
         lineStyle: { color: "#f4b860", width: 3 }
       },
       {
         type: "line",
-        name: "ΔCoVaR",
+        name: "Delta CoVaR",
         yAxisIndex: 1,
         smooth: true,
         showSymbol: false,
-        data: history.map((row: BankHistoryRow) => row.delta_covar),
+        data: historyQuery.data.map((row) => row.delta_covar),
         lineStyle: { color: "#4ab8d9", width: 2 }
       }
     ]
   };
 
   return (
-    <AppShell dates={dates} lastUpdated={latest.date}>
+    <AppShell>
       <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_360px]">
         <ChartCard
           title={`${snapshotBank.bank_name} Historical View`}
-          description="Reserved single-bank drill-down page with the core 2-metric trend view."
+          description="Reserved single-bank drill-down page with the core two-metric trend view."
         >
           <EChartsClient option={trendOption} className="h-[560px] w-full" />
         </ChartCard>
@@ -99,7 +142,7 @@ export default async function BankPage({ params }: Props) {
             <Metric label="MES" value={formatDelta(snapshotBank.mes)} />
             <Metric label="LRMES" value={formatDelta(snapshotBank.lrmes)} />
             <Metric label="CoVaR" value={formatDelta(snapshotBank.covar)} />
-            <Metric label="ΔCoVaR" value={formatDelta(snapshotBank.delta_covar)} />
+            <Metric label="Delta CoVaR" value={formatDelta(snapshotBank.delta_covar)} />
           </div>
         </Panel>
       </div>

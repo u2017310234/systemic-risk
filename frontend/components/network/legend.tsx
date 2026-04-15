@@ -15,7 +15,7 @@ export function Legend() {
             </div>
           ))}
         </div>
-        <p>Node size tracks SRISK. Outer intensity is driven by the magnitude of negative ΔCoVaR.</p>
+        <p>Node size tracks SRISK. Outer intensity is driven by the magnitude of negative Delta CoVaR.</p>
       </div>
     </Panel>
   );

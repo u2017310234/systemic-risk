@@ -6,18 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import { EChartsClient } from "@/components/shared/echarts-client";
 import { Panel } from "@/components/shared/panel";
 import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
+import { buildMiniTrend, fetchBankHistory } from "@/lib/public-data";
 import type { BankMetric } from "@/lib/types";
 import { REGION_LABELS } from "@/lib/constants";
-
-async function fetchBank(bankId: string) {
-  const response = await fetch(`/api/system/bank/${bankId}`);
-  if (!response.ok) {
-    throw new Error("Failed to load bank detail");
-  }
-  return (await response.json()) as {
-    miniTrend: Array<{ date: string; value?: number }>;
-  };
-}
 
 export function BankDetailPanel({
   bank,
@@ -28,7 +19,10 @@ export function BankDetailPanel({
 }) {
   const bankQuery = useQuery({
     queryKey: ["bank-detail", bank?.bank_id],
-    queryFn: () => fetchBank(bank!.bank_id),
+    queryFn: async () => {
+      const rows = await fetchBankHistory(bank!.bank_id);
+      return { miniTrend: buildMiniTrend(rows, "srisk_usd_bn", 30) };
+    },
     enabled: Boolean(bank)
   });
 
@@ -81,7 +75,7 @@ export function BankDetailPanel({
               <MiniStat label="MES" value={formatDelta(bank.mes)} />
               <MiniStat label="LRMES" value={formatDelta(bank.lrmes)} />
               <MiniStat label="CoVaR" value={formatDelta(bank.covar)} />
-              <MiniStat label="ΔCoVaR" value={formatDelta(bank.delta_covar)} />
+              <MiniStat label="Delta CoVaR" value={formatDelta(bank.delta_covar)} />
             </div>
 
             <div className="mt-6">

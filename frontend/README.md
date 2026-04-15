@@ -10,11 +10,11 @@ npm install
 npm run dev
 ```
 
-The frontend syncs repository data from `../data` into `frontend/data` before dev/build.
+The frontend syncs repository data from `../data` into `frontend/public/data` before dev/build.
 
 ## Deploy
 
-For Vercel, set the project root directory to `frontend/`.
+For Vercel or Cloudflare, set the project root directory to `frontend/`.
 
 ## Structure
 

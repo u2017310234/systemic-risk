@@ -2,23 +2,47 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 import { REGION_LABELS, REGION_OPTIONS } from "@/lib/constants";
+import { ErrorState } from "@/components/shared/error-state";
+import { PageSkeleton } from "@/components/shared/page-skeleton";
+import { fetchManifest } from "@/lib/public-data";
 import type { Region } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type AppShellProps = {
   children: React.ReactNode;
-  dates: string[];
-  lastUpdated: string;
 };
 
-export function AppShell({ children, dates, lastUpdated }: AppShellProps) {
+export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const manifestQuery = useQuery({
+    queryKey: ["data-manifest"],
+    queryFn: fetchManifest
+  });
+  const dates = manifestQuery.data?.dates ?? [];
+  const lastUpdated = manifestQuery.data?.lastUpdated ?? "";
   const selectedRegion = searchParams.get("region") ?? "ALL";
   const selectedDate = searchParams.get("date") ?? lastUpdated;
+
+  if (manifestQuery.isLoading) {
+    return <PageSkeleton chartCount={2} />;
+  }
+
+  if (manifestQuery.isError || !manifestQuery.data) {
+    return (
+      <main className="mx-auto min-h-screen max-w-[1600px] px-4 py-6 lg:px-8">
+        <ErrorState
+          title="App metadata failed to load"
+          description="The app could not load the static data manifest required for navigation and date playback."
+          onRetry={() => manifestQuery.refetch()}
+        />
+      </main>
+    );
+  }
 
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -38,7 +62,7 @@ export function AppShell({ children, dates, lastUpdated }: AppShellProps) {
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-accent">Systemic Risk Frontend V1</p>
             <h1 className="mt-3 font-display text-4xl leading-tight text-text">Interpretive systemic stress monitor for 29 active G-SIBs</h1>
             <p className="mt-3 max-w-3xl text-sm text-muted">
-              Browse SRISK, MES, LRMES, CoVaR and ΔCoVaR snapshots, rankings and co-movement-based propagation patterns.
+              Browse SRISK, MES, LRMES, CoVaR and Delta CoVaR snapshots, rankings, and co-movement-based propagation patterns.
             </p>
           </div>
           <div className="rounded-2xl border border-line/70 bg-bg/60 px-4 py-3 text-right">
