@@ -177,6 +177,69 @@ data/
 
 ---
 
+## Frontend V1
+
+This repository now includes a **Next.js App Router frontend** under `frontend/` for the systemic risk dataset:
+
+- `frontend/app/` — routes and layouts
+- `frontend/components/` — UI layer
+- `frontend/lib/` — data adapter, types, graph logic
+- `frontend/scripts/` — workspace sync helpers
+
+### Frontend Features
+
+- Dashboard KPI cards for system-wide SRISK, top SRISK bank, top ΔCoVaR bank, and last updated date
+- Regional filtering and date switching through URL query state
+- Top-bank ranking view and 30-day system SRISK replay chart
+- Interpretive force-directed network based on bank co-movement, clearly labeled as **not** actual bilateral exposure
+- Right-side bank detail panel with current metrics and recent mini trend
+- Timeline playback controls, threshold switching, lookback switching, and network mode switching
+- Loading skeletons, empty states, and error states
+
+### Frontend Data Adapter
+
+The frontend uses a repository-first adapter layer:
+
+- Preferred source: repository files in `data/latest.json`, `data/history/*.json`, and `data/banks/*.csv`
+- Frontend runtime path: `frontend/data/`, synced automatically from the repository root before dev/build
+- Optional future API compatibility via frontend adapter abstraction
+
+The frontend does **not** invent undocumented REST endpoints for the core data. It reads local files on the server and exposes typed route handlers under:
+
+- `/api/system/latest`
+- `/api/system/history`
+- `/api/system/dates`
+- `/api/system/bank/[bankId]`
+
+### Frontend Local Run
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open `http://localhost:3000`.
+
+### Frontend Build Check
+
+```bash
+cd frontend
+npm run build
+```
+
+### Frontend Stack
+
+- Next.js 15 App Router
+- TypeScript
+- Tailwind CSS
+- TanStack Query
+- Apache ECharts
+- d3-dsv
+- Zod
+
+---
+
 ## Pipeline CLI
 
 The data pipeline fetches prices, computes all metrics, and writes results:
