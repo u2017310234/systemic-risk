@@ -38,7 +38,7 @@ Get the most recent systemic risk snapshot for all (or filtered) banks.
 
 **Example calls:**
 ```
-get_latest_metrics()                     # all 30 banks
+get_latest_metrics()                     # all banks
 get_latest_metrics(bank_id="JPM")        # just JPMorgan
 get_latest_metrics(region="CN")          # all Chinese G-SIBs
 ```
