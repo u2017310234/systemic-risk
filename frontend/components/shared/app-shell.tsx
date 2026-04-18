@@ -57,7 +57,7 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <main className="mx-auto min-h-screen max-w-[1600px] px-4 py-6 lg:px-8">
       <header className="panel-grid rounded-[32px] border border-line/80 bg-panel/75 p-5 shadow-glow backdrop-blur">
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-accent">Systemic Risk Frontend V1</p>
             <h1 className="mt-3 font-display text-4xl leading-tight text-text">Interpretive systemic stress monitor for 29 active G-SIBs</h1>
@@ -65,6 +65,20 @@ export function AppShell({ children }: AppShellProps) {
               Browse SRISK, MES, LRMES, CoVaR and Delta CoVaR snapshots, rankings, and co-movement-based propagation patterns.
             </p>
           </div>
+          <a
+            href="https://github.com/u2017310234/systemic-risk"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Open project on GitHub"
+            className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-line/70 bg-bg/60 text-muted transition hover:border-accent hover:text-text"
+          >
+            <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
+              <path d="M12 .5C5.65.5.5 5.66.5 12.03c0 5.1 3.3 9.42 7.88 10.95.58.1.8-.25.8-.56 0-.28-.01-1.2-.02-2.18-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.71.08-.69.08-.69 1.16.08 1.77 1.2 1.77 1.2 1.02 1.77 2.68 1.26 3.34.96.1-.75.4-1.26.73-1.55-2.56-.3-5.26-1.3-5.26-5.77 0-1.28.45-2.32 1.2-3.14-.12-.3-.52-1.5.12-3.13 0 0 .98-.32 3.2 1.2a11.03 11.03 0 0 1 5.84 0c2.22-1.52 3.2-1.2 3.2-1.2.64 1.63.24 2.83.12 3.13.75.82 1.2 1.86 1.2 3.14 0 4.48-2.7 5.46-5.28 5.76.42.37.8 1.08.8 2.2 0 1.6-.02 2.88-.02 3.27 0 .31.2.67.8.56A11.54 11.54 0 0 0 23.5 12.03C23.5 5.66 18.35.5 12 .5Z" />
+            </svg>
+          </a>
+        </div>
+
+        <div className="mt-5 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div className="rounded-2xl border border-line/70 bg-bg/60 px-4 py-3 text-right">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted">Last updated</p>
             <p className="mt-2 text-xl font-semibold text-text">{lastUpdated}</p>
@@ -127,6 +141,9 @@ export function AppShell({ children }: AppShellProps) {
         </div>
       </header>
       <div className="pb-10">{children}</div>
+      <footer className="pb-6 text-center">
+        <p className="font-mono text-xs uppercase tracking-[0.26em] text-muted">AutoFRM Data Partner</p>
+      </footer>
     </main>
   );
 }
