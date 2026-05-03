@@ -27,7 +27,8 @@ dependencies = [
 [project.scripts]
 gsib-pipeline = "src.pipeline:main"
 gsib-mcp = "mcp.server:app"
+gsib-branch-cache = "loc.branch_locator:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*", "mcp*"]
+include = ["src*", "mcp*", "loc*"]

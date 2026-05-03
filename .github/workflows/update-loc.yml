@@ -1,0 +1,50 @@
+name: Monthly G-SIB Location Refresh
+
+on:
+  schedule:
+    - cron: '0 17 3 * *'  # 17:00 UTC on day 3 = 01:00 Beijing time on day 4
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-loc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run loc tests
+        run: pytest -q loc/test_branch_locator.py
+
+      - name: Refresh location cache
+        run: python -m loc.branch_locator --force
+
+      - name: Commit and push loc data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add loc/
+          if git diff --cached --quiet; then
+            echo "No loc changes to commit"
+            exit 0
+          fi
+          git commit -m "loc: refresh gsib branches $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            echo "Push attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
+          echo "Failed to push after 3 attempts"
+          exit 1
