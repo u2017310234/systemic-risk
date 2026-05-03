@@ -89,7 +89,8 @@ export function AppShell({ children }: AppShellProps) {
           <nav className="flex flex-wrap items-center gap-2">
             {[
               { href: "/", label: "Dashboard" },
-              { href: "/network", label: "Network" }
+              { href: "/network", label: "Network" },
+              { href: "/globe", label: "Globe" }
             ].map((item) => (
               <Link
                 key={item.href}
