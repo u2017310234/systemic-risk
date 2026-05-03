@@ -9,10 +9,10 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
+import { buildBankHeadquarters } from "@/lib/bank-locations";
 import { REGION_COLORS, REGION_LABELS } from "@/lib/constants";
 import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
-import { BANK_LOCATIONS } from "@/lib/bank-locations";
-import { fetchSnapshotByDate } from "@/lib/public-data";
+import { fetchBankLocations, fetchSnapshotByDate } from "@/lib/public-data";
 import type { BankMetric } from "@/lib/types";
 
 export function GlobeView() {
@@ -25,9 +25,18 @@ export function GlobeView() {
     queryKey: ["globe-snapshot", selectedDate, region],
     queryFn: () => fetchSnapshotByDate(selectedDate, region)
   });
+  const locationQuery = useQuery({
+    queryKey: ["bank-locations"],
+    queryFn: fetchBankLocations
+  });
+
+  const headquarters = useMemo(
+    () => (locationQuery.data ? buildBankHeadquarters(locationQuery.data) : {}),
+    [locationQuery.data]
+  );
 
   const enrichedBanks = useMemo(() => {
-    if (!snapshotQuery.data) {
+    if (!snapshotQuery.data || !locationQuery.data) {
       return [];
     }
 
@@ -35,7 +44,7 @@ export function GlobeView() {
 
     return snapshotQuery.data.banks
       .map((bank) => {
-        const location = BANK_LOCATIONS[bank.bank_id];
+        const location = headquarters[bank.bank_id];
         if (!location) {
           return null;
         }
@@ -47,7 +56,7 @@ export function GlobeView() {
       })
       .flatMap((bank) => (bank ? [bank] : []))
       .sort((left, right) => right.srisk_usd_bn - left.srisk_usd_bn);
-  }, [snapshotQuery.data]);
+  }, [headquarters, locationQuery.data, snapshotQuery.data]);
 
   const selectedBank =
     enrichedBanks.find((bank) => bank.bank_id === selectedBankId) ?? enrichedBanks[0] ?? null;
@@ -62,17 +71,20 @@ export function GlobeView() {
     selected: bank.bank_id === selectedBank?.bank_id
   }));
 
-  if (snapshotQuery.isLoading) {
+  if (snapshotQuery.isLoading || locationQuery.isLoading) {
     return <PageSkeleton chartCount={2} />;
   }
 
-  if (snapshotQuery.isError) {
+  if (snapshotQuery.isError || locationQuery.isError) {
     return (
       <div className="mt-6">
         <ErrorState
           title="Globe data failed to load"
-          description="The geographic systemic view could not load the selected snapshot."
-          onRetry={() => snapshotQuery.refetch()}
+          description="The geographic systemic view could not load the selected snapshot or location dataset."
+          onRetry={() => {
+            snapshotQuery.refetch();
+            locationQuery.refetch();
+          }}
         />
       </div>
     );

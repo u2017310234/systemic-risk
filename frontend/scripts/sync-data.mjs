@@ -3,11 +3,13 @@ import path from "node:path";
 
 const repoRoot = path.resolve(process.cwd(), "..");
 const sourceDir = path.join(repoRoot, "data");
+const locDatasetPath = path.join(repoRoot, "loc", "gsib_branches.json");
 const targetDir = path.join(process.cwd(), "public", "data");
 
 async function main() {
   await fs.rm(targetDir, { recursive: true, force: true });
   await copyDir(sourceDir, targetDir);
+  await fs.copyFile(locDatasetPath, path.join(targetDir, "gsib_branches.json"));
   await writeManifest(targetDir);
   console.log(`Synced data from ${sourceDir} to ${targetDir}`);
 }

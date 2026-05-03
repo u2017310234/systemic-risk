@@ -13,6 +13,26 @@ export type DataManifest = {
   lastUpdated: string;
 };
 
+export type LocationDataset = {
+  banks: Array<{
+    bank_id: string;
+    bank_name: string;
+    country: string | null;
+    branches: Array<{
+      branch_id: string;
+      type: string;
+      city: string | null;
+      country: string | null;
+      lat: number;
+      lon: number;
+      verification?: {
+        verification_status?: string;
+        confidence_score?: number;
+      };
+    }>;
+  }>;
+};
+
 export async function fetchManifest() {
   const response = await fetch("/data/manifest.json", { cache: "no-store" });
   if (!response.ok) {
@@ -76,6 +96,14 @@ export function buildMiniTrend(rows: BankHistoryRow[], field: keyof BankHistoryR
       value: typeof row[field] === "number" ? (row[field] as number) : undefined
     }))
     .filter((item) => item.value !== undefined);
+}
+
+export async function fetchBankLocations() {
+  const response = await fetch("/data/gsib_branches.json", { cache: "force-cache" });
+  if (!response.ok) {
+    throw new Error("Failed to load bank locations");
+  }
+  return (await response.json()) as LocationDataset;
 }
 
 function filterSnapshotByRegion(snapshot: SystemSnapshot, region: Region): SystemSnapshot {
