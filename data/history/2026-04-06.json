@@ -1,6 +1,6 @@
 {
   "date": "2026-04-06",
-  "generated_at": "2026-05-06T22:52:28.622359+00:00",
+  "generated_at": "2026-05-07T23:00:31.135202+00:00",
   "methodology_version": "1.0",
   "parameters": {
     "srisk_k": 0.08,
@@ -10,8 +10,8 @@
     "lrmes_market_drop": 0.4,
     "mes_tail_pct": 0.05
   },
-  "system_srisk_usd_bn": 557.2649,
-  "bank_count": 11,
+  "system_srisk_usd_bn": 284.8718,
+  "bank_count": 8,
   "banks": [
     {
       "bank_name": "Bank of America",
@@ -22,10 +22,10 @@
       "covar": -0.027559,
       "delta_covar": -0.014745,
       "covar_beta": 0.497735,
-      "srisk_usd_bn": 88.146403,
+      "srisk_usd_bn": 88.146382,
       "market_cap_usd_bn": 355.255338,
       "debt_usd_bn": 3195.518,
-      "srisk_share_pct": 15.8177,
+      "srisk_share_pct": 30.9425,
       "bank_id": "BAC"
     },
     {
@@ -52,10 +52,10 @@
       "covar": -0.030461,
       "delta_covar": -0.018632,
       "covar_beta": 0.497458,
-      "srisk_usd_bn": 106.966123,
+      "srisk_usd_bn": 106.966133,
       "market_cap_usd_bn": 204.333505,
       "debt_usd_bn": 2443.38,
-      "srisk_share_pct": 19.1948,
+      "srisk_share_pct": 37.5489,
       "bank_id": "C"
     },
     {
@@ -66,11 +66,11 @@
       "lrmes": 0.510177,
       "covar": -0.024171,
       "delta_covar": -0.012901,
-      "covar_beta": 0.471698,
-      "srisk_usd_bn": 19.614095,
+      "covar_beta": 0.471697,
+      "srisk_usd_bn": 39.858102,
       "market_cap_usd_bn": 255.491173,
-      "debt_usd_bn": 1684.348,
-      "srisk_share_pct": 3.5197,
+      "debt_usd_bn": 1937.398,
+      "srisk_share_pct": 13.9916,
       "bank_id": "GS"
     },
     {
@@ -89,21 +89,6 @@
       "bank_id": "JPM"
     },
     {
-      "bank_name": "Mizuho Financial Group",
-      "region": "JP",
-      "covar_index": "^N225",
-      "mes": -0.058819,
-      "lrmes": 0.541386,
-      "covar": -0.040661,
-      "delta_covar": -0.025709,
-      "covar_beta": 0.56663,
-      "srisk_usd_bn": 101.659095,
-      "market_cap_usd_bn": 98.81798,
-      "debt_usd_bn": 1791.910232,
-      "srisk_share_pct": 18.2425,
-      "bank_id": "MFG"
-    },
-    {
       "bank_name": "Morgan Stanley",
       "region": "US",
       "covar_index": "^GSPC",
@@ -111,42 +96,12 @@
       "lrmes": 0.507406,
       "covar": -0.024354,
       "delta_covar": -0.014789,
-      "covar_beta": 0.506172,
+      "covar_beta": 0.506171,
       "srisk_usd_bn": 0.0,
-      "market_cap_usd_bn": 263.044516,
-      "debt_usd_bn": 1307.618,
+      "market_cap_usd_bn": 261.292599,
+      "debt_usd_bn": 1466.034,
       "srisk_share_pct": 0.0,
       "bank_id": "MS"
-    },
-    {
-      "bank_name": "Mitsubishi UFJ Financial",
-      "region": "JP",
-      "covar_index": "^N225",
-      "mes": -0.048517,
-      "lrmes": 0.474294,
-      "covar": -0.03809,
-      "delta_covar": -0.020737,
-      "covar_beta": 0.57887,
-      "srisk_usd_bn": 102.5263,
-      "market_cap_usd_bn": 197.239777,
-      "debt_usd_bn": 2474.014718,
-      "srisk_share_pct": 18.3981,
-      "bank_id": "MUFG"
-    },
-    {
-      "bank_name": "Sumitomo Mitsui Financial",
-      "region": "JP",
-      "covar_index": "^N225",
-      "mes": -0.048441,
-      "lrmes": 0.473762,
-      "covar": -0.038791,
-      "delta_covar": -0.022224,
-      "covar_beta": 0.597548,
-      "srisk_usd_bn": 88.451737,
-      "market_cap_usd_bn": 128.533232,
-      "debt_usd_bn": 1883.496556,
-      "srisk_share_pct": 15.8725,
-      "bank_id": "SMFG"
     },
     {
       "bank_name": "State Street",
@@ -157,10 +112,10 @@
       "covar": -0.026567,
       "delta_covar": -0.016116,
       "covar_beta": 0.534266,
-      "srisk_usd_bn": 11.795738,
+      "srisk_usd_bn": 11.795734,
       "market_cap_usd_bn": 36.035067,
       "debt_usd_bn": 364.423,
-      "srisk_share_pct": 2.1167,
+      "srisk_share_pct": 4.1407,
       "bank_id": "STT"
     },
     {
@@ -175,7 +130,7 @@
       "srisk_usd_bn": 38.105441,
       "market_cap_usd_bn": 250.476505,
       "debt_usd_bn": 2025.439,
-      "srisk_share_pct": 6.8379,
+      "srisk_share_pct": 13.3763,
       "bank_id": "WFC"
     }
   ]
