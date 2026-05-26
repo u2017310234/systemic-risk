@@ -1,0 +1,62 @@
+{
+  "date": "2026-05-25",
+  "generated_at": "2026-05-26T23:08:57.273694+00:00",
+  "methodology_version": "1.0",
+  "parameters": {
+    "srisk_k": 0.08,
+    "covar_quantile": 0.05,
+    "covar_window_days": 252,
+    "lrmes_horizon_days": 22,
+    "lrmes_market_drop": 0.4,
+    "mes_tail_pct": 0.05
+  },
+  "system_srisk_usd_bn": 220.7854,
+  "bank_count": 3,
+  "banks": [
+    {
+      "bank_name": "Mizuho Financial Group",
+      "region": "JP",
+      "covar_index": "^N225",
+      "mes": -0.029403,
+      "lrmes": 0.397634,
+      "covar": -0.031914,
+      "delta_covar": -0.016068,
+      "covar_beta": 0.398904,
+      "srisk_usd_bn": 84.283077,
+      "market_cap_usd_bn": 112.056762,
+      "debt_usd_bn": 1829.779619,
+      "srisk_share_pct": 38.1742,
+      "bank_id": "MFG"
+    },
+    {
+      "bank_name": "Mitsubishi UFJ Financial",
+      "region": "JP",
+      "covar_index": "^N225",
+      "mes": -0.017854,
+      "lrmes": 0.315075,
+      "covar": -0.031211,
+      "delta_covar": -0.013992,
+      "covar_beta": 0.431803,
+      "srisk_usd_bn": 68.145968,
+      "market_cap_usd_bn": 217.733065,
+      "debt_usd_bn": 2566.83022,
+      "srisk_share_pct": 30.8653,
+      "bank_id": "MUFG"
+    },
+    {
+      "bank_name": "Sumitomo Mitsui Financial",
+      "region": "JP",
+      "covar_index": "^N225",
+      "mes": -0.021243,
+      "lrmes": 0.335121,
+      "covar": -0.031174,
+      "delta_covar": -0.013285,
+      "covar_beta": 0.406824,
+      "srisk_usd_bn": 68.356346,
+      "market_cap_usd_bn": 145.448255,
+      "debt_usd_bn": 1966.567283,
+      "srisk_share_pct": 30.9605,
+      "bank_id": "SMFG"
+    }
+  ]
+}
