@@ -1,6 +1,6 @@
 {
   "date": "2026-05-08",
-  "generated_at": "2026-06-15T23:44:30.521655+00:00",
+  "generated_at": "2026-06-16T23:23:36.381759+00:00",
   "methodology_version": "1.0",
   "parameters": {
     "srisk_k": 0.08,
@@ -10,7 +10,7 @@
     "lrmes_market_drop": 0.4,
     "mes_tail_pct": 0.05
   },
-  "system_srisk_usd_bn": 515.5373,
+  "system_srisk_usd_bn": 515.5628,
   "bank_count": 11,
   "banks": [
     {
@@ -22,10 +22,10 @@
       "covar": -0.017732,
       "delta_covar": -0.008371,
       "covar_beta": 0.329726,
-      "srisk_usd_bn": 75.405167,
+      "srisk_usd_bn": 75.405036,
       "market_cap_usd_bn": 362.243941,
       "debt_usd_bn": 3195.518,
-      "srisk_share_pct": 14.6265,
+      "srisk_share_pct": 14.6258,
       "bank_id": "BAC"
     },
     {
@@ -37,10 +37,10 @@
       "covar": -0.016055,
       "delta_covar": -0.00958,
       "covar_beta": 0.282973,
-      "srisk_usd_bn": 79.665345,
-      "market_cap_usd_bn": 43.327366,
+      "srisk_usd_bn": 79.68792,
+      "market_cap_usd_bn": 43.265472,
       "debt_usd_bn": 1193.352185,
-      "srisk_share_pct": 15.4529,
+      "srisk_share_pct": 15.4565,
       "bank_id": "BARC"
     },
     {
@@ -48,7 +48,7 @@
       "region": "US",
       "covar_index": "^GSPC",
       "mes": -0.01476,
-      "lrmes": 0.358256,
+      "lrmes": 0.358255,
       "covar": -0.01993,
       "delta_covar": -0.009755,
       "covar_beta": 0.445248,
@@ -66,11 +66,11 @@
       "lrmes": 0.537188,
       "covar": -0.016957,
       "delta_covar": -0.007925,
-      "covar_beta": 0.28842,
-      "srisk_usd_bn": 114.03319,
+      "covar_beta": 0.288419,
+      "srisk_usd_bn": 114.033134,
       "market_cap_usd_bn": 214.135192,
       "debt_usd_bn": 2565.115,
-      "srisk_share_pct": 22.1193,
+      "srisk_share_pct": 22.1182,
       "bank_id": "C"
     },
     {
@@ -80,12 +80,12 @@
       "mes": -0.022089,
       "lrmes": 0.526955,
       "covar": -0.016516,
-      "delta_covar": -0.00743,
-      "covar_beta": 0.298936,
-      "srisk_usd_bn": 35.286968,
+      "delta_covar": -0.007429,
+      "covar_beta": 0.298934,
+      "srisk_usd_bn": 35.286953,
       "market_cap_usd_bn": 275.05632,
       "debt_usd_bn": 1937.398,
-      "srisk_share_pct": 6.8447,
+      "srisk_share_pct": 6.8444,
       "bank_id": "GS"
     },
     {
@@ -97,10 +97,10 @@
       "covar": -0.01428,
       "delta_covar": -0.006834,
       "covar_beta": 0.273533,
-      "srisk_usd_bn": 116.249166,
-      "market_cap_usd_bn": 166.388749,
+      "srisk_usd_bn": 116.24786,
+      "market_cap_usd_bn": 166.39193,
       "debt_usd_bn": 2293.318191,
-      "srisk_share_pct": 22.5491,
+      "srisk_share_pct": 22.5478,
       "bank_id": "HSBC"
     },
     {
@@ -126,7 +126,7 @@
       "lrmes": 0.50418,
       "covar": -0.016249,
       "delta_covar": -0.007654,
-      "covar_beta": 0.288322,
+      "covar_beta": 0.288323,
       "srisk_usd_bn": 0.0,
       "market_cap_usd_bn": 304.55792,
       "debt_usd_bn": 1466.034,
@@ -142,10 +142,10 @@
       "covar": -0.014008,
       "delta_covar": -0.005815,
       "covar_beta": 0.20897,
-      "srisk_usd_bn": 42.451763,
-      "market_cap_usd_bn": 30.351374,
+      "srisk_usd_bn": 42.456113,
+      "market_cap_usd_bn": 30.340128,
       "debt_usd_bn": 677.372356,
-      "srisk_share_pct": 8.2345,
+      "srisk_share_pct": 8.2349,
       "bank_id": "STAN"
     },
     {
@@ -160,7 +160,7 @@
       "srisk_usd_bn": 9.454197,
       "market_cap_usd_bn": 41.373905,
       "debt_usd_bn": 364.423,
-      "srisk_share_pct": 1.8339,
+      "srisk_share_pct": 1.8338,
       "bank_id": "STT"
     },
     {
@@ -168,14 +168,14 @@
       "region": "US",
       "covar_index": "^GSPC",
       "mes": -0.019353,
-      "lrmes": 0.440991,
+      "lrmes": 0.440992,
       "covar": -0.018453,
       "delta_covar": -0.009067,
-      "covar_beta": 0.295241,
-      "srisk_usd_bn": 42.991479,
+      "covar_beta": 0.29524,
+      "srisk_usd_bn": 42.991561,
       "market_cap_usd_bn": 231.472731,
       "debt_usd_bn": 2025.439,
-      "srisk_share_pct": 8.3392,
+      "srisk_share_pct": 8.3388,
       "bank_id": "WFC"
     }
   ]
