@@ -1,6 +1,6 @@
 # systemic-risk
 
-Daily systemic risk metrics (**MES**, **ΔCoVaR**, **SRISK**) for all 29 active G-SIBs (Global Systemically Important Banks) designated by the FSB. Designed for both humans and AI agents.
+Daily systemic risk metrics (**MES**, **ΔCoVaR**, **SRISK**) for all 30 active G-SIBs (Global Systemically Important Banks) designated by the FSB. Designed for both humans and AI agents.
 
 Data is updated automatically every trading day (22:00 UTC Mon–Fri) via GitHub Actions.
 
