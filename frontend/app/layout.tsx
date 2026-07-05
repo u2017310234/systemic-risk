@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import "@/app/globals.css";
+import { I18nProvider } from "@/lib/i18n";
 import { QueryProvider } from "@/components/providers/query-provider";
 
 export const metadata: Metadata = {
@@ -10,9 +12,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="zh">
       <body className="font-sans text-text antialiased">
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <Suspense>
+            <I18nProvider>{children}</I18nProvider>
+          </Suspense>
+        </QueryProvider>
       </body>
     </html>
   );

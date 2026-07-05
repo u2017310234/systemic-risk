@@ -11,18 +11,19 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
-import { REGION_LABELS } from "@/lib/constants";
 import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
-import { fetchBankHistory, fetchLatestSnapshot } from "@/lib/public-data";
+import { useI18n } from "@/lib/i18n";
+import { fetchBankHistory, fetchSnapshotByDate } from "@/lib/public-data";
 import type { BankMetric } from "@/lib/types";
 
 export default function BankPage() {
+  const { lang, t, regionLabel } = useI18n();
   const params = useParams<{ bankId: string }>();
   const bankId = params.bankId.toUpperCase();
 
   const latestQuery = useQuery({
     queryKey: ["latest-snapshot"],
-    queryFn: () => fetchLatestSnapshot()
+    queryFn: () => fetchSnapshotByDate()
   });
   const historyQuery = useQuery({
     queryKey: ["bank-history-page", bankId],
@@ -47,8 +48,8 @@ export default function BankPage() {
       <AppShell>
         <div className="mt-6">
           <ErrorState
-            title="Bank page failed to load"
-            description="The app could not load the selected bank snapshot or history."
+            title={t.bank.pageErrorTitle}
+            description={t.bank.pageErrorDescription}
             onRetry={() => {
               latestQuery.refetch();
               historyQuery.refetch();
@@ -64,8 +65,8 @@ export default function BankPage() {
       <AppShell>
         <div className="mt-6">
           <EmptyState
-            title="Bank not found"
-            description="The requested bank ID is missing from the current dataset."
+            title={t.bank.notFoundTitle}
+            description={t.bank.notFoundDescription}
           />
         </div>
       </AppShell>
@@ -124,21 +125,21 @@ export default function BankPage() {
     <AppShell>
       <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_360px]">
         <ChartCard
-          title={`${snapshotBank.bank_name} Historical View`}
-          description="Reserved single-bank drill-down page with the core two-metric trend view."
+          title={`${snapshotBank.bank_name} ${t.bank.historicalView}`}
+          description={t.bank.historicalDescription}
         >
           <EChartsClient option={trendOption} className="h-[560px] w-full" />
         </ChartCard>
 
         <Panel>
-          <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Current Snapshot</p>
+          <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.bank.currentSnapshot}</p>
           <h2 className="mt-3 text-2xl font-semibold">{snapshotBank.bank_name}</h2>
           <p className="mt-2 text-sm uppercase tracking-[0.24em] text-muted">
-            {snapshotBank.bank_id} · {REGION_LABELS[snapshotBank.region]}
+            {snapshotBank.bank_id} · {regionLabel(snapshotBank.region)}
           </p>
           <div className="mt-5 space-y-3">
-            <Metric label="SRISK" value={formatUsdBn(snapshotBank.srisk_usd_bn)} />
-            <Metric label="SRISK Share" value={formatPercent(snapshotBank.srisk_share_pct)} />
+            <Metric label="SRISK" value={formatUsdBn(snapshotBank.srisk_usd_bn, lang)} />
+            <Metric label={t.bank.sriskShare} value={formatPercent(snapshotBank.srisk_share_pct)} />
             <Metric label="MES" value={formatDelta(snapshotBank.mes)} />
             <Metric label="LRMES" value={formatDelta(snapshotBank.lrmes)} />
             <Metric label="CoVaR" value={formatDelta(snapshotBank.covar)} />

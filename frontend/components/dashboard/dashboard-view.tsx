@@ -11,12 +11,14 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
+import { useI18n } from "@/lib/i18n";
 import { formatDate, formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
 import { fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
 import type { Region, SystemSnapshot } from "@/lib/types";
-import { REGION_COLORS, REGION_LABELS, REGION_OPTIONS } from "@/lib/constants";
+import { REGION_COLORS, REGION_OPTIONS } from "@/lib/constants";
 
 export function DashboardView() {
+  const { lang, t, regionLabel } = useI18n();
   const searchParams = useSearchParams();
   const selectedDate = searchParams.get("date") ?? undefined;
   const selectedRegion = searchParams.get("region") ?? undefined;
@@ -65,8 +67,8 @@ export function DashboardView() {
     return (
       <div className="mt-6">
         <ErrorState
-          title="Dashboard data failed to load"
-          description="The frontend could not read the current systemic risk snapshot."
+          title={t.dashboard.dataErrorTitle}
+          description={t.dashboard.dataErrorDescription}
           onRetry={() => {
             snapshotQuery.refetch();
             historyQuery.refetch();
@@ -80,8 +82,8 @@ export function DashboardView() {
     return (
       <div className="mt-6">
         <EmptyState
-          title="No banks available for this filter"
-          description="Try a different region or a later date with data coverage."
+          title={t.dashboard.emptyTitle}
+          description={t.dashboard.emptyDescription}
         />
       </div>
     );
@@ -115,7 +117,7 @@ export function DashboardView() {
           show: true,
           position: "right",
           color: "#eff7ff",
-          formatter: ({ value }: { value: number }) => formatUsdBn(value)
+          formatter: ({ value }: { value: number }) => formatUsdBn(value, lang)
         }
       }
     ],
@@ -181,7 +183,7 @@ export function DashboardView() {
         radius: ["52%", "75%"],
         data: derived.regionTotals.map((item) => ({
           value: item.value,
-          name: REGION_LABELS[item.region as Region],
+          name: regionLabel(item.region as Region),
           itemStyle: { color: REGION_COLORS[item.region as Region] }
         })),
         label: {
@@ -193,24 +195,24 @@ export function DashboardView() {
 
   const metricCards = [
     {
-      label: "System-wide SRISK",
-      value: formatUsdBn(snapshot.system_srisk_usd_bn),
-      hint: "Expected capital shortfall under systemic stress"
+      label: t.dashboard.systemWideSrisk,
+      value: formatUsdBn(snapshot.system_srisk_usd_bn, lang),
+      hint: t.dashboard.systemWideSriskHint
     },
     {
-      label: "Most Systemic by SRISK",
+      label: t.dashboard.mostSystemicSrisk,
       value: `${derived.topSrisk.bank_name} (${derived.topSrisk.bank_id})`,
-      hint: formatUsdBn(derived.topSrisk.srisk_usd_bn)
+      hint: formatUsdBn(derived.topSrisk.srisk_usd_bn, lang)
     },
     {
-      label: "Most Systemic by Delta CoVaR",
+      label: t.dashboard.mostSystemicDelta,
       value: `${derived.topDelta.bank_name} (${derived.topDelta.bank_id})`,
       hint: formatDelta(derived.topDelta.delta_covar)
     },
     {
-      label: "Last Updated Date",
+      label: t.dashboard.lastUpdatedDate,
       value: formatDate(snapshot.date),
-      hint: `${snapshot.banks.length} banks in current filter`
+      hint: lang === "zh" ? `${snapshot.banks.length} ${t.dashboard.banksInFilter}` : `${snapshot.banks.length} ${t.dashboard.banksInFilter}`
     }
   ];
 
@@ -229,15 +231,15 @@ export function DashboardView() {
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_360px]">
         <div className="space-y-6">
           <ChartCard
-            title="Today's Systemic Ranking"
-            description="Top banks by current SRISK. Node drill-down routes to the reserved bank detail page."
+            title={t.dashboard.rankingTitle}
+            description={t.dashboard.rankingDescription}
           >
             <EChartsClient option={rankingOption} className="h-[420px] w-full" />
           </ChartCard>
 
           <ChartCard
-            title="System Stress Replay"
-            description="Last 30 available trading days for system-wide SRISK under the current filter."
+            title={t.dashboard.replayTitle}
+            description={t.dashboard.replayDescription}
           >
             <EChartsClient option={seriesOption} className="h-[320px] w-full" />
           </ChartCard>
@@ -245,8 +247,8 @@ export function DashboardView() {
 
         <div className="space-y-6">
           <ChartCard
-            title="Regional Concentration"
-            description="Where the current systemic risk load is concentrated."
+            title={t.dashboard.concentrationTitle}
+            description={t.dashboard.concentrationDescription}
           >
             <EChartsClient option={regionOption} className="h-[320px] w-full" />
           </ChartCard>
@@ -254,28 +256,28 @@ export function DashboardView() {
           <Panel>
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Methodology</p>
-                <h3 className="mt-2 text-lg font-semibold">Metric guide</h3>
+                <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.dashboard.methodology}</p>
+                <h3 className="mt-2 text-lg font-semibold">{t.dashboard.metricGuide}</h3>
               </div>
               <Link href="/network" className="rounded-full border border-line px-3 py-2 text-sm transition hover:border-accent">
-                Open network
+                {t.dashboard.openNetwork}
               </Link>
             </div>
             <div className="mt-4 space-y-4 text-sm text-muted">
               <p>
-                <span className="text-text">SRISK</span> measures expected capital shortfall in a systemic crisis.
+                <span className="text-text">SRISK</span> {t.dashboard.sriskGuide}
               </p>
               <p>
-                <span className="text-text">Delta CoVaR</span> captures how much broader system stress worsens when a bank is distressed.
+                <span className="text-text">Delta CoVaR</span> {t.dashboard.deltaGuide}
               </p>
               <p>
-                <span className="text-text">MES / LRMES</span> quantify short-horizon and longer-horizon market tail exposure.
+                <span className="text-text">MES / LRMES</span> {t.dashboard.mesGuide}
               </p>
             </div>
           </Panel>
 
           <Panel className="overflow-hidden">
-            <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Bank drill-down</p>
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.dashboard.drillDown}</p>
             <div className="mt-4 space-y-3">
               {derived.topBanks.slice(0, 6).map((bank) => (
                 <Link
@@ -286,11 +288,11 @@ export function DashboardView() {
                   <div>
                     <p className="font-medium">{bank.bank_name}</p>
                     <p className="mt-1 text-xs uppercase tracking-[0.24em] text-muted">
-                      {bank.bank_id} · {REGION_LABELS[bank.region]}
+                      {bank.bank_id} · {regionLabel(bank.region)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold">{formatUsdBn(bank.srisk_usd_bn)}</p>
+                    <p className="text-sm font-semibold">{formatUsdBn(bank.srisk_usd_bn, lang)}</p>
                     <p className="mt-1 text-xs text-muted">{formatPercent(bank.srisk_share_pct)}</p>
                   </div>
                 </Link>

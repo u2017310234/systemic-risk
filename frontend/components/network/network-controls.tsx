@@ -1,6 +1,7 @@
 "use client";
 
-import { EDGE_THRESHOLDS, EMPHASIS_LABELS, LOOKBACK_WINDOWS } from "@/lib/constants";
+import { EDGE_THRESHOLDS, LOOKBACK_WINDOWS } from "@/lib/constants";
+import { useI18n } from "@/lib/i18n";
 import type { MetricEmphasis, NetworkViewMode } from "@/lib/types";
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export function NetworkControls(props: Props) {
+  const { t, emphasisLabel } = useI18n();
   const {
     lookback,
     threshold,
@@ -28,7 +30,7 @@ export function NetworkControls(props: Props) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      <ControlGroup title="Lookback">
+      <ControlGroup title={t.network.lookback}>
         {LOOKBACK_WINDOWS.map((value) => (
           <PillButton
             key={value}
@@ -39,7 +41,7 @@ export function NetworkControls(props: Props) {
         ))}
       </ControlGroup>
 
-      <ControlGroup title="Edge Threshold">
+      <ControlGroup title={t.network.edgeThreshold}>
         {EDGE_THRESHOLDS.map((value) => (
           <PillButton
             key={value}
@@ -50,22 +52,22 @@ export function NetworkControls(props: Props) {
         ))}
       </ControlGroup>
 
-      <ControlGroup title="Metric Emphasis">
+      <ControlGroup title={t.network.metricEmphasis}>
         {(["balanced", "srisk", "delta"] as MetricEmphasis[]).map((value) => (
           <PillButton
             key={value}
             active={emphasis === value}
             onClick={() => onEmphasisChange(value)}
-            label={EMPHASIS_LABELS[value]}
+            label={emphasisLabel(value)}
           />
         ))}
       </ControlGroup>
 
-      <ControlGroup title="View Mode">
+      <ControlGroup title={t.network.viewMode}>
         {([
-          ["full", "Full Network"],
-          ["ego", "Ego Network"],
-          ["cluster", "Region Cluster"]
+          ["full", t.network.fullNetwork],
+          ["ego", t.network.egoNetwork],
+          ["cluster", t.network.regionCluster]
         ] as const).map(([value, label]) => (
           <PillButton
             key={value}

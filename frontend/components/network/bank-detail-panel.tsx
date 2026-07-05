@@ -5,10 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import { EChartsClient } from "@/components/shared/echarts-client";
 import { Panel } from "@/components/shared/panel";
+import { useI18n } from "@/lib/i18n";
 import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
 import { buildMiniTrend, fetchBankHistory } from "@/lib/public-data";
 import type { BankMetric } from "@/lib/types";
-import { REGION_LABELS } from "@/lib/constants";
 
 export function BankDetailPanel({
   bank,
@@ -17,6 +17,7 @@ export function BankDetailPanel({
   bank: BankMetric | null;
   topBanks: BankMetric[];
 }) {
+  const { lang, t, regionLabel } = useI18n();
   const bankQuery = useQuery({
     queryKey: ["bank-detail", bank?.bank_id],
     queryFn: async () => {
@@ -59,19 +60,19 @@ export function BankDetailPanel({
   return (
     <div className="space-y-6">
       <Panel className="sticky top-6">
-        <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Selected Bank</p>
+        <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.network.selectedBank}</p>
         {bank ? (
           <>
             <div className="mt-4">
               <h3 className="text-2xl font-semibold">{bank.bank_name}</h3>
               <p className="mt-2 text-sm uppercase tracking-[0.24em] text-muted">
-                {bank.bank_id} · {REGION_LABELS[bank.region]}
+                {bank.bank_id} · {regionLabel(bank.region)}
               </p>
             </div>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <MiniStat label="SRISK" value={formatUsdBn(bank.srisk_usd_bn)} />
-              <MiniStat label="Share" value={formatPercent(bank.srisk_share_pct)} />
+              <MiniStat label="SRISK" value={formatUsdBn(bank.srisk_usd_bn, lang)} />
+              <MiniStat label={t.network.share} value={formatPercent(bank.srisk_share_pct)} />
               <MiniStat label="MES" value={formatDelta(bank.mes)} />
               <MiniStat label="LRMES" value={formatDelta(bank.lrmes)} />
               <MiniStat label="CoVaR" value={formatDelta(bank.covar)} />
@@ -79,7 +80,7 @@ export function BankDetailPanel({
             </div>
 
             <div className="mt-6">
-              <p className="mb-3 text-sm text-muted">Recent 30-day SRISK trend</p>
+              <p className="mb-3 text-sm text-muted">{t.network.recentTrend}</p>
               <EChartsClient option={trendOption} className="h-44 w-full" />
             </div>
 
@@ -87,18 +88,18 @@ export function BankDetailPanel({
               href={`/bank/${bank.bank_id}`}
               className="mt-5 inline-flex rounded-full border border-line px-4 py-2 text-sm transition hover:border-accent/80"
             >
-              Open bank drill-down
+              {t.network.openBank}
             </Link>
           </>
         ) : (
           <div className="mt-5 rounded-2xl border border-dashed border-line/70 p-5 text-sm text-muted">
-            Click a node to open the bank detail panel.
+            {t.network.clickNode}
           </div>
         )}
       </Panel>
 
       <Panel>
-        <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Current Top Systemic Banks</p>
+        <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.network.currentTop}</p>
         <div className="mt-4 space-y-3">
           {topBanks.slice(0, 5).map((item) => (
             <div key={item.bank_id} className="rounded-2xl border border-line/70 bg-panelAlt/50 p-4">
@@ -108,7 +109,7 @@ export function BankDetailPanel({
                   <p className="mt-1 text-xs uppercase tracking-[0.24em] text-muted">{item.bank_id}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold">{formatUsdBn(item.srisk_usd_bn)}</p>
+                  <p className="font-semibold">{formatUsdBn(item.srisk_usd_bn, lang)}</p>
                   <p className="mt-1 text-xs text-muted">{formatDelta(item.delta_covar)}</p>
                 </div>
               </div>

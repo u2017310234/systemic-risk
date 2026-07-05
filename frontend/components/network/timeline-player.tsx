@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { PLAYBACK_WINDOWS } from "@/lib/constants";
+import { useI18n } from "@/lib/i18n";
 
 type Props = {
   dates: string[];
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export function TimelinePlayer(props: Props) {
+  const { t } = useI18n();
   const {
     dates,
     selectedDate,
@@ -47,8 +49,8 @@ export function TimelinePlayer(props: Props) {
     <div className="rounded-[24px] border border-line/70 bg-panel/80 p-4">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Timeline</p>
-          <p className="mt-2 text-sm text-muted">Replay the latest 30, 90 or 180 available trading days.</p>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">{t.network.timeline}</p>
+          <p className="mt-2 text-sm text-muted">{t.network.timelineDescription}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {PLAYBACK_WINDOWS.map((value) => (
@@ -68,14 +70,14 @@ export function TimelinePlayer(props: Props) {
             onClick={() => onPlayingChange(!isPlaying)}
             className="rounded-full border border-line px-4 py-2 text-sm transition hover:border-accent/70 hover:text-text"
           >
-            {isPlaying ? "Pause" : "Play"}
+            {isPlaying ? t.network.pause : t.network.play}
           </button>
           <button
             type="button"
             onClick={() => onDateChange(dates[Math.min(currentIndex + 1, dates.length - 1)])}
             className="rounded-full border border-line px-4 py-2 text-sm transition hover:border-accent/70 hover:text-text"
           >
-            Step
+            {t.network.step}
           </button>
         </div>
       </div>

@@ -14,11 +14,13 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
+import { useI18n } from "@/lib/i18n";
 import { buildInterpretiveGraph } from "@/lib/network-builder";
 import { fetchManifest, fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
 import type { BankMetric, MetricEmphasis, NetworkViewMode } from "@/lib/types";
 
 export function NetworkView() {
+  const { t } = useI18n();
   const searchParams = useSearchParams();
   const router = useRouter();
   const manifestQuery = useQuery({
@@ -94,8 +96,8 @@ export function NetworkView() {
     return (
       <div className="mt-6">
         <ErrorState
-          title="Network data failed to load"
-          description="The propagation view could not compute the graph from the selected history window."
+          title={t.network.dataErrorTitle}
+          description={t.network.dataErrorDescription}
           onRetry={() => {
             manifestQuery.refetch();
             snapshotQuery.refetch();
@@ -114,8 +116,8 @@ export function NetworkView() {
     return (
       <div className="mt-6">
         <EmptyState
-          title="No network nodes to render"
-          description="The current region and threshold combination removed all nodes or edges."
+          title={t.network.emptyTitle}
+          description={t.network.emptyDescription}
         />
       </div>
     );
@@ -141,11 +143,11 @@ export function NetworkView() {
           <Panel className="overflow-hidden">
             <div className="mb-4 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Interpretive Risk Propagation View</p>
-                <h2 className="mt-2 text-2xl font-semibold">Co-movement-derived systemic similarity network</h2>
+                <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.network.viewEyebrow}</p>
+                <h2 className="mt-2 text-2xl font-semibold">{t.network.viewTitle}</h2>
               </div>
               <p className="max-w-lg text-sm text-muted">
-                Edges represent co-movement-based propagation similarity, not disclosed bilateral exposure.
+                {t.network.viewDescription}
               </p>
             </div>
 

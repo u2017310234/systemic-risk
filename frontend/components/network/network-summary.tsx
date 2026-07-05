@@ -1,27 +1,34 @@
 import { Panel } from "@/components/shared/panel";
 import { formatDelta } from "@/lib/format";
+import { useI18n } from "@/lib/i18n";
+import type { Region } from "@/lib/types";
 import type { NetworkSummary as NetworkSummaryType } from "@/lib/types";
 
 export function NetworkSummary({ summary, currentDate }: { summary: NetworkSummaryType; currentDate: string }) {
+  const { t, regionLabel } = useI18n();
+
   return (
     <Panel>
       <div className="flex items-center justify-between">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Network summary</p>
-          <h3 className="mt-2 text-lg font-semibold">Interpretive propagation status</h3>
+          <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.network.summary}</p>
+          <h3 className="mt-2 text-lg font-semibold">{t.network.status}</h3>
         </div>
         <p className="font-mono text-sm text-muted">{currentDate}</p>
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <Metric label="Total Nodes" value={String(summary.totalNodes)} />
-        <Metric label="Rendered Edges" value={String(summary.renderedEdges)} />
-        <Metric label="Densest Region" value={summary.densestRegion} />
-        <Metric label="Most Connected" value={summary.mostConnectedBank} />
-        <Metric label="Stress Index" value={formatDelta(summary.networkStressIndex)} />
+        <Metric label={t.network.totalNodes} value={String(summary.totalNodes)} />
+        <Metric label={t.network.renderedEdges} value={String(summary.renderedEdges)} />
+        <Metric
+          label={t.network.densestRegion}
+          value={summary.densestRegion === "Mixed" ? t.network.mixed : regionLabel(summary.densestRegion as Region)}
+        />
+        <Metric label={t.network.mostConnected} value={summary.mostConnectedBank} />
+        <Metric label={t.network.stressIndex} value={formatDelta(summary.networkStressIndex)} />
       </div>
       <p className="mt-4 text-sm text-muted">
-        Cross-Region Tension: <span className="text-text">{formatDelta(summary.crossRegionTension)}</span>
+        {t.network.crossRegionTension}: <span className="text-text">{formatDelta(summary.crossRegionTension)}</span>
       </p>
     </Panel>
   );

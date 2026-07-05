@@ -10,12 +10,14 @@ import { ErrorState } from "@/components/shared/error-state";
 import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
 import { buildBankHeadquarters } from "@/lib/bank-locations";
-import { REGION_COLORS, REGION_LABELS } from "@/lib/constants";
+import { REGION_COLORS } from "@/lib/constants";
 import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
+import { useI18n } from "@/lib/i18n";
 import { fetchBankLocations, fetchSnapshotByDate } from "@/lib/public-data";
 import type { BankMetric } from "@/lib/types";
 
 export function GlobeView() {
+  const { lang, t, regionLabel } = useI18n();
   const searchParams = useSearchParams();
   const selectedDate = searchParams.get("date") ?? undefined;
   const region = searchParams.get("region") ?? undefined;
@@ -79,8 +81,8 @@ export function GlobeView() {
     return (
       <div className="mt-6">
         <ErrorState
-          title="Globe data failed to load"
-          description="The geographic systemic view could not load the selected snapshot or location dataset."
+          title={t.globe.dataErrorTitle}
+          description={t.globe.dataErrorDescription}
           onRetry={() => {
             snapshotQuery.refetch();
             locationQuery.refetch();
@@ -94,8 +96,8 @@ export function GlobeView() {
     return (
       <div className="mt-6">
         <EmptyState
-          title="No banks available on the globe"
-          description="The selected region currently has no mapped geographic points."
+          title={t.globe.emptyTitle}
+          description={t.globe.emptyDescription}
         />
       </div>
     );
@@ -107,11 +109,11 @@ export function GlobeView() {
         <Panel className="overflow-hidden">
           <div className="mb-5 flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.28em] text-cool">Geographic Systemic Map</p>
-              <h2 className="mt-2 text-3xl font-semibold">Drag the globe to inspect where systemic concentration sits</h2>
+              <p className="font-mono text-xs uppercase tracking-[0.28em] text-cool">{t.globe.eyebrow}</p>
+              <h2 className="mt-2 text-3xl font-semibold">{t.globe.title}</h2>
             </div>
             <p className="max-w-xl text-sm text-muted">
-              Marker size tracks SRISK magnitude. Click a visible point to inspect the bank and its latest systemic metrics.
+              {t.globe.description}
             </p>
           </div>
 
@@ -122,16 +124,16 @@ export function GlobeView() {
           />
 
           <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted">
-            <span className="rounded-full border border-line/70 bg-panelAlt/60 px-3 py-1">Drag: rotate globe</span>
-            <span className="rounded-full border border-line/70 bg-panelAlt/60 px-3 py-1">Click point: open details</span>
+            <span className="rounded-full border border-line/70 bg-panelAlt/60 px-3 py-1">{t.globe.drag}</span>
+            <span className="rounded-full border border-line/70 bg-panelAlt/60 px-3 py-1">{t.globe.click}</span>
             <span className="rounded-full border border-line/70 bg-panelAlt/60 px-3 py-1">
-              Snapshot: {snapshotQuery.data?.date}
+              {t.globe.snapshot}: {snapshotQuery.data?.date}
             </span>
           </div>
         </Panel>
 
         <Panel>
-          <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Top Systemic Footprint</p>
+          <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.globe.topFootprint}</p>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             {enrichedBanks.slice(0, 6).map((bank, index) => (
               <button
@@ -155,8 +157,8 @@ export function GlobeView() {
                   />
                 </div>
                 <div className="mt-4 flex items-end justify-between gap-3">
-                  <span className="text-sm text-muted">{REGION_LABELS[bank.region]}</span>
-                  <span className="text-base font-semibold">{formatUsdBn(bank.srisk_usd_bn)}</span>
+                  <span className="text-sm text-muted">{regionLabel(bank.region)}</span>
+                  <span className="text-base font-semibold">{formatUsdBn(bank.srisk_usd_bn, lang)}</span>
                 </div>
               </button>
             ))}
@@ -165,7 +167,7 @@ export function GlobeView() {
       </div>
 
       <Panel className="h-fit xl:sticky xl:top-6">
-        <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">Selected Location</p>
+        <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">{t.globe.selectedLocation}</p>
         {selectedBank ? <SelectedBankCard bank={selectedBank} /> : null}
       </Panel>
     </div>
@@ -179,6 +181,8 @@ function SelectedBankCard({
     location: { city: string; country: string };
   };
 }) {
+  const { lang, regionLabel } = useI18n();
+
   return (
     <div className="mt-4">
       <div className="rounded-[28px] border border-line/70 bg-[radial-gradient(circle_at_top,rgba(74,184,217,0.22),transparent_45%),linear-gradient(180deg,rgba(10,25,39,0.96),rgba(5,13,22,0.96))] p-5">
@@ -187,12 +191,12 @@ function SelectedBankCard({
         </p>
         <h3 className="mt-3 text-2xl font-semibold">{bank.bank_name}</h3>
         <p className="mt-2 text-sm uppercase tracking-[0.22em] text-muted">
-          {bank.bank_id} · {REGION_LABELS[bank.region]}
+          {bank.bank_id} · {regionLabel(bank.region)}
         </p>
 
         <div className="mt-6 grid grid-cols-2 gap-3">
-          <MetricChip label="SRISK" value={formatUsdBn(bank.srisk_usd_bn)} />
-          <MetricChip label="Share" value={formatPercent(bank.srisk_share_pct)} />
+          <MetricChip label="SRISK" value={formatUsdBn(bank.srisk_usd_bn, lang)} />
+          <MetricChip label={lang === "zh" ? "占比" : "Share"} value={formatPercent(bank.srisk_share_pct)} />
           <MetricChip label="MES" value={formatDelta(bank.mes)} />
           <MetricChip label="LRMES" value={formatDelta(bank.lrmes)} />
           <MetricChip label="CoVaR" value={formatDelta(bank.covar)} />

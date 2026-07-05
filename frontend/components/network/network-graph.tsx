@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 
 import { EChartsClient } from "@/components/shared/echarts-client";
+import { useI18n } from "@/lib/i18n";
 import type { GraphEdge, GraphNode } from "@/lib/types";
 import { REGION_COLORS } from "@/lib/constants";
 
@@ -21,6 +22,7 @@ export function NetworkGraph({
   onNodeClick,
   onNodeDoubleClick
 }: Props) {
+  const { t } = useI18n();
   const option = useMemo(
     () => ({
       backgroundColor: "transparent",
@@ -30,10 +32,10 @@ export function NetworkGraph({
         borderColor: "#1c3851",
         formatter: (params: { dataType: string; data: Record<string, unknown> }) => {
           if (params.dataType === "node") {
-            return `${params.data.label}<br/>SRISK: ${Number(params.data.srisk).toFixed(1)} bn<br/>Delta CoVaR: ${Number(params.data.deltaCoVar).toFixed(4)}`;
+            return `${params.data.label}<br/>${t.network.nodeTooltipSrisk}: ${Number(params.data.srisk).toFixed(1)} bn<br/>${t.network.nodeTooltipDelta}: ${Number(params.data.deltaCoVar).toFixed(4)}`;
           }
           const edgeData = params.data as unknown as { weight: number; components: GraphEdge["components"] };
-          return `Edge weight: ${edgeData.weight.toFixed(3)}<br/>SRISK corr: ${edgeData.components.sriskCorr.toFixed(3)}<br/>Delta CoVaR corr: ${edgeData.components.deltaCoVarCorr.toFixed(3)}<br/>Same region: ${edgeData.components.sameRegion}`;
+          return `${t.network.edgeWeight}: ${edgeData.weight.toFixed(3)}<br/>${t.network.sriskCorr}: ${edgeData.components.sriskCorr.toFixed(3)}<br/>${t.network.deltaCorr}: ${edgeData.components.deltaCoVarCorr.toFixed(3)}<br/>${t.network.sameRegion}: ${edgeData.components.sameRegion}`;
         }
       },
       series: [
@@ -89,7 +91,7 @@ export function NetworkGraph({
         }
       ]
     }),
-    [edges, nodes, selectedBankId]
+    [edges, nodes, selectedBankId, t]
   );
 
   return (
