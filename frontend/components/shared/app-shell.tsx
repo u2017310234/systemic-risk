@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { REGION_OPTIONS } from "@/lib/constants";
 import { ErrorState } from "@/components/shared/error-state";
 import { PageSkeleton } from "@/components/shared/page-skeleton";
-import { useI18n, type Language } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 import { fetchManifest } from "@/lib/public-data";
 import type { Region } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ type AppShellProps = {
 };
 
 export function AppShell({ children }: AppShellProps) {
-  const { lang, setLang, t, regionLabel } = useI18n();
+  const { t, regionLabel } = useI18n();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -67,17 +67,6 @@ export function AppShell({ children }: AppShellProps) {
               {t.shell.description}
             </p>
           </div>
-          <label className="flex shrink-0 items-center gap-3 rounded-full border border-line bg-panelAlt/70 px-4 py-2 text-sm">
-            <span className="font-mono text-xs uppercase tracking-[0.24em] text-muted">{t.shell.language}</span>
-            <select
-              className="bg-transparent text-text outline-none"
-              value={lang}
-              onChange={(event) => setLang(event.target.value as Language)}
-            >
-              <option value="zh">中文</option>
-              <option value="en">English</option>
-            </select>
-          </label>
         </div>
 
         <div className="mt-5 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh">
+    <html lang="en">
       <body className="font-sans text-text antialiased">
         <QueryProvider>
           <Suspense>

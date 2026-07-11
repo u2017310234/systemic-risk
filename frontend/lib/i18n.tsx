@@ -1,13 +1,10 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { createContext, useContext, useMemo } from "react";
 
 import type { MetricEmphasis, Region } from "@/lib/types";
 
 export type Language = "zh" | "en";
-
-const STORAGE_KEY = "systemic-risk-language";
 
 const dictionaries = {
   zh: {
@@ -284,46 +281,18 @@ type Dictionary = (typeof dictionaries)[Language];
 
 const I18nContext = createContext<{
   lang: Language;
-  setLang: (language: Language) => void;
   t: Dictionary;
   regionLabel: (region: Region) => string;
   emphasisLabel: (emphasis: MetricEmphasis) => string;
 } | null>(null);
 
-function isLanguage(value: string | null): value is Language {
-  return value === "zh" || value === "en";
-}
-
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-  const [lang, setLangState] = useState<Language>("zh");
-
-  useEffect(() => {
-    const queryLang = searchParams.get("lang");
-    if (isLanguage(queryLang)) {
-      setLangState(queryLang);
-      window.localStorage.setItem(STORAGE_KEY, queryLang);
-      return;
-    }
-    const storedLang = window.localStorage.getItem(STORAGE_KEY);
-    if (isLanguage(storedLang)) {
-      setLangState(storedLang);
-    }
-  }, [searchParams]);
+  const lang: Language = "en";
 
   const value = useMemo(() => {
     const dictionary = dictionaries[lang];
     return {
       lang,
-      setLang(language: Language) {
-        setLangState(language);
-        window.localStorage.setItem(STORAGE_KEY, language);
-        const params = new URLSearchParams(searchParams.toString());
-        params.set("lang", language);
-        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      },
       t: dictionary,
       regionLabel(region: Region) {
         return dictionary.regions[region];
@@ -332,7 +301,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         return dictionary.emphasis[emphasis];
       }
     };
-  }, [lang, pathname, router, searchParams]);
+  }, []);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
