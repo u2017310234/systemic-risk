@@ -96,8 +96,21 @@ def run_pipeline(
                 day_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
             publish_snapshot(snap_date, day_data, sys_srisk)
 
-    # Update latest.json from target_date
+    # Update latest.json from target_date. If today's prices are not published
+    # yet (yfinance `end` is exclusive, so data only reaches the prior trading
+    # day), fall back to the newest available date so latest.json is ALWAYS
+    # written — the MCP server and the dashboard both need it.
     target_str = target_date.isoformat()
+    if not any(target_str in metrics for metrics in all_results.values()):
+        available = sorted(
+            {d for metrics in all_results.values() for d in metrics}
+        )
+        if available:
+            logger.warning(
+                f"No data for target {target_str}; "
+                f"using newest available date {available[-1]} for latest.json"
+            )
+            target_str = available[-1]
     latest_data = {
         bid: metrics.get(target_str, {})
         for bid, metrics in all_results.items()
@@ -110,7 +123,7 @@ def run_pipeline(
         sys_srisk = system_srisk(srisk_vals)
         for bid in latest_data:
             latest_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
-        publish_latest(target_date, latest_data, sys_srisk)
+        publish_latest(date.fromisoformat(target_str), latest_data, sys_srisk)
         logger.info(f"Published latest.json for {target_str}")
 
     logger.info("Pipeline complete.")

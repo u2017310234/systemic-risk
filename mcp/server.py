@@ -38,6 +38,7 @@ from mcp.server.sse import SseServerTransport
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import cfg
 from src.universe import BANKS, BANK_BY_ID, REGIONS
+from src.utils import is_valid_date
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -48,7 +49,7 @@ logger = logging.getLogger("mcp-server")
 # ---------------------------------------------------------------------------
 mcp = FastMCP(
     name="gsib-systemic-risk",
-    description=(
+    instructions=(
         "Daily systemic risk metrics (MES, CoVaR/ΔCoVaR, SRISK) "
         "for all 30 FSB-designated Global Systemically Important Banks."
     ),
@@ -61,8 +62,15 @@ DATA_DIR = Path(cfg.data_dir)
 
 
 def _load_json(rel_path: str) -> dict | None:
-    """Load JSON from local data dir or GitHub raw URL."""
+    """Load JSON from local data dir or GitHub raw URL, confined to DATA_DIR."""
     local = DATA_DIR / rel_path
+    # Security: refuse any path that escapes DATA_DIR (path-traversal guard).
+    try:
+        local.resolve().relative_to(DATA_DIR.resolve())
+    except ValueError:
+        logger.warning(f"Blocked path outside data dir: {rel_path}")
+        return None
+
     if local.exists():
         with open(local, encoding="utf-8") as f:
             return json.load(f)
@@ -76,6 +84,29 @@ def _load_json(rel_path: str) -> dict | None:
             return resp.json()
         except Exception as e:
             logger.warning(f"Remote fetch failed for {rel_path}: {e}")
+    return None
+
+
+def _newest_history_date() -> str | None:
+    """Return the most recent YYYY-MM-DD that has a local history snapshot."""
+    hist_dir = DATA_DIR / "history"
+    if hist_dir.exists():
+        dates = sorted(p.stem for p in hist_dir.glob("*.json"))
+        if dates:
+            return dates[-1]
+    return None
+
+
+def _load_latest() -> dict | None:
+    """Load latest.json; if missing, fall back to the newest history snapshot."""
+    _rel = "latest.json"          # kept as a variable so task 1c's replace-all
+    payload = _load_json(_rel)    # does NOT rewrite this line into recursion.
+    if payload is not None:
+        return payload
+    newest = _newest_history_date()
+    if newest:
+        logger.info(f"latest.json missing; using newest history snapshot {newest}")
+        return _load_json(f"history/{newest}.json")
     return None
 
 
@@ -115,7 +146,7 @@ def get_latest_metrics(
     Returns:
         Full latest.json payload (or filtered subset).
     """
-    payload = _load_json("latest.json")
+    payload = _load_latest()
     if payload is None:
         return {"error": "latest.json not found. Has the pipeline run yet?"}
 
@@ -214,11 +245,13 @@ def get_srisk_ranking(
         Ranked list of banks by SRISK with key metrics.
     """
     if date:
+        if not is_valid_date(date):
+            return {"error": f"Invalid date '{date}'. Expected format YYYY-MM-DD."}
         payload = _load_json(f"history/{date}.json")
         if payload is None:
             return {"error": f"No snapshot found for {date}."}
     else:
-        payload = _load_json("latest.json")
+        payload = _load_latest()
         if payload is None:
             return {"error": "No data available."}
 
@@ -270,11 +303,13 @@ def get_delta_covar_ranking(
         Ranked list with ΔCoVaR and CoVaR values.
     """
     if date:
+        if not is_valid_date(date):
+            return {"error": f"Invalid date '{date}'. Expected format YYYY-MM-DD."}
         payload = _load_json(f"history/{date}.json")
         if payload is None:
             return {"error": f"No snapshot for {date}."}
     else:
-        payload = _load_json("latest.json")
+        payload = _load_latest()
         if payload is None:
             return {"error": "No data available."}
 
@@ -330,12 +365,11 @@ def get_methodology() -> dict:
             "LRMES": {
                 "full_name": "Long-Run Marginal Expected Shortfall",
                 "reference": "Brownlees & Engle (2017)",
-                "formula": "LRMES ≈ 1 - exp(log(1-D) · ρ · β · √h)",
+                "formula": "LRMES = 1 - exp(log(1-D) · beta_eff)",
                 "parameters": {
                     "D": f"Market drop scenario = {cfg.lrmes_market_drop:.0%}",
-                    "h": f"Horizon = {cfg.lrmes_h} trading days",
-                    "ρ": "Rolling Pearson correlation (bank, market index)",
-                    "β": "Rolling OLS beta",
+                    "h": f"Horizon = {cfg.lrmes_h} trading days (scenario label; not in the closed form)",
+                    "beta_eff": "max(β_OLS (beta_OLS), beta_tail): OLS beta or tail-conditional beta, whichever is larger",
                 },
             },
             "CoVaR": {
@@ -429,7 +463,7 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "mcp.server:app",
+        app,
         host=cfg.mcp_host,
         port=cfg.mcp_port,
         reload=False,
