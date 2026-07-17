@@ -1,6 +1,6 @@
 {
   "date": "2026-06-04",
-  "generated_at": "2026-07-16T22:56:18.208371+00:00",
+  "generated_at": "2026-07-17T22:47:59.805072+00:00",
   "methodology_version": "1.0",
   "parameters": {
     "srisk_k": 0.08,
@@ -10,52 +10,22 @@
     "lrmes_market_drop": 0.4,
     "mes_tail_pct": 0.05
   },
-  "system_srisk_usd_bn": 237.9763,
-  "bank_count": 3,
+  "system_srisk_usd_bn": 42.2636,
+  "bank_count": 1,
   "banks": [
-    {
-      "bank_name": "Barclays",
-      "region": "GB",
-      "covar_index": "^FTSE",
-      "mes": -0.026205,
-      "lrmes": 0.608989,
-      "covar": -0.017927,
-      "delta_covar": -0.011052,
-      "covar_beta": 0.323716,
-      "srisk_usd_bn": 79.619899,
-      "market_cap_usd_bn": 46.5958,
-      "debt_usd_bn": 1204.772893,
-      "srisk_share_pct": 33.4571,
-      "bank_id": "BARC"
-    },
-    {
-      "bank_name": "HSBC Holdings",
-      "region": "GB",
-      "covar_index": "^FTSE",
-      "mes": -0.025555,
-      "lrmes": 0.569607,
-      "covar": -0.017333,
-      "delta_covar": -0.008161,
-      "covar_beta": 0.321404,
-      "srisk_usd_bn": 116.092781,
-      "market_cap_usd_bn": 174.583673,
-      "debt_usd_bn": 2315.265875,
-      "srisk_share_pct": 48.7833,
-      "bank_id": "HSBC"
-    },
     {
       "bank_name": "Standard Chartered",
       "region": "GB",
       "covar_index": "^FTSE",
       "mes": -0.025787,
       "lrmes": 0.572879,
-      "covar": -0.015063,
-      "delta_covar": -0.007063,
-      "covar_beta": 0.246711,
+      "covar": -0.015064,
+      "delta_covar": -0.007064,
+      "covar_beta": 0.246765,
       "srisk_usd_bn": 42.26363,
       "market_cap_usd_bn": 31.669971,
       "debt_usd_bn": 683.854995,
-      "srisk_share_pct": 17.7596,
+      "srisk_share_pct": 100.0,
       "bank_id": "STAN"
     }
   ]
