@@ -1,6 +1,6 @@
 {
   "date": "2026-06-10",
-  "generated_at": "2026-07-17T22:47:59.806549+00:00",
+  "generated_at": "2026-07-20T22:59:18.782429+00:00",
   "methodology_version": "1.0",
   "parameters": {
     "srisk_k": 0.08,
@@ -10,24 +10,9 @@
     "lrmes_market_drop": 0.4,
     "mes_tail_pct": 0.05
   },
-  "system_srisk_usd_bn": 459.7138,
-  "bank_count": 10,
+  "system_srisk_usd_bn": 249.4939,
+  "bank_count": 3,
   "banks": [
-    {
-      "bank_name": "Bank of America",
-      "region": "US",
-      "covar_index": "^GSPC",
-      "mes": -0.01802,
-      "lrmes": 0.403626,
-      "covar": -0.01819,
-      "delta_covar": -0.008371,
-      "covar_beta": 0.32987,
-      "srisk_usd_bn": 45.634694,
-      "market_cap_usd_bn": 382.759952,
-      "debt_usd_bn": 3195.518,
-      "srisk_share_pct": 9.9268,
-      "bank_id": "BAC"
-    },
     {
       "bank_name": "Barclays",
       "region": "GB",
@@ -40,38 +25,8 @@
       "srisk_usd_bn": 80.530765,
       "market_cap_usd_bn": 44.961751,
       "debt_usd_bn": 1209.72302,
-      "srisk_share_pct": 17.5176,
+      "srisk_share_pct": 32.2777,
       "bank_id": "BARC"
-    },
-    {
-      "bank_name": "Citigroup",
-      "region": "US",
-      "covar_index": "^GSPC",
-      "mes": -0.024622,
-      "lrmes": 0.516061,
-      "covar": -0.017178,
-      "delta_covar": -0.007938,
-      "covar_beta": 0.291681,
-      "srisk_usd_bn": 105.598458,
-      "market_cap_usd_bn": 223.73162,
-      "debt_usd_bn": 2565.115,
-      "srisk_share_pct": 22.9705,
-      "bank_id": "C"
-    },
-    {
-      "bank_name": "Goldman Sachs",
-      "region": "US",
-      "covar_index": "^GSPC",
-      "mes": -0.024308,
-      "lrmes": 0.551363,
-      "covar": -0.017168,
-      "delta_covar": -0.007775,
-      "covar_beta": 0.308349,
-      "srisk_usd_bn": 33.071667,
-      "market_cap_usd_bn": 295.387974,
-      "debt_usd_bn": 1937.398,
-      "srisk_share_pct": 7.194,
-      "bank_id": "GS"
     },
     {
       "bank_name": "HSBC Holdings",
@@ -85,38 +40,8 @@
       "srisk_usd_bn": 124.392616,
       "market_cap_usd_bn": 165.862701,
       "debt_usd_bn": 2324.778756,
-      "srisk_share_pct": 27.0587,
+      "srisk_share_pct": 49.858,
       "bank_id": "HSBC"
-    },
-    {
-      "bank_name": "JPMorgan Chase",
-      "region": "US",
-      "covar_index": "^GSPC",
-      "mes": -0.016842,
-      "lrmes": 0.383137,
-      "covar": -0.018135,
-      "delta_covar": -0.008362,
-      "covar_beta": 0.335045,
-      "srisk_usd_bn": 0.0,
-      "market_cap_usd_bn": 818.070622,
-      "debt_usd_bn": 4536.437,
-      "srisk_share_pct": 0.0,
-      "bank_id": "JPM"
-    },
-    {
-      "bank_name": "Morgan Stanley",
-      "region": "US",
-      "covar_index": "^GSPC",
-      "mes": -0.022531,
-      "lrmes": 0.51126,
-      "covar": -0.01631,
-      "delta_covar": -0.007704,
-      "covar_beta": 0.289201,
-      "srisk_usd_bn": 0.0,
-      "market_cap_usd_bn": 324.869526,
-      "debt_usd_bn": 1466.034,
-      "srisk_share_pct": 0.0,
-      "bank_id": "MS"
     },
     {
       "bank_name": "Standard Chartered",
@@ -130,38 +55,8 @@
       "srisk_usd_bn": 44.570469,
       "market_cap_usd_bn": 29.125017,
       "debt_usd_bn": 686.664794,
-      "srisk_share_pct": 9.6953,
+      "srisk_share_pct": 17.8644,
       "bank_id": "STAN"
-    },
-    {
-      "bank_name": "State Street",
-      "region": "US",
-      "covar_index": "^GSPC",
-      "mes": -0.020632,
-      "lrmes": 0.461059,
-      "covar": -0.018004,
-      "delta_covar": -0.008866,
-      "covar_beta": 0.313792,
-      "srisk_usd_bn": 7.060285,
-      "market_cap_usd_bn": 44.559112,
-      "debt_usd_bn": 364.423,
-      "srisk_share_pct": 1.5358,
-      "bank_id": "STT"
-    },
-    {
-      "bank_name": "Wells Fargo",
-      "region": "US",
-      "covar_index": "^GSPC",
-      "mes": -0.016641,
-      "lrmes": 0.379571,
-      "covar": -0.018482,
-      "delta_covar": -0.009142,
-      "covar_beta": 0.295727,
-      "srisk_usd_bn": 18.854807,
-      "market_cap_usd_bn": 250.843737,
-      "debt_usd_bn": 2025.439,
-      "srisk_share_pct": 4.1014,
-      "bank_id": "WFC"
     }
   ]
 }
