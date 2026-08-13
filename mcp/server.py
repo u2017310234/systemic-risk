@@ -35,6 +35,7 @@ import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import cfg
@@ -457,8 +458,20 @@ async def root():
     }
 
 
+# The public Azure Container Apps hostname must be explicitly trusted by the
+# MCP SDK's DNS-rebinding protection.
+transport_security = TransportSecuritySettings(
+    enable_dns_rebinding_protection=True,
+    allowed_hosts=[
+        "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io",
+        "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io:*",
+        "localhost:*",
+        "127.0.0.1:*",
+    ],
+)
+
 # streamable_http_app() exposes the SDK's default /mcp endpoint.
-app.mount("/", mcp.streamable_http_app())
+app.mount("/", mcp.streamable_http_app(transport_security=transport_security))
 
 
 if __name__ == "__main__":
