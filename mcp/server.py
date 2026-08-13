@@ -46,6 +46,17 @@ logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("mcp-server")
 
+
+transport_security = TransportSecuritySettings(
+    enable_dns_rebinding_protection=True,
+    allowed_hosts=[
+        "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io",
+        "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io:*",
+        "localhost:*",
+        "127.0.0.1:*",
+    ],
+)
+
 # ---------------------------------------------------------------------------
 # FastMCP instance
 # ---------------------------------------------------------------------------
@@ -460,18 +471,9 @@ async def root():
 
 # The public Azure Container Apps hostname must be explicitly trusted by the
 # MCP SDK's DNS-rebinding protection.
-transport_security = TransportSecuritySettings(
-    enable_dns_rebinding_protection=True,
-    allowed_hosts=[
-        "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io",
-        "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io:*",
-        "localhost:*",
-        "127.0.0.1:*",
-    ],
-)
 
 # streamable_http_app() exposes the SDK's default /mcp endpoint.
-app.mount("/", mcp.streamable_http_app(transport_security=transport_security))
+app.mount("/", mcp.streamable_http_app())
 
 
 if __name__ == "__main__":
