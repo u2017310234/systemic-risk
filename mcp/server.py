@@ -1,11 +1,11 @@
 """
-server.py — G-SIBs Systemic Risk MCP Server (FastAPI + SSE transport)
+server.py — G-SIBs Systemic Risk MCP Server (FastAPI + Streamable HTTP transport)
 
 Exposes systemic risk metrics for the FSB-designated G-SIB universe via the
 Model Context Protocol.
 
 Transport:
-    HTTP/SSE (Server-Sent Events) — suitable for remote deployment.
+    Streamable HTTP — suitable for remote deployment.
     Default: http://0.0.0.0:8000
 
 Data source priority:
@@ -18,13 +18,14 @@ Run:
     uvicorn mcp.server:app --host 0.0.0.0 --port 8000
 
 MCP clients connect to:
-    http://<host>:8000/sse
+    http://<host>:8000/mcp
 """
 
 import json
 import logging
 import os
 import sys
+import contextlib
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
@@ -34,7 +35,6 @@ import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mcp.server.fastmcp import FastMCP
-import contextlib
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import cfg
@@ -55,6 +55,8 @@ mcp = FastMCP(
         "FSB-designated G-SIBs; 28 are currently covered because the BK "
         "(BNY Mellon) series ends 2026-07-02."
     ),
+    stateless_http=True,
+    json_response=True,
 )
 
 # ---------------------------------------------------------------------------
@@ -417,12 +419,19 @@ def get_methodology() -> dict:
 
 
 # ---------------------------------------------------------------------------
-# FastAPI app + SSE transport
+# FastAPI app + MCP Streamable HTTP transport
 # ---------------------------------------------------------------------------
+@contextlib.asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with mcp.session_manager.run():
+        yield
+
+
 app = FastAPI(
     title="G-SIBs Systemic Risk MCP",
     description="MCP server for 29 designated G-SIBs; 28 currently covered (BK ends 2026-07-02)",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -442,10 +451,14 @@ async def health():
 async def root():
     return {
         "name": "G-SIBs Systemic Risk MCP Server",
-        "mcp_endpoint": "/sse",
+        "mcp_endpoint": "/mcp",
         "health": "/health",
         "docs": "/docs",
     }
+
+
+# streamable_http_app() exposes the SDK's default /mcp endpoint.
+app.mount("/", mcp.streamable_http_app())
 
 
 if __name__ == "__main__":
