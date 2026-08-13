@@ -31,10 +31,10 @@ from typing import Any
 
 import httpx
 import pandas as pd
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mcp.server.fastmcp import FastMCP
-from mcp.server.sse import SseServerTransport
+import contextlib
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.config import cfg
