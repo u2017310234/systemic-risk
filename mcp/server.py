@@ -69,6 +69,7 @@ mcp = FastMCP(
     ),
     stateless_http=True,
     json_response=True,
+    transport_security=transport_security,
 )
 
 # ---------------------------------------------------------------------------
