@@ -30,7 +30,7 @@ from typing import Any
 
 import httpx
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from mcp.server.fastmcp import FastMCP
 from mcp.server.sse import SseServerTransport
@@ -433,7 +433,7 @@ app.add_middleware(
 sse = SseServerTransport("/messages")
 
 @app.get("/sse")
-async def sse_endpoint(request):
+async def sse_endpoint(request: Request):
     """MCP client connection endpoint (SSE)."""
     async with sse.connect_sse(request.scope, request.receive, request._send) as streams:
         await mcp._mcp_server.run(
@@ -441,7 +441,7 @@ async def sse_endpoint(request):
         )
 
 @app.post("/messages")
-async def messages_endpoint(request):
+async def messages_endpoint(request: Request):
     """MCP message posting endpoint."""
     await sse.handle_post_message(request.scope, request.receive, request._send)
 
