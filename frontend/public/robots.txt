@@ -1,0 +1,8 @@
+# Public research dataset and agent guidance
+User-agent: *
+Allow: /
+
+# ai-input=yes, search=yes
+Content-Signal: search=yes, ai-input=yes
+Sitemap: https://systemic-risk.2017310234.workers.dev/sitemap.xml
+# Agent entry point: /llms.txt

@@ -1,0 +1,29 @@
+# systemic-risk — G-SIB Systemic Risk Metrics
+
+> Daily MES, ΔCoVaR and SRISK for 29 FSB-designated G-SIBs, updated every
+> weekday. Preferred access for agents: the MCP server below. All monetary
+> values are USD billions; MES/CoVaR/ΔCoVaR are daily-return decimals.
+
+## MCP (preferred)
+
+- Endpoint: https://systemic-risk.2017310234.workers.dev/mcp (streamable-http)
+- Server name: gsib-systemic-risk. Tools: get_latest_metrics, get_historical,
+  get_srisk_ranking, get_delta_covar_ranking, get_methodology
+- Claude Code: `claude mcp add --transport http gsib-risk https://systemic-risk.2017310234.workers.dev/mcp`
+- Tools return `{ "error": "..." }` on failure; check that key.
+
+## Raw data (no auth, CORS enabled)
+
+- [Latest snapshot](/data/latest.json)
+- [Date manifest](/data/manifest.json)
+- Daily snapshot: `/data/history/{YYYY-MM-DD}.json` — check `bank_count`; many pre-2026-07 dates are partial.
+- Per-bank series: `/data/banks/{BANK_ID}.csv` (uppercase IDs, e.g. `JPM.csv`)
+- [Schema and caveats](https://github.com/u2017310234/systemic-risk#readme)
+- [Service status](/status.json)
+
+## Caveats
+
+- BK (BNY Mellon) series ends 2026-07-02; snapshots from that date hold 28 banks.
+- GLE and BPCE carry identical values (BPCE has no listed equity): treat them as one observation.
+- ΔCoVaR uses a regional index per bank; do not treat a cross-region ranking as conclusive.
+- Model estimates are for research and education, not investment advice.

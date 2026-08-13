@@ -10,7 +10,10 @@ import {
 
 export type DataManifest = {
   dates: string[];
+  snapshots?: Array<{ date: string; bank_count: number }>;
   lastUpdated: string;
+  cadence?: string;
+  expected_next_update?: string | null;
 };
 
 export type LocationDataset = {
@@ -71,7 +74,13 @@ export async function fetchSnapshotSeries(
   const normalizedEndDate =
     endDate && manifest.dates.includes(endDate) ? endDate : manifest.lastUpdated;
   const endIndex = manifest.dates.indexOf(normalizedEndDate);
-  const dates = manifest.dates.slice(Math.max(0, endIndex - lookback + 1), endIndex + 1);
+  // System-wide totals from partial snapshots are not comparable. Keep those
+  // snapshots selectable, but never use them to build an aggregate trend.
+  const completeDates = manifest.snapshots
+    ? manifest.snapshots.filter((snapshot) => snapshot.bank_count >= 28).map((snapshot) => snapshot.date)
+    : manifest.dates;
+  const boundedEnd = completeDates.filter((date) => date <= normalizedEndDate);
+  const dates = boundedEnd.slice(Math.max(0, boundedEnd.length - lookback));
   const snapshots = await Promise.all(dates.map((date) => fetchSnapshotByDate(date, region)));
   return { dates, snapshots };
 }

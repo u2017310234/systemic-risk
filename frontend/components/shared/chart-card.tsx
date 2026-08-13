@@ -10,7 +10,7 @@ export function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <Panel className="h-full">
+    <Panel>
       <div className="mb-4">
         <h3 className="text-lg font-semibold">{title}</h3>
         {description ? <p className="mt-1 text-sm text-muted">{description}</p> : null}

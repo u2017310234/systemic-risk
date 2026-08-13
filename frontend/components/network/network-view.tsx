@@ -27,7 +27,9 @@ export function NetworkView() {
     queryKey: ["data-manifest"],
     queryFn: fetchManifest
   });
-  const dates = manifestQuery.data?.dates ?? [];
+  const dates = manifestQuery.data?.snapshots
+    ? manifestQuery.data.snapshots.filter((item) => item.bank_count >= 28).map((item) => item.date)
+    : manifestQuery.data?.dates ?? [];
   const selectedDate = searchParams.get("date") ?? dates.at(-1) ?? "";
   const region = searchParams.get("region") ?? undefined;
   const thresholdFromUrl = Number(searchParams.get("threshold") ?? 0.6);
@@ -35,7 +37,7 @@ export function NetworkView() {
   const emphasisFromUrl = (searchParams.get("metric") ?? "balanced") as MetricEmphasis;
 
   const [selectedBankId, setSelectedBankId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<NetworkViewMode>("full");
+  const [viewMode, setViewMode] = useState<NetworkViewMode>("cluster");
   const [playbackWindow, setPlaybackWindow] = useState(90);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -151,16 +153,17 @@ export function NetworkView() {
               </p>
             </div>
 
-            <NetworkGraph
-              nodes={graph.nodes}
-              edges={graph.edges}
-              selectedBankId={selectedBankId}
-              onNodeClick={(bankId) => setSelectedBankId(bankId)}
-              onNodeDoubleClick={(bankId) => {
-                setSelectedBankId(bankId);
-                setViewMode("ego");
-              }}
-            />
+            <div className="hidden md:block"><NetworkGraph
+                nodes={graph.nodes}
+                edges={graph.edges}
+                selectedBankId={selectedBankId}
+                onNodeClick={(bankId) => setSelectedBankId(bankId)}
+                onNodeDoubleClick={(bankId) => {
+                  setSelectedBankId(bankId);
+                  setViewMode("ego");
+                }}
+              /></div>
+            <MobileAdjacencyList nodes={graph.nodes} edges={graph.edges} onSelect={setSelectedBankId} />
           </Panel>
 
           <TimelinePlayer
@@ -184,4 +187,14 @@ export function NetworkView() {
 
 function NetworkLoadingFallback() {
   return <PageSkeleton chartCount={2} />;
+}
+
+function MobileAdjacencyList({ nodes, edges, onSelect }: { nodes: NonNullable<ReturnType<typeof buildInterpretiveGraph>>["nodes"]; edges: NonNullable<ReturnType<typeof buildInterpretiveGraph>>["edges"]; onSelect: (id: string) => void }) {
+  const neighbors = (id: string) => edges.filter((edge) => edge.source === id || edge.target === id).sort((a, b) => b.weight - a.weight).slice(0, 3);
+  return <div className="space-y-2 md:hidden" aria-label="Bank connection list">
+    {nodes.map((node) => <button key={node.id} type="button" onClick={() => onSelect(node.id)} className="w-full rounded-xl border border-line/70 bg-panelAlt/40 p-3 text-left">
+      <div className="flex justify-between gap-3"><span className="font-medium">{node.label}</span><span className="text-xs text-muted">{node.region}</span></div>
+      <div className="mt-2 space-y-1">{neighbors(node.id).map((edge) => { const other = edge.source === node.id ? edge.target : edge.source; return <div className="flex items-center gap-2 text-xs text-muted" key={`${node.id}-${other}`}><span className="w-14">{other}</span><span className="h-1.5 flex-1 rounded bg-line"><span className="block h-full rounded bg-accent" style={{ width: `${edge.weight * 100}%` }} /></span><span>{edge.weight.toFixed(2)}</span></div>; })}</div>
+    </button>)}
+  </div>;
 }

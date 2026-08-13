@@ -10,8 +10,8 @@ const dictionaries = {
   zh: {
     shell: {
       eyebrow: "系统性风险前端 V1",
-      title: "29 家活跃 G-SIB 的系统性压力监测",
-      description: "浏览 SRISK、MES、LRMES、CoVaR 和 Delta CoVaR 快照、排名及基于联动性的风险传播模式。",
+      title: "全球系统重要性银行风险监测",
+      description: "危机中哪些全球最大银行可能出现资本缺口？每日更新 29 家 FSB 指定 G-SIB 的 SRISK、MES、LRMES、CoVaR 和 Delta CoVaR。当前覆盖 28 家：BK 数据止于 2026-07-02。",
       lastUpdated: "最后更新",
       dashboard: "仪表盘",
       network: "网络",
@@ -144,8 +144,8 @@ const dictionaries = {
   en: {
     shell: {
       eyebrow: "Systemic Risk Frontend V1",
-      title: "Interpretive systemic stress monitor for 29 active G-SIBs",
-      description: "Browse SRISK, MES, LRMES, CoVaR and Delta CoVaR snapshots, rankings, and co-movement-based propagation patterns.",
+      title: "G-SIB systemic risk monitor",
+      description: "Which of the world’s 29 designated biggest banks would be short of capital in a crisis? Daily SRISK, MES, LRMES, CoVaR and Delta CoVaR. 28 are currently covered because BK ends 2026-07-02.",
       lastUpdated: "Last updated",
       dashboard: "Dashboard",
       network: "Network",
@@ -187,7 +187,7 @@ const dictionaries = {
       lastUpdatedDate: "Last Updated Date",
       banksInFilter: "banks in current filter",
       rankingTitle: "Today's Systemic Ranking",
-      rankingDescription: "Top banks by current SRISK. Node drill-down routes to the reserved bank detail page.",
+      rankingDescription: "Top banks by current SRISK.",
       replayTitle: "System Stress Replay",
       replayDescription: "Last 30 available trading days for system-wide SRISK under the current filter.",
       concentrationTitle: "Regional Concentration",

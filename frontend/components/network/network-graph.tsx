@@ -97,7 +97,7 @@ export function NetworkGraph({
   return (
     <EChartsClient
       option={option}
-      className="h-[780px] w-full"
+      className="h-[620px] w-full"
       onEvents={{
         click: (params: unknown) => {
           const event = params as { dataType?: string; data?: { id?: string } };

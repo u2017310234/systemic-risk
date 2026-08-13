@@ -117,11 +117,12 @@ export function GlobeView() {
             </p>
           </div>
 
-          <GlobeCanvas
+          <div className="hidden md:block"><GlobeCanvas
             markers={markers}
             selectedId={selectedBank?.bank_id}
             onSelect={(bankId) => setSelectedBankId(bankId)}
-          />
+          /></div>
+          <p className="rounded-2xl border border-line/70 bg-panelAlt/40 p-4 text-sm text-muted md:hidden">The interactive globe is available on larger screens. Use the selected location panel and the systemic-footprint list below on mobile.</p>
 
           <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted">
             <span className="rounded-full border border-line/70 bg-panelAlt/60 px-3 py-1">{t.globe.drag}</span>

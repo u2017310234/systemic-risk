@@ -6,8 +6,15 @@ import { I18nProvider } from "@/lib/i18n";
 import { QueryProvider } from "@/components/providers/query-provider";
 
 export const metadata: Metadata = {
-  title: "Systemic Risk Frontend",
-  description: "Dashboard and interpretive propagation network for G-SIB systemic risk metrics"
+  metadataBase: new URL("https://systemic-risk.2017310234.workers.dev"),
+  title: {
+    default: "G-SIB Systemic Risk Dashboard — SRISK, ΔCoVaR, MES",
+    template: "%s | G-SIB Systemic Risk"
+  },
+  description: "Daily systemic-risk metrics for FSB-designated global systemically important banks.",
+  alternates: { canonical: "/", types: { "application/json": "/data/latest.json" } },
+  openGraph: { type: "website", title: "G-SIB Systemic Risk Dashboard", description: "Daily SRISK, ΔCoVaR and MES metrics." },
+  twitter: { card: "summary", title: "G-SIB Systemic Risk Dashboard", description: "Daily SRISK, ΔCoVaR and MES metrics." }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

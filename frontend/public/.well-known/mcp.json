@@ -1,0 +1,6 @@
+{
+  "name": "gsib-systemic-risk",
+  "endpoint": "https://systemic-risk.2017310234.workers.dev/mcp",
+  "transport": "streamable-http",
+  "tools": ["get_latest_metrics", "get_historical", "get_srisk_ranking", "get_delta_covar_ranking", "get_methodology"]
+}

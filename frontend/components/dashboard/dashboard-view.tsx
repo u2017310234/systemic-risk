@@ -17,6 +17,15 @@ import { fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
 import type { Region, SystemSnapshot } from "@/lib/types";
 import { REGION_COLORS, REGION_OPTIONS } from "@/lib/constants";
 
+function uniqueBanks(banks: SystemSnapshot["banks"]) {
+  const hasGle = banks.some((bank) => bank.bank_id === "GLE");
+  return banks.filter((bank) => bank.bank_id !== "BPCE" || !hasGle).map((bank) =>
+    bank.bank_id === "GLE" && banks.some((item) => item.bank_id === "BPCE")
+      ? { ...bank, bank_name: "GLE / BPCE (shared proxy data)" }
+      : bank
+  );
+}
+
 export function DashboardView() {
   const { lang, t, regionLabel } = useI18n();
   const searchParams = useSearchParams();
@@ -38,11 +47,12 @@ export function DashboardView() {
     if (!snapshot) {
       return null;
     }
-    const banks = [...snapshot.banks].sort((left, right) => right.srisk_usd_bn - left.srisk_usd_bn);
-    const deltaLeaders = [...snapshot.banks].sort((left, right) => left.delta_covar - right.delta_covar);
+    const comparableBanks = uniqueBanks(snapshot.banks);
+    const banks = [...comparableBanks].sort((left, right) => right.srisk_usd_bn - left.srisk_usd_bn);
+    const deltaLeaders = [...comparableBanks].sort((left, right) => left.delta_covar - right.delta_covar);
     const regionTotals = REGION_OPTIONS.map((region) => ({
       region,
-      value: snapshot.banks
+      value: comparableBanks
         .filter((bank) => bank.region === region)
         .reduce((sum, bank) => sum + bank.srisk_usd_bn, 0)
     })).filter((item) => item.value > 0);
@@ -90,6 +100,8 @@ export function DashboardView() {
   }
 
   const snapshot = snapshotQuery.data;
+  const partial = snapshot.banks.length < 28;
+  const displayedSystemSrisk = uniqueBanks(snapshot.banks).reduce((sum, bank) => sum + bank.srisk_usd_bn, 0);
 
   const rankingOption = {
     backgroundColor: "transparent",
@@ -195,8 +207,8 @@ export function DashboardView() {
 
   const metricCards = [
     {
-      label: t.dashboard.systemWideSrisk,
-      value: formatUsdBn(snapshot.system_srisk_usd_bn, lang),
+      label: partial ? `SRISK (${snapshot.banks.length} banks)` : t.dashboard.systemWideSrisk,
+      value: formatUsdBn(displayedSystemSrisk, lang),
       hint: t.dashboard.systemWideSriskHint
     },
     {
@@ -205,7 +217,7 @@ export function DashboardView() {
       hint: formatUsdBn(derived.topSrisk.srisk_usd_bn, lang)
     },
     {
-      label: t.dashboard.mostSystemicDelta,
+      label: `${t.dashboard.mostSystemicDelta} ⓘ`,
       value: `${derived.topDelta.bank_name} (${derived.topDelta.bank_id})`,
       hint: formatDelta(derived.topDelta.delta_covar)
     },
@@ -218,6 +230,7 @@ export function DashboardView() {
 
   return (
     <div className="mt-6 space-y-6">
+      {partial ? <div role="alert" className="rounded-2xl border border-accent/60 bg-accent/10 px-4 py-3 text-sm text-text">This snapshot covers only {snapshot.banks.length} of 29 banks — system-wide totals are not comparable across dates.</div> : null}
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {metricCards.map((card) => (
           <Panel key={card.label} className="overflow-hidden">
@@ -232,7 +245,7 @@ export function DashboardView() {
         <div className="space-y-6">
           <ChartCard
             title={t.dashboard.rankingTitle}
-            description={t.dashboard.rankingDescription}
+            description={`${t.dashboard.rankingDescription} GLE / BPCE is shown once because it is shared proxy data.`}
           >
             <EChartsClient option={rankingOption} className="h-[420px] w-full" />
           </ChartCard>
@@ -267,7 +280,7 @@ export function DashboardView() {
               <p>
                 <span className="text-text">SRISK</span> {t.dashboard.sriskGuide}
               </p>
-              <p>
+              <p title="ΔCoVaR is measured against each bank's regional index; cross-region comparison is indicative only.">
                 <span className="text-text">Delta CoVaR</span> {t.dashboard.deltaGuide}
               </p>
               <p>

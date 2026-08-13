@@ -1,0 +1,7 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "systemic-risk",
+  "main": "cloudflare-worker.ts",
+  "compatibility_date": "2026-08-03",
+  "assets": { "directory": "out", "binding": "ASSETS" }
+}

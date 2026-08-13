@@ -1,7 +1,8 @@
 """
 server.py — G-SIBs Systemic Risk MCP Server (FastAPI + SSE transport)
 
-Exposes systemic risk metrics for all 30 G-SIBs via the Model Context Protocol.
+Exposes systemic risk metrics for the FSB-designated G-SIB universe via the
+Model Context Protocol.
 
 Transport:
     HTTP/SSE (Server-Sent Events) — suitable for remote deployment.
@@ -50,8 +51,9 @@ logger = logging.getLogger("mcp-server")
 mcp = FastMCP(
     name="gsib-systemic-risk",
     instructions=(
-        "Daily systemic risk metrics (MES, CoVaR/ΔCoVaR, SRISK) "
-        "for all 30 FSB-designated Global Systemically Important Banks."
+        "Daily systemic risk metrics (MES, CoVaR/ΔCoVaR, SRISK) for 29 "
+        "FSB-designated G-SIBs; 28 are currently covered because the BK "
+        "(BNY Mellon) series ends 2026-07-02."
     ),
 )
 
@@ -419,7 +421,7 @@ def get_methodology() -> dict:
 # ---------------------------------------------------------------------------
 app = FastAPI(
     title="G-SIBs Systemic Risk MCP",
-    description="MCP server for daily systemic risk metrics of all 30 G-SIBs",
+    description="MCP server for 29 designated G-SIBs; 28 currently covered (BK ends 2026-07-02)",
     version="1.0.0",
 )
 

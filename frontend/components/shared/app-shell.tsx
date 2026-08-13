@@ -29,6 +29,9 @@ export function AppShell({ children }: AppShellProps) {
   const lastUpdated = manifestQuery.data?.lastUpdated ?? "";
   const selectedRegion = searchParams.get("region") ?? "ALL";
   const selectedDate = searchParams.get("date") ?? lastUpdated;
+  const showPartial = searchParams.get("partial") === "1";
+  const snapshotCounts = new Map(manifestQuery.data?.snapshots?.map((item) => [item.date, item.bank_count]) ?? []);
+  const visibleDates = showPartial ? dates : dates.filter((date) => (snapshotCounts.get(date) ?? 28) >= 28);
 
   if (manifestQuery.isLoading) {
     return <PageSkeleton chartCount={2} />;
@@ -81,7 +84,8 @@ export function AppShell({ children }: AppShellProps) {
             {[
               { href: "/", label: t.shell.dashboard },
               { href: "/network", label: t.shell.network },
-              { href: "/globe", label: t.shell.globe }
+              { href: "/globe", label: t.shell.globe },
+              { href: "/data-access", label: "Data & API" }
             ].map((item) => (
               <Link
                 key={item.href}
@@ -122,19 +126,24 @@ export function AppShell({ children }: AppShellProps) {
                 value={selectedDate}
                 onChange={(event) => updateParam("date", event.target.value)}
               >
-                {dates.map((date) => (
+                {visibleDates.map((date) => (
                   <option key={date} value={date}>
-                    {date}
+                    {date}{(snapshotCounts.get(date) ?? 28) < 28 ? ` (${snapshotCounts.get(date)}/29)` : ""}
                   </option>
                 ))}
               </select>
+            </label>
+            <label className="flex items-center gap-2 text-xs text-muted">
+              <input type="checkbox" checked={showPartial} onChange={(event) => updateParam("partial", event.target.checked ? "1" : "")} />
+              Show partial dates
             </label>
           </div>
         </div>
       </header>
       <div className="pb-10">{children}</div>
-      <footer className="pb-6 text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.26em] text-muted">{t.shell.dataPartner}</p>
+      <footer className="pb-6 text-center text-xs text-muted">
+        <p><a className="hover:text-text" href="/data/latest.json">Data: /data/latest.json</a> · <a className="hover:text-text" href="/mcp">MCP: /mcp</a> · <a className="hover:text-text" href="https://github.com/u2017310234/systemic-risk">GitHub</a></p>
+        <p className="mt-2">Model estimates for research and education only; not investment advice.</p>
       </footer>
     </main>
   );

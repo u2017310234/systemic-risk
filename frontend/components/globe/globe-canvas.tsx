@@ -38,7 +38,7 @@ export function GlobeCanvas({ markers, selectedId, onSelect }: GlobeCanvasProps)
   const draggingRef = useRef(false);
   const pointerMovedRef = useRef(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
-  const rotationRef = useRef({ lon: -20, lat: -12 });
+  const rotationRef = useRef({ lon: 18, lat: 18 });
 
   useEffect(() => {
     const canvasElement = canvasRef.current;
@@ -68,7 +68,7 @@ export function GlobeCanvas({ markers, selectedId, onSelect }: GlobeCanvasProps)
       const height = rect.height;
       const cx = width / 2;
       const cy = height / 2;
-      const radius = Math.min(width, height) * 0.34;
+      const radius = Math.min(width, height) * 0.42;
       const rotation = rotationRef.current;
 
       ctx.clearRect(0, 0, width, height);
@@ -254,7 +254,7 @@ function drawMarkers(
       return { id: marker.id, x: projected.x, y: projected.y, r: 0, visible: false };
     }
 
-    const size = marker.selected || marker.id === selectedId ? marker.size + 2.5 : marker.size;
+    const size = Math.max(8, marker.selected || marker.id === selectedId ? marker.size + 2.5 : marker.size);
     const alpha = 0.45 + projected.depth * 0.55;
 
     context.save();

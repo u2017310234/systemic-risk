@@ -43,10 +43,30 @@ async function writeManifest(dataDir) {
       lastUpdated = latest.date;
     }
   } catch {}
-  await fs.writeFile(
-    path.join(dataDir, "manifest.json"),
-    JSON.stringify({ dates, lastUpdated }, null, 2)
+  const snapshots = await Promise.all(
+    dates.map(async (date) => {
+      const snapshot = JSON.parse(await fs.readFile(path.join(historyDir, `${date}.json`), "utf8"));
+      return { date, bank_count: Number(snapshot.bank_count ?? snapshot.banks?.length ?? 0) };
+    })
   );
+  const generatedAt = new Date().toISOString();
+  const manifest = {
+    // `dates` remains for older clients; `snapshots` is the authoritative, quality-aware form.
+    dates,
+    snapshots,
+    lastUpdated,
+    cadence: "weekdays, T+1",
+    expected_next_update: nextWeekday(lastUpdated),
+    generated_at: generatedAt
+  };
+  await fs.writeFile(path.join(dataDir, "manifest.json"), JSON.stringify(manifest, null, 2));
+}
+
+function nextWeekday(dateString) {
+  if (!dateString) return null;
+  const date = new Date(`${dateString}T00:00:00Z`);
+  do date.setUTCDate(date.getUTCDate() + 1); while (date.getUTCDay() === 0 || date.getUTCDay() === 6);
+  return date.toISOString().slice(0, 10);
 }
 
 main().catch((error) => {
