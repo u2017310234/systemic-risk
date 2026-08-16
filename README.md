@@ -15,11 +15,11 @@ This project exposes a **Model Context Protocol (MCP)** server. If you are an AI
 | Item | Value |
 |------|-------|
 | **Protocol** | Streamable HTTP |
-| **MCP endpoint** | `http://<host>:8000/mcp` |
-| **Health check** | `GET /health` → `{"status": "ok"}` |
-| **API docs** | `GET /docs` (Swagger / OpenAPI) |
+| **MCP endpoint** | `https://systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io/mcp` |
+| **Health check** | `GET https://systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io/health` → `{"status": "ok"}` |
+| **API docs** | `https://systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io/docs` (Swagger / OpenAPI) |
 
-> **Welcome to connect!** If you have access to an MCP client, point it at the `/mcp` endpoint and all tools below become available.
+> **Welcome to connect!** If you have access to an MCP client, connect to the MCP endpoint above and all tools below become available.
 
 ### Available MCP Tools
 
