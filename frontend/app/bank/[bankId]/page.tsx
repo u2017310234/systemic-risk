@@ -13,6 +13,7 @@ import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
 import { formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { buildBankNarratives } from "@/lib/narrative-engine";
 import { fetchBankHistory, fetchSnapshotByDate } from "@/lib/public-data";
 import type { BankMetric } from "@/lib/types";
 
@@ -34,6 +35,16 @@ export default function BankPage() {
     () => latestQuery.data?.banks.find((bank: BankMetric) => bank.bank_id === bankId) ?? null,
     [bankId, latestQuery.data]
   );
+
+  const narratives = useMemo(() => {
+    if (!latestQuery.data || !historyQuery.data?.length) return [];
+    return buildBankNarratives({
+      snapshot: latestQuery.data,
+      bankId,
+      history: historyQuery.data,
+      lang: lang === "zh" ? "zh" : "en"
+    }).slice(0, 5);
+  }, [bankId, historyQuery.data, lang, latestQuery.data]);
 
   if (latestQuery.isLoading || historyQuery.isLoading) {
     return (
@@ -123,6 +134,41 @@ export default function BankPage() {
 
   return (
     <AppShell>
+      {narratives.length > 0 ? (
+        <Panel className="mt-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted">
+                {lang === "zh" ? "确定性事实摘要" : "Deterministic Fact Summary"}
+              </p>
+              <h2 className="mt-2 text-xl font-semibold">
+                {lang === "zh" ? "自动描述" : "Automated narrative"}
+              </h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6 text-muted">
+              {lang === "zh"
+                ? "以下表述直接由已发布观测值通过确定性规则生成，不使用 LLM 临时计算。"
+                : "These statements are generated directly from published observations using deterministic rules; no LLM calculation is used."}
+            </p>
+          </div>
+          <div className="mt-5 grid gap-3 lg:grid-cols-2">
+            {narratives.map((item) => (
+              <div key={item.type} className="rounded-2xl border border-line/70 bg-panelAlt/50 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted">
+                    {item.type.replaceAll("_", " ")}
+                  </p>
+                  <span className="rounded-full border border-line/70 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+                    {item.salience}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-text">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      ) : null}
+
       <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_360px]">
         <ChartCard
           title={`${snapshotBank.bank_name} ${t.bank.historicalView}`}
