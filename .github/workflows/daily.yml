@@ -1,0 +1,73 @@
+name: Daily Systemic Risk Pipeline
+
+on:
+  schedule:
+    # Run at 23:00 UTC every weekday (after US, EU, and Asian market closes)
+    - cron: "0 23 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Target date (YYYY-MM-DD). Defaults to today."
+        required: false
+        default: ""
+      banks:
+        description: "Comma-separated bank IDs to process (e.g. JPM,BAC). Defaults to all."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        run: |
+          set -euo pipefail
+          PIPELINE_ARGS=()
+          if [ -n "$PIPELINE_DATE" ]; then
+            PIPELINE_ARGS+=(--date "$PIPELINE_DATE")
+          fi
+          if [ -n "$PIPELINE_BANKS" ]; then
+            PIPELINE_ARGS+=(--banks "$PIPELINE_BANKS")
+          fi
+          python src/pipeline.py "${PIPELINE_ARGS[@]}"
+        env:
+          PIPELINE_DATE: ${{ github.event.inputs.date }}
+          PIPELINE_BANKS: ${{ github.event.inputs.banks }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_BRANCH: ${{ github.ref_name }}
+
+      - name: Commit and push data files
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Stage only the expected output files (latest.json, history/, banks/)
+          git add -- data/latest.json data/history data/banks
+          if git diff --cached --quiet; then
+            echo "No new data to commit."
+          else
+            DATE_LABEL="${PIPELINE_DATE:-$(date -u +%Y-%m-%d)}"
+            git commit -m "data: update systemic risk metrics for ${DATE_LABEL} [skip ci]"
+            git push
+          fi
+        env:
+          PIPELINE_DATE: ${{ github.event.inputs.date }}
