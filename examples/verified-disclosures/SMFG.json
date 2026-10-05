@@ -1,0 +1,40 @@
+{
+  "bank_id": "SMFG",
+  "scope": "consolidated_group",
+  "accounting_standard": "J-GAAP",
+  "currency": "JPY",
+  "source_sha256": "59322083468adba8cb85c94ff7a2e497ad796f2ba86482ca66ef8c82eb513e44",
+  "retrieved_asof": "2025-05-16",
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-15",
+      "value": 291440506000000,
+      "source": "https://www.smfg.co.jp/english/investor/financial/latest_statement/2025_3/2025_fy_e01.pdf",
+      "accounting_standard": "J-GAAP",
+      "published_date": "2025-05-14",
+      "availability_policy": "publication_plus_one_calendar_day",
+      "page_reference": "Consolidated balance sheets, PDF page 7 in downloaded source"
+    }
+  ],
+  "published_share_classes": [
+    {
+      "share_class_id": "ordinary",
+      "issued_shares": 3884445458,
+      "treasury_shares": 10651848,
+      "outstanding_shares_for_reference": 3873793610,
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-15",
+      "source": "https://www.smfg.co.jp/english/investor/financial/latest_statement/2025_3/2025_fy_e01.pdf",
+      "split_basis": "post-2024-10-01-three-for-one",
+      "page_reference": "PDF page 2"
+    }
+  ],
+  "revision_note": {
+    "url": "https://www.smfg.co.jp/news_e/pdf/e20250620_02.pdf",
+    "published_date": "2025-06-20",
+    "sha256": "d61c17aebe5174a767c75afd81796b37130c5b94a36b98b73d5e56fd3e7f2bd5",
+    "affected_statement": "cash flows; announced correction does not change selected total liabilities/share-count rows"
+  },
+  "sample_limit": "Contemporaneous liabilities are Japanese GAAP. Do not substitute IFRS 20-F figures or backdate later corrected cash-flow rows."
+}

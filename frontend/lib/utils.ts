@@ -30,10 +30,8 @@ export function zscoreMap(items: Record<string, number>) {
 }
 
 export function pearsonCorrelation(seriesA: number[], seriesB: number[]) {
-  const length = Math.min(seriesA.length, seriesB.length);
-  if (length < 2) {
-    return 0;
-  }
+  const length = seriesA.length;
+  if (length !== seriesB.length || length < 2 || ![...seriesA, ...seriesB].every(Number.isFinite)) return null;
   const a = seriesA.slice(-length);
   const b = seriesB.slice(-length);
   const meanA = average(a);
@@ -49,7 +47,7 @@ export function pearsonCorrelation(seriesA: number[], seriesB: number[]) {
     denomB += diffB ** 2;
   }
   if (!denomA || !denomB) {
-    return 0;
+    return null;
   }
   return numerator / Math.sqrt(denomA * denomB);
 }

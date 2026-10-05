@@ -5,6 +5,10 @@ on:
     - cron: '0 22 * * 1-5'  # 22:00 UTC Mon–Fri (after US market close)
   workflow_dispatch:         # allow manual trigger at any time
 
+concurrency:
+  group: daily-risk-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -25,6 +29,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Test core before publication
+        run: |
+          pip install pytest
+          pytest tests -q
+
       - name: Run pipeline (today's date)
         env:
           GITHUB_REPO: ${{ github.repository }}
@@ -42,7 +51,7 @@ jobs:
           fi
           git commit -m "data: daily risk metrics $(date -u +%Y-%m-%d)"
           for i in 1 2 3; do
-            git pull --rebase origin main && git push && exit 0
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push && exit 0
             echo "Push attempt $i failed, retrying in 5s…"
             sleep 5
           done

@@ -1,0 +1,18 @@
+[
+  {
+    "identifier": "UBSG.SW",
+    "kind": "adjusted_close",
+    "status": "quarantined",
+    "source": "Wind request UBSG.SW-final",
+    "reason": "Response is USD/New York trading data, not the requested CHF Swiss ordinary stock; identity unverified.",
+    "source_sha256": "4701f003a00faf5c9f1523d93f7f59d14cf0eefb5f6ccef1155a960974d81e02"
+  },
+  {
+    "identifier": "^GSPTSE",
+    "kind": "adjusted_close",
+    "status": "quarantined",
+    "source": "Wind request SPTSX.GI",
+    "reason": "Response endpoint is 224.44 with CNY turnover; not verified as S&P/TSX Composite. No substitution permitted.",
+    "source_sha256": "927a7a16ae2282bc4daf3daeb7f7cf6c315a6bbe12e2b83af38f1343e176fe10"
+  }
+]

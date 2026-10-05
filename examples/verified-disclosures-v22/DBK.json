@@ -1,0 +1,23 @@
+{
+  "bank_id": "DBK",
+  "scope": "consolidated_group",
+  "currency": "EUR",
+  "accounting_standard": "IFRS",
+  "source_sha256": "67e1d732bf33148b9613352fd47584a9fbc9b9764dde7b7b46a4d5d2366d64f4",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001159508.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [],
+  "published_shares": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-14",
+      "value": 1945125755,
+      "source": "https://www.sec.gov/Archives/edgar/data/1159508/000115950825000020/0001159508-25-000020-index.html",
+      "accession": "0001159508-25-000020",
+      "filed_date": "2025-03-13",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

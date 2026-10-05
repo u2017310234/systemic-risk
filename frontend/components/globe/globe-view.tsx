@@ -42,7 +42,7 @@ export function GlobeView() {
       return [];
     }
 
-    const maxSrisk = Math.max(...snapshotQuery.data.banks.map((bank) => bank.srisk_usd_bn), 1);
+    const maxSrisk = Math.max(...snapshotQuery.data.banks.map((bank) => (bank.srisk_usd_bn ?? 0)), 1);
 
     return snapshotQuery.data.banks
       .map((bank) => {
@@ -53,11 +53,11 @@ export function GlobeView() {
         return {
           ...bank,
           location,
-          markerSize: 5 + (bank.srisk_usd_bn / maxSrisk) * 10
+          markerSize: 5 + ((bank.srisk_usd_bn ?? 0) / maxSrisk) * 10
         };
       })
       .flatMap((bank) => (bank ? [bank] : []))
-      .sort((left, right) => right.srisk_usd_bn - left.srisk_usd_bn);
+      .sort((left, right) => (right.srisk_usd_bn ?? -1) - (left.srisk_usd_bn ?? -1));
   }, [headquarters, locationQuery.data, snapshotQuery.data]);
 
   const selectedBank =

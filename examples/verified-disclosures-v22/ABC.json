@@ -1,0 +1,24 @@
+{
+  "bank_id": "ABC",
+  "scope": "consolidated_group",
+  "currency": "CNY",
+  "accounting_standard": "IFRS",
+  "source_sha256": "4c87aed7d1d7fb499095c8cdd6e7a634c28a45768af0718a6be18829e56e623a",
+  "manual_balance_check": {
+    "assets": 44818957000000.0,
+    "liabilities": 41675952000000.0,
+    "equity": 3143005000000.0,
+    "residual": 0.0,
+    "precision": "million native currency; MUFG independently rounded down"
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-04-30",
+      "source": "https://www.abchina.com/en/investor-relations/corporate-announcements/Announcements/202504/W020250429532708701578.pdf",
+      "accounting_standard": "IFRS",
+      "currency": "CNY",
+      "value": 41675952000000
+    }
+  ]
+}

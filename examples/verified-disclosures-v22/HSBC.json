@@ -1,0 +1,35 @@
+{
+  "bank_id": "HSBC",
+  "scope": "consolidated_group",
+  "currency": "USD",
+  "accounting_standard": "IFRS",
+  "source_sha256": "c639c871b622c8cac7a218c6d0f8afe39ad06de41373d16ccc8a74e5228049df",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001089113.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-02-21",
+      "value": 2824775000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/1089113/000108911325000040/0001089113-25-000040-index.html",
+      "accession": "0001089113-25-000040",
+      "filed_date": "2025-02-20",
+      "accounting_standard": "IFRS",
+      "currency": "USD",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-02-21",
+      "value": 17946950582,
+      "source": "https://www.sec.gov/Archives/edgar/data/1089113/000108911325000040/0001089113-25-000040-index.html",
+      "accession": "0001089113-25-000040",
+      "filed_date": "2025-02-20",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

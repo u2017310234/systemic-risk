@@ -1,0 +1,34 @@
+{
+  "bank_id": "JPM",
+  "scope": "consolidated_group",
+  "currency": "USD",
+  "accounting_standard": "US-GAAP",
+  "source_sha256": "1ba256b88d172b809505576b43254a8039039ecf9004eb1b528ddeaadf488913",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json",
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-02",
+      "value": 4006436000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/19617/000001961725000421/0000019617-25-000421-index.html",
+      "accession": "0000019617-25-000421",
+      "filed_date": "2025-05-01",
+      "accounting_standard": "US-GAAP",
+      "currency": "USD",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-02",
+      "value": 2779094488,
+      "source": "https://www.sec.gov/Archives/edgar/data/19617/000001961725000421/0000019617-25-000421-index.html",
+      "accession": "0000019617-25-000421",
+      "filed_date": "2025-05-01",
+      "accounting_standard": "US-GAAP",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

@@ -1,0 +1,355 @@
+{
+  "calibration_id": "2ac6af526e82065b",
+  "data_policy_version": "2.1",
+  "dataset_kind": "historical_reconstruction",
+  "date": "2025-05-16",
+  "generated_at": "2026-10-04T15:34:30.149648+00:00",
+  "methodology_version": "2.0-beta-scenario",
+  "parameters": {
+    "srisk_k": 0.08,
+    "covar_quantile": 0.05,
+    "covar_window_days": 252,
+    "lrmes_horizon_days": 22,
+    "lrmes_market_drop": 0.4,
+    "mes_tail_pct": 0.05,
+    "lrmes_model": "ols_beta_scenario",
+    "horizon_is_label_only": true
+  },
+  "coverage": {
+    "universe_version": "legacy-research-29-v2",
+    "expected_ids": [
+      "JPM",
+      "BAC",
+      "C",
+      "WFC",
+      "GS",
+      "MS",
+      "BK",
+      "STT",
+      "ICBC",
+      "CCB",
+      "ABC",
+      "BOC",
+      "BOCOM",
+      "HSBC",
+      "BARC",
+      "STAN",
+      "BNP",
+      "ACA",
+      "GLE",
+      "BPCE",
+      "DBK",
+      "UBS",
+      "ING",
+      "SAN",
+      "BBVA",
+      "UCG",
+      "MUFG",
+      "SMFG",
+      "MFG"
+    ],
+    "eligible_ids": [
+      "JPM",
+      "BAC",
+      "C",
+      "WFC",
+      "GS",
+      "MS",
+      "BK",
+      "STT",
+      "ICBC",
+      "CCB",
+      "ABC",
+      "BOC",
+      "BOCOM",
+      "HSBC",
+      "BARC",
+      "STAN",
+      "BNP",
+      "ACA",
+      "GLE",
+      "DBK",
+      "UBS",
+      "ING",
+      "SAN",
+      "BBVA",
+      "UCG",
+      "MUFG",
+      "SMFG",
+      "MFG"
+    ],
+    "observed_ids": [
+      "BARC",
+      "ICBC",
+      "JPM",
+      "SMFG"
+    ],
+    "srisk_ids": [
+      "BARC",
+      "ICBC",
+      "JPM",
+      "SMFG"
+    ],
+    "missing": {
+      "BAC": "no_record_for_date",
+      "C": "no_record_for_date",
+      "WFC": "no_record_for_date",
+      "GS": "no_record_for_date",
+      "MS": "no_record_for_date",
+      "BK": "no_record_for_date",
+      "STT": "no_record_for_date",
+      "CCB": "no_record_for_date",
+      "ABC": "no_record_for_date",
+      "BOC": "no_record_for_date",
+      "BOCOM": "no_record_for_date",
+      "HSBC": "no_record_for_date",
+      "STAN": "no_record_for_date",
+      "BNP": "no_record_for_date",
+      "ACA": "no_record_for_date",
+      "GLE": "no_record_for_date",
+      "BPCE": "unlisted_without_own_equity_data",
+      "DBK": "no_record_for_date",
+      "UBS": "no_record_for_date",
+      "ING": "no_record_for_date",
+      "SAN": "no_record_for_date",
+      "BBVA": "no_record_for_date",
+      "UCG": "no_record_for_date",
+      "MUFG": "no_record_for_date",
+      "MFG": "no_record_for_date"
+    },
+    "complete": false,
+    "expected_count": 29,
+    "srisk_count": 4
+  },
+  "system_srisk_usd_bn": null,
+  "covered_srisk_usd_bn": 537.9172,
+  "units": {
+    "monetary": "USD billions",
+    "returns": "log returns over matched closing-date intervals",
+    "shares": "percent"
+  },
+  "share_denominator": "covered_srisk_usd_bn",
+  "bank_count": 4,
+  "banks": [
+    {
+      "bank_name": "Barclays",
+      "region": "GB",
+      "covar_index": "^FTSE",
+      "security_ticker": "BARC.L",
+      "accounting_standard": "IFRS",
+      "liabilities_evidence": {
+        "effective_date": "2024-12-31",
+        "available_date": "2025-02-14",
+        "source": "https://www.sec.gov/Archives/edgar/data/312069/000031206925000114/0000312069-25-000114-index.html",
+        "accession": "0000312069-25-000114",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "ed26276672d6a2fa4e7492e29f713f768ec317536d4b969aba43e3205894aabf",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.035818,
+      "lrmes": 0.584188,
+      "covar": -0.021975,
+      "delta_covar": -0.011505,
+      "covar_beta": 0.319302,
+      "srisk_usd_bn": 129.754035,
+      "market_cap_usd_bn": 61.622029,
+      "debt_usd_bn": 1916.59233,
+      "data_quality_warnings": [
+        "historical_feed_not_vintage_verified",
+        "CURRENCY_METADATA_CONFLICT: explicit sourced currency override applied",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 24.1216,
+      "bank_id": "BARC"
+    },
+    {
+      "bank_name": "Industrial & Commercial Bank of China",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "1398.HK",
+      "accounting_standard": "IFRS",
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://v.icbc.com.cn/userfiles/resources/icbcltd/download/2025/Announcement20250429_3.pdf",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "61874f7090d18e48260dbedee1f14a85384875066a6352c2cd882e6d0ddbc648",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.022786,
+      "lrmes": 0.253252,
+      "covar": -0.032114,
+      "delta_covar": -0.015778,
+      "covar_beta": 0.637783,
+      "srisk_usd_bn": 300.343783,
+      "market_cap_usd_bn": 329.868212,
+      "debt_usd_bn": 6587.074352,
+      "data_quality_warnings": [
+        "historical_feed_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 55.8346,
+      "bank_id": "ICBC"
+    },
+    {
+      "bank_name": "JPMorgan Chase",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "JPM",
+      "accounting_standard": "US-GAAP",
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-02",
+        "source": "https://www.sec.gov/Archives/edgar/data/19617/000001961725000421/0000019617-25-000421-index.html",
+        "accession": "0000019617-25-000421",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "36f07909ffbffce3c7744a3e626c51f827fb43e5839f7451dc42cd9936d43c85",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.031691,
+      "lrmes": 0.390658,
+      "covar": -0.027567,
+      "delta_covar": -0.013173,
+      "covar_beta": 0.489233,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 743.574521,
+      "debt_usd_bn": 4006.436,
+      "data_quality_warnings": [
+        "historical_feed_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "JPM"
+    },
+    {
+      "bank_name": "Sumitomo Mitsui Financial",
+      "region": "JP",
+      "covar_index": "^N225",
+      "security_ticker": "8316.T",
+      "accounting_standard": "J-GAAP",
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-15",
+        "source": "https://www.smfg.co.jp/english/investor/financial/latest_statement/2025_3/2025_fy_e01.pdf",
+        "accession": null,
+        "accounting_standard": "J-GAAP"
+      },
+      "fundamentals_input_sha256": "b928e3a430e33d319bb2f84d2ff8356b4ff3a2dd063e1616e26bd7d4c6601c07",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.060832,
+      "lrmes": 0.386163,
+      "covar": -0.037829,
+      "delta_covar": -0.020462,
+      "covar_beta": 0.625498,
+      "srisk_usd_bn": 107.819404,
+      "market_cap_usd_bn": 91.817557,
+      "debt_usd_bn": 1995.894439,
+      "data_quality_warnings": [
+        "historical_feed_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 20.0439,
+      "bank_id": "SMFG"
+    }
+  ],
+  "quality": {
+    "status": "warning",
+    "srisk_coverage_ratio": 0.13793103448275862,
+    "alerts": [
+      {
+        "code": "LOW_COVERAGE",
+        "severity": "warning",
+        "bank_id": null,
+        "message": "SRISK coverage 4/29; threshold 80%"
+      },
+      {
+        "code": "INCOMPLETE_UNIVERSE",
+        "severity": "warning",
+        "bank_id": null,
+        "message": "Covered subtotal is not the full-system total"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "historical_feed_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "CURRENCY_METADATA_CONFLICT: explicit sourced currency override applied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "Liabilities period is 136 days old"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "historical_feed_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "JPM",
+        "message": "historical_feed_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "JPM",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "historical_feed_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      }
+    ],
+    "thresholds": {
+      "min_srisk_coverage": 0.8,
+      "snapshot_max_calendar_days": 7,
+      "fundamentals_warning_days": 100
+    }
+  }
+}

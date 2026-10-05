@@ -13,17 +13,12 @@ import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
 import { useI18n } from "@/lib/i18n";
 import { formatDate, formatDelta, formatPercent, formatUsdBn } from "@/lib/format";
-import { fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
+import { fetchSnapshotByDate, fetchSnapshotSeries, comparableTotals } from "@/lib/public-data";
 import type { Region, SystemSnapshot } from "@/lib/types";
 import { REGION_COLORS, REGION_OPTIONS } from "@/lib/constants";
 
 function uniqueBanks(banks: SystemSnapshot["banks"]) {
-  const hasGle = banks.some((bank) => bank.bank_id === "GLE");
-  return banks.filter((bank) => bank.bank_id !== "BPCE" || !hasGle).map((bank) =>
-    bank.bank_id === "GLE" && banks.some((item) => item.bank_id === "BPCE")
-      ? { ...bank, bank_name: "GLE / BPCE (shared proxy data)" }
-      : bank
-  );
+  return banks.filter(bank => bank.bank_id !== "BPCE");
 }
 
 export function DashboardView() {
@@ -48,13 +43,13 @@ export function DashboardView() {
       return null;
     }
     const comparableBanks = uniqueBanks(snapshot.banks);
-    const banks = [...comparableBanks].sort((left, right) => right.srisk_usd_bn - left.srisk_usd_bn);
-    const deltaLeaders = [...comparableBanks].sort((left, right) => left.delta_covar - right.delta_covar);
+    const banks = comparableBanks.filter(bank => bank.srisk_usd_bn != null).sort((left, right) => right.srisk_usd_bn! - left.srisk_usd_bn!);
+    const deltaLeaders = comparableBanks.filter(bank => bank.delta_covar != null).sort((left, right) => left.delta_covar! - right.delta_covar!);
     const regionTotals = REGION_OPTIONS.map((region) => ({
       region,
       value: comparableBanks
         .filter((bank) => bank.region === region)
-        .reduce((sum, bank) => sum + bank.srisk_usd_bn, 0)
+        .reduce((sum, bank) => sum + (bank.srisk_usd_bn ?? 0), 0)
     })).filter((item) => item.value > 0);
 
     return {
@@ -62,10 +57,7 @@ export function DashboardView() {
       topDelta: deltaLeaders[0],
       topBanks: banks.slice(0, 10),
       regionTotals,
-      systemSeries: series.map((item) => ({
-        date: item.date,
-        value: item.system_srisk_usd_bn
-      }))
+      systemSeries: comparableTotals(series, snapshot)
     };
   }, [historyQuery.data?.snapshots, snapshotQuery.data]);
 
@@ -100,8 +92,8 @@ export function DashboardView() {
   }
 
   const snapshot = snapshotQuery.data;
-  const partial = snapshot.banks.length < 28;
-  const displayedSystemSrisk = uniqueBanks(snapshot.banks).reduce((sum, bank) => sum + bank.srisk_usd_bn, 0);
+  const partial = !snapshot.coverage?.complete;
+  const displayedSystemSrisk = snapshot.covered_srisk_usd_bn ?? snapshot.system_srisk_usd_bn;
 
   const rankingOption = {
     backgroundColor: "transparent",
@@ -207,19 +199,19 @@ export function DashboardView() {
 
   const metricCards = [
     {
-      label: partial ? `SRISK (${snapshot.banks.length} banks)` : t.dashboard.systemWideSrisk,
+      label: partial ? `Covered SRISK (${snapshot.coverage?.srisk_count ?? 0} banks)` : t.dashboard.systemWideSrisk,
       value: formatUsdBn(displayedSystemSrisk, lang),
       hint: t.dashboard.systemWideSriskHint
     },
     {
       label: t.dashboard.mostSystemicSrisk,
-      value: `${derived.topSrisk.bank_name} (${derived.topSrisk.bank_id})`,
-      hint: formatUsdBn(derived.topSrisk.srisk_usd_bn, lang)
+      value: derived.topSrisk ? `${derived.topSrisk.bank_name} (${derived.topSrisk.bank_id})` : "N/A",
+      hint: formatUsdBn(derived.topSrisk?.srisk_usd_bn, lang)
     },
     {
       label: `${t.dashboard.mostSystemicDelta} ⓘ`,
-      value: `${derived.topDelta.bank_name} (${derived.topDelta.bank_id})`,
-      hint: formatDelta(derived.topDelta.delta_covar)
+      value: derived.topDelta ? `${derived.topDelta.bank_name} (${derived.topDelta.bank_id})` : "N/A",
+      hint: formatDelta(derived.topDelta?.delta_covar)
     },
     {
       label: t.dashboard.lastUpdatedDate,
@@ -230,7 +222,13 @@ export function DashboardView() {
 
   return (
     <div className="mt-6 space-y-6">
-      {partial ? <div role="alert" className="rounded-2xl border border-accent/60 bg-accent/10 px-4 py-3 text-sm text-text">This snapshot covers only {snapshot.banks.length} of 29 banks — system-wide totals are not comparable across dates.</div> : null}
+      {snapshot.dataset_kind === "historical_reconstruction" ? <div role="alert">Historical reconstruction using selected disclosures and reference FX. Not a point-in-time forecast or live ranking.</div> : null}
+      {snapshot.dataset_kind === "synthetic_test" ? <div role="alert">SYNTHETIC TEST DATA — NOT REAL BANK ESTIMATES</div> : null}
+      {snapshot.quality?.alerts.length ? <details className="rounded-2xl border border-accent/60 p-4" open={snapshot.quality.status === "error"}>
+        <summary>Data quality: {snapshot.quality.status} · {snapshot.quality.alerts.length} alerts</summary>
+        <ul className="mt-3 space-y-1 text-sm">{snapshot.quality.alerts.map((alert,index)=><li key={index}>{alert.bank_id ? `${alert.bank_id}: ` : ""}{alert.code} · {alert.message}</li>)}</ul>
+      </details> : null}
+      {partial ? <div role="alert" className="rounded-2xl border border-accent/60 bg-accent/10 px-4 py-3 text-sm text-text">SRISK coverage: {snapshot.coverage?.srisk_count ?? 0} / {snapshot.coverage?.expected_count ?? 29}. Missing inputs are not zero. Trend uses a fixed cohort; it is not a full-system total.</div> : null}
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {metricCards.map((card) => (
           <Panel key={card.label} className="overflow-hidden">
@@ -245,14 +243,14 @@ export function DashboardView() {
         <div className="space-y-6">
           <ChartCard
             title={t.dashboard.rankingTitle}
-            description={`${t.dashboard.rankingDescription} GLE / BPCE is shown once because it is shared proxy data.`}
+            description={`${t.dashboard.rankingDescription} BPCE is excluded pending its own verified inputs.`}
           >
             <EChartsClient option={rankingOption} className="h-[420px] w-full" />
           </ChartCard>
 
           <ChartCard
             title={t.dashboard.replayTitle}
-            description={t.dashboard.replayDescription}
+            description={`${t.dashboard.replayDescription} Fixed cohort of current banks with valid SRISK; incomplete dates omitted.`}
           >
             <EChartsClient option={seriesOption} className="h-[320px] w-full" />
           </ChartCard>

@@ -1,0 +1,35 @@
+{
+  "bank_id": "UBS",
+  "scope": "consolidated_group",
+  "currency": "USD",
+  "accounting_standard": "IFRS",
+  "source_sha256": "9022d33b731de76b10b3b055524398860164403375dda07f849d2824a8ef2c66",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001610520.json",
+  "share_tag": "ifrs-full:NumberOfSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-18",
+      "value": 1479454000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/1610520/000161052025000023/0001610520-25-000023-index.html",
+      "accession": "0001610520-25-000023",
+      "filed_date": "2025-03-17",
+      "accounting_standard": "IFRS",
+      "currency": "USD",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-18",
+      "value": 3174825251,
+      "source": "https://www.sec.gov/Archives/edgar/data/1610520/000161052025000023/0001610520-25-000023-index.html",
+      "accession": "0001610520-25-000023",
+      "filed_date": "2025-03-17",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { compareBackendHealth, type BackendHealth } from "./lib/health";
 /** Cloudflare entrypoint. Bind ASSETS and set MCP_ORIGIN (including /mcp). */
 export interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
@@ -24,11 +25,11 @@ export default {
     if (url.pathname.startsWith("/api/")) return json({ error: "No REST API on this deployment", mcp: `${SITE}/mcp`, data: `${SITE}/data/latest.json`, docs: `${SITE}/llms.txt` }, 404);
     if (url.pathname === "/status.json") {
       const manifestResponse = await env.ASSETS.fetch(new Request(new URL("/data/manifest.json", url), request));
-      const data: { lastUpdated?: string; cadence?: string; expected_next_update?: string } = manifestResponse.ok ? await manifestResponse.json() : {};
+      const data: { lastUpdated?: string; cadence?: string; expected_next_update?: string; calibration_id?: string; methodology_version?: string } = manifestResponse.ok ? await manifestResponse.json() : {};
       let mcpOriginHealth = "unreachable";
-      try { mcpOriginHealth = (await fetch(new URL("/health", env.MCP_ORIGIN))).ok ? "ok" : "unreachable"; } catch {}
+      try { const response = await fetch(new URL("/health", env.MCP_ORIGIN), { signal: AbortSignal.timeout(3000) }); const body = response.ok ? await response.json() as BackendHealth : {}; mcpOriginHealth = compareBackendHealth(response.ok, body, data); } catch {}
       const expected = data.expected_next_update ?? (data.lastUpdated ? nextWeekday(data.lastUpdated) : null);
-      return json({ latest_date: data.lastUpdated ?? null, generated_at: new Date().toISOString(), cadence: data.cadence ?? "weekdays, T+1", expected_next_update: expected, is_stale: Boolean(expected && new Date().toISOString().slice(0, 10) > expected), mcp_origin_health: mcpOriginHealth });
+      return json({ latest_date: data.lastUpdated ?? null, generated_at: new Date().toISOString(), cadence: data.cadence ?? "weekdays, T+1", expected_next_update: expected, is_stale: !data.lastUpdated || Boolean(expected && new Date().toISOString().slice(0, 10) > expected), mcp_origin_health: mcpOriginHealth });
     }
     if (url.pathname.startsWith("/data/")) {
       if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });

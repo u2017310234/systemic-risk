@@ -1,0 +1,35 @@
+{
+  "bank_id": "RBC",
+  "scope": "consolidated_group",
+  "currency": "CAD",
+  "accounting_standard": "IFRS",
+  "source_sha256": "0fe358749ce9c374a458fb3478c2980cd842de503e07693efb595c0ede47eef5",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001000275.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2025-01-31",
+      "available_date": "2025-02-28",
+      "value": 2057763000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/1000275/000119312525037542/0001193125-25-037542-index.html",
+      "accession": "0001193125-25-037542",
+      "filed_date": "2025-02-27",
+      "accounting_standard": "IFRS",
+      "currency": "CAD",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2024-10-31",
+      "available_date": "2024-12-05",
+      "value": 1415080299,
+      "source": "https://www.sec.gov/Archives/edgar/data/1000275/000119312524270294/0001193125-24-270294-index.html",
+      "accession": "0001193125-24-270294",
+      "filed_date": "2024-12-04",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

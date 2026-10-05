@@ -6,7 +6,8 @@ const regionAnchors: Record<Region, { x: number; y: number }> = {
   CN: { x: 82, y: 32 },
   GB: { x: 42, y: 24 },
   EU: { x: 50, y: 50 },
-  JP: { x: 78, y: 62 }
+  JP: { x: 78, y: 62 },
+  CA: { x: 18, y: 16 }
 };
 
 export function assignGraphLayout(nodes: GraphNode[], mode: "full" | "cluster") {

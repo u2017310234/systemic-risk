@@ -1,0 +1,24 @@
+{
+  "bank_id": "BOCOM",
+  "scope": "consolidated_group",
+  "currency": "CNY",
+  "accounting_standard": "PRC-GAAP",
+  "source_sha256": "a56f756f1a40dc85e3455c3bae5f42142e040310da568a4e98c05edef7e0f8ef",
+  "manual_balance_check": {
+    "assets": 15288895000000.0,
+    "liabilities": 14112326000000.0,
+    "equity": 1176569000000.0,
+    "residual": 0.0,
+    "precision": "million native currency; MUFG independently rounded down"
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-04-30",
+      "source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0429/2025042903111_c.pdf",
+      "accounting_standard": "PRC-GAAP",
+      "currency": "CNY",
+      "value": 14112326000000
+    }
+  ]
+}

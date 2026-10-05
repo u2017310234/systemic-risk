@@ -21,7 +21,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.config import cfg
-from src.universe import BANKS, BANK_BY_ID
+from src.universe import BANKS, BANK_BY_ID, UNIVERSE_MEMBERSHIP_AVAILABLE_FROM, universe_evidence
 from src.fetcher import fetch_prices, fetch_market_cap_series, fetch_debt_series, MCAP_UPPER_BOUND_USD_BN
 from src.metrics.mes import calc_lrmes_rolling, calc_mes_rolling
 from src.metrics.covar import calc_covar_rolling
@@ -35,10 +35,83 @@ logging.basicConfig(
 logger = logging.getLogger("pipeline")
 
 
+def run_pipeline(target_date: date, start_date: date, bank_ids: list[str] | None = None) -> None:
+    """Stage and validate a complete batch before atomically switching readers.
+
+    Local publisher lock prevents concurrent writers from losing corrections.
+    Legacy v1 files are not copied into the repaired v2 series.
+    """
+    universe_evidence(target_date.isoformat())
+    import json, shutil, uuid, fcntl
+    from src.storage import active_root
+    from src.publish import _write_json, calibration_id
+    root = Path(cfg.data_dir).resolve()
+    root.mkdir(parents=True, exist_ok=True)
+    if start_date > target_date:
+        raise ValueError("start_date exceeds target_date")
+    with open(root / ".publish.lock", "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        name = uuid.uuid4().hex
+        staged = root / "runs" / name
+        staged.mkdir(parents=True)
+        previous = active_root(root)
+        if bank_ids and previous != root:
+            raise ValueError("Subset runs require a separate DATA_DIR; cannot overwrite an existing full publication")
+        if previous != root:
+            if json.loads((previous / "latest.json").read_text()).get("calibration_id") != calibration_id():
+                raise ValueError("Calibration changed; use a separate DATA_DIR and full recomputation")
+            shutil.copytree(previous, staged, dirs_exist_ok=True)
+        old_dir = cfg.data_dir
+        try:
+            cfg.data_dir = str(staged)
+            _compute_and_publish(target_date, start_date, bank_ids)
+            latest_path = staged / "latest.json"
+            if not latest_path.exists():
+                raise RuntimeError("Batch has no latest snapshot")
+            latest = json.loads(latest_path.read_text())
+            if previous != root:
+                old_latest = json.loads((previous / "latest.json").read_text())
+                if old_latest["date"] > latest["date"]:
+                    _write_json(old_latest, latest_path)
+            # Compare with the previous committed run; don't confuse liveness with data quality.
+            from src.quality import assess_quality
+            selected = json.loads(latest_path.read_text())
+            prior = json.loads((previous / "latest.json").read_text()) if previous != root else None
+            selected["quality"] = assess_quality(selected, prior, today=date.fromisoformat(selected["date"]))
+            _write_json(selected, latest_path)
+            _write_json(selected["quality"], staged / "quality-report.json")
+            # Verify JSON/CSV for every regenerated snapshot before commit.
+            validate_batch(staged)
+            _write_json({"run": name, "methodology_version": "2.0-beta-scenario"}, root / "current.json")
+        finally:
+            cfg.data_dir = old_dir
+        # Failed staging directories stay unreferenced for diagnosis; readers never see them.
+
+
+def validate_batch(root: Path):
+    import json
+    csvs = {}
+    for path in (root / "history").glob("*.json"):
+        payload = json.loads(path.read_text())
+        for bank in payload["banks"]:
+            bid = bank["bank_id"]
+            if bid not in csvs:
+                csvs[bid] = pd.read_csv(root / "banks" / f"{bid}.csv").set_index("date")
+            rows = csvs[bid]
+            if payload["date"] not in rows.index:
+                raise ValueError(f"Missing CSV date: {bid} {payload['date']}")
+            for field in ["srisk_usd_bn", "srisk_share_pct", "market_cap_usd_bn", "debt_usd_bn", "mes", "lrmes", "covar", "delta_covar"]:
+                expected, actual = bank.get(field), rows.loc[payload["date"], field]
+                if expected is None:
+                    if pd.notna(actual): raise ValueError(f"CSV/JSON null mismatch: {bid}/{field}")
+                elif not np.isclose(expected, actual, rtol=1e-9, atol=1e-9):
+                    raise ValueError(f"CSV/JSON mismatch: {bid}/{field}")
+
+
 # ---------------------------------------------------------------------------
 # Main pipeline
 # ---------------------------------------------------------------------------
-def run_pipeline(
+def _compute_and_publish(
     target_date: date,
     start_date: date,
     bank_ids: list[str] | None = None,
@@ -57,12 +130,14 @@ def run_pipeline(
     failed_banks: list[str] = []
 
     for bank in banks:
+        if not bank.supported:
+            failed_banks.append(bank.id)
+            continue
         logger.info(f"Processing {bank.id} ({bank.name})")
         try:
             bank_data = process_bank(bank, start_str, end_str)
             if bank_data is not None:
-                all_results[bank.id] = bank_data
-                publish_bank_csv(bank, bank_data)
+                all_results[bank.id] = {d:m for d,m in bank_data.items() if d >= UNIVERSE_MEMBERSHIP_AVAILABLE_FROM}
                 logger.info(f"  ✓ {bank.id} completed")
             else:
                 failed_banks.append(bank.id)
@@ -93,7 +168,7 @@ def run_pipeline(
             shares = calc_srisk_shares(srisk_vals)
             sys_srisk = system_srisk(srisk_vals)
             for bid in day_data:
-                day_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
+                day_data[bid]["srisk_share_pct"] = shares.get(bid)
             publish_snapshot(snap_date, day_data, sys_srisk)
 
     # Update latest.json from target_date. If today's prices are not published
@@ -122,10 +197,14 @@ def run_pipeline(
         shares = calc_srisk_shares(srisk_vals)
         sys_srisk = system_srisk(srisk_vals)
         for bid in latest_data:
-            latest_data[bid]["srisk_share_pct"] = shares.get(bid, 0.0)
+            latest_data[bid]["srisk_share_pct"] = shares.get(bid)
         publish_latest(date.fromisoformat(target_str), latest_data, sys_srisk)
         logger.info(f"Published latest.json for {target_str}")
 
+    # Shares are now present in the same canonical records used for JSON.
+    for bank in banks:
+        if bank.id in all_results:
+            publish_bank_csv(bank, all_results[bank.id])
     logger.info("Pipeline complete.")
 
 
@@ -136,6 +215,8 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
     Returns:
         dict mapping date strings to metric dicts, or None on fatal error.
     """
+    if not bank.supported:
+        return None
     # ----- Price returns -----
     prices = fetch_prices(bank.yf_ticker, start_str, end_str, bank.ak_ticker)
     if prices.empty or len(prices) < cfg.covar_window + 10:
@@ -147,9 +228,11 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
         logger.warning(f"  Missing index data {bank.index_yf} for {bank.id}")
         return None
 
-    # Log returns
-    bank_rets = np.log(prices / prices.shift(1)).dropna()
-    index_rets = np.log(index_prices / index_prices.shift(1)).dropna()
+    # Join closing dates first so returns cover identical calendar intervals.
+    paired_prices = pd.concat([prices.rename("bank"), index_prices.rename("index")], axis=1).dropna().sort_index()
+    paired_prices = paired_prices.where(paired_prices > 0).dropna()
+    paired_returns = np.log(paired_prices / paired_prices.shift(1)).replace([np.inf, -np.inf], np.nan).dropna()
+    bank_rets, index_rets = paired_returns["bank"], paired_returns["index"]
 
     # ----- Market cap & debt -----
     mcap = fetch_market_cap_series(bank, start_str, end_str)
@@ -157,6 +240,16 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
 
     # ----- Data quality warnings -----
     warnings_list: list[str] = []
+    if prices.attrs.get("quality"):
+        warnings_list.append(prices.attrs["quality"])
+    if prices.attrs.get("currency_override"):
+        warnings_list.append("CURRENCY_METADATA_CONFLICT: explicit sourced currency override applied")
+    if mcap.empty:
+        warnings_list.append("market_cap_unavailable_or_unverified_group_scope")
+    if debt.empty:
+        warnings_list.append("publication_dated_liabilities_required")
+    if mcap.attrs.get("quality"):
+        warnings_list.append(mcap.attrs["quality"])
     if not mcap.empty:
         median_mcap = float(mcap.median())
         if not np.isnan(median_mcap) and median_mcap > MCAP_UPPER_BOUND_USD_BN:
@@ -195,6 +288,13 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
             "bank_name": bank.name,
             "region": bank.region,
             "covar_index": bank.index_yf,
+            "security_ticker": bank.yf_ticker,
+            "accounting_standard": debt.attrs.get("accounting_standard", "unspecified"),
+            "market_cap_evidence": mcap.attrs.get("selected_sources", {}).get(dt_str),
+            "liabilities_evidence": debt.attrs.get("selected_sources", {}).get(dt_str),
+            "fundamentals_input_sha256": debt.attrs.get("input_sha256") or mcap.attrs.get("input_sha256"),
+            "methodology_version": "2.0-beta-scenario",
+            "fundamentals_quality": {"market_cap": mcap.attrs.get("quality", "unavailable"), "liabilities": debt.attrs.get("quality", "unavailable")},
             "mes": _safe_float(mes_series.get(dt)),
             "lrmes": _safe_float(lrmes_series.get(dt)),
             "covar": _safe_float(covar_row["covar"] if covar_row is not None else None),
@@ -214,7 +314,7 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
 def _safe_float(val) -> float | None:
     try:
         f = float(val)
-        return None if np.isnan(f) else round(f, 6)
+        return None if not np.isfinite(f) else round(f, 6)
     except (TypeError, ValueError):
         return None
 

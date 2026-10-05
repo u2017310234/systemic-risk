@@ -35,7 +35,7 @@ export function NetworkGraph({
             return `${params.data.label}<br/>${t.network.nodeTooltipSrisk}: ${Number(params.data.srisk).toFixed(1)} bn<br/>${t.network.nodeTooltipDelta}: ${Number(params.data.deltaCoVar).toFixed(4)}`;
           }
           const edgeData = params.data as unknown as { weight: number; components: GraphEdge["components"] };
-          return `${t.network.edgeWeight}: ${edgeData.weight.toFixed(3)}<br/>${t.network.sriskCorr}: ${edgeData.components.sriskCorr.toFixed(3)}<br/>${t.network.deltaCorr}: ${edgeData.components.deltaCoVarCorr.toFixed(3)}<br/>${t.network.sameRegion}: ${edgeData.components.sameRegion}`;
+          return `${t.network.edgeWeight}: ${edgeData.weight.toFixed(3)}<br/>${t.network.sriskCorr}: ${(edgeData.components.sriskCorr?.toFixed(3) ?? "N/A")}<br/>${t.network.deltaCorr}: ${(edgeData.components.deltaCoVarCorr?.toFixed(3) ?? "N/A")}<br/>${t.network.sameRegion}: ${edgeData.components.sameRegion}`;
         }
       },
       series: [

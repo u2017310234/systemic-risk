@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { compareBackendHealth } from '../lib/health';
+const site={lastUpdated:'2026-10-01',calibration_id:'abc',methodology_version:'2'};
+const backend={status:'ok',data_date:'2026-10-01',calibration_id:'abc',methodology_version:'2'};
+test('HTTP 200 with degraded data is not healthy',()=>assert.equal(compareBackendHealth(true,{...backend,status:'degraded'},site),'degraded'));
+test('different snapshot is visible',()=>assert.equal(compareBackendHealth(true,{...backend,data_date:'2026-09-30'},site),'different_snapshot'));
+test('different calibration is visible',()=>assert.equal(compareBackendHealth(true,{...backend,calibration_id:'old'},site),'different_snapshot'));
+test('missing identity is unverified',()=>assert.equal(compareBackendHealth(true,{status:'ok'},site),'unverified'));
+test('matching healthy snapshot is healthy',()=>assert.equal(compareBackendHealth(true,backend,site),'ok'));

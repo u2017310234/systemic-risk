@@ -48,7 +48,7 @@ def _ak():
 # ---------------------------------------------------------------------------
 def _cache_path(ticker: str, start: str, end: str) -> Path:
     safe = ticker.replace("^", "IDX_").replace(".", "_").replace("/", "_")
-    return Path(cfg.raw_dir) / f"{safe}_{start}_{end}.parquet"
+    return Path(cfg.raw_dir) / f"v2_{safe}_{start}_{end}.parquet"
 
 
 def _load_cache(path: Path) -> pd.DataFrame | None:
@@ -88,6 +88,10 @@ def fetch_prices(
     Returns:
         pd.Series with DatetimeIndex, float values in local currency.
     """
+    from src.market_inputs import load_series
+    external = load_series(ticker, "adjusted_close", start, end)
+    if external is not None:
+        return external.rename(ticker)
     cache_path = _cache_path(ticker, start, end)
     if use_cache:
         cached = _load_cache(cache_path)
@@ -98,18 +102,14 @@ def fetch_prices(
     # ── Try Yahoo Finance ─────────────────────────────────────────────────
     series = _fetch_yf(ticker, start, end)
 
-    # ── Fallback: AkShare (CN A-shares) ──────────────────────────────────
-    if (series is None or series.empty) and ak_ticker:
-        logger.info(f"YF returned empty for {ticker}, trying AkShare {ak_ticker}")
-        series = _fetch_ak(ak_ticker, start, end)
-
+    # A-share returns cannot silently stand in for an H-share listing/index.
+    # Missing primary data remains missing; an explicit security registry change is required.
     if series is None or series.empty:
         logger.warning(f"No price data found for {ticker} ({start} to {end})")
         return pd.Series(dtype=float, name=ticker)
 
     series.name = ticker
-    series.index = pd.to_datetime(series.index)
-    series = series.sort_index()
+    series = _dates(series)
 
     if use_cache:
         _save_cache(pd.DataFrame({"close": series}), cache_path)
@@ -122,7 +122,7 @@ def _fetch_yf(ticker: str, start: str, end: str) -> pd.Series | None:
     try:
         yf = _yf()
         # Download with auto_adjust=True gives adjusted close in 'Close' column
-        df = yf.download(ticker, start=start, end=end, auto_adjust=True,
+        df = yf.download(ticker, start=start, end=(pd.Timestamp(end) + timedelta(days=1)).strftime("%Y-%m-%d"), auto_adjust=True,
                          progress=False, threads=False)
         if df.empty:
             return None
@@ -158,198 +158,198 @@ def _fetch_ak(ak_ticker: str, start: str, end: str) -> pd.Series | None:
 # ---------------------------------------------------------------------------
 # Market Cap
 # ---------------------------------------------------------------------------
-def fetch_market_cap_series(bank: Bank, start: str, end: str) -> pd.Series:
+class DataQualityError(ValueError):
+    """An input cannot safely be interpreted in the declared units/security scope."""
+
+
+def _dates(series: pd.Series) -> pd.Series:
+    series = series.copy()
+    series.index = pd.to_datetime(series.index).tz_localize(None).normalize()
+    return series[~series.index.duplicated(keep="last")].sort_index()
+
+
+def convert_currency(series: pd.Series, currency: str) -> pd.Series:
+    """Convert native amounts to USD; all FX tickers quote USD per currency unit.
+
+    Missing/stale FX produces NaN, never native numbers mislabeled USD.
     """
-    Return daily market cap in USD billions.
-    market_cap = adjusted_close * shares_outstanding
-    Shares outstanding sourced from yfinance info (point-in-time approx).
-
-    Includes anomaly detection: if computed market cap exceeds a reasonable
-    threshold for a bank (3000 USD bn), a warning is logged and a fallback
-    via yfinance's marketCap field is attempted.
-    """
-    prices = fetch_prices(bank.yf_ticker, start, end, bank.ak_ticker)
-    if prices.empty:
-        return pd.Series(dtype=float, name=f"{bank.id}_mcap")
-
-    yf = _yf()
-    tkr_obj = yf.Ticker(bank.yf_ticker)
-    info = tkr_obj.fast_info
-    shares = getattr(info, "shares", None) or getattr(info, "shares_outstanding", None)
-    if not shares:
-        logger.warning(f"No shares outstanding for {bank.id}")
-        return pd.Series(dtype=float)
-
-    # yfinance returns share counts for HK-listed stocks as ~100× the actual
-    # number of individual shares (board-lot unit inflation).  Correct it here.
-    if bank.yf_ticker.endswith(".HK"):
-        shares = shares / 100
-
-    mcap = prices * shares / 1e9  # convert to billions
-
-    # FX conversion to USD for non-USD listed banks
-    mcap_usd = _to_usd(mcap, bank.yf_ticker)
-    mcap_usd.name = f"{bank.id}_mcap_usd_bn"
-
-    # --- Anomaly detection: sanity-check computed market cap ---------------
-    median_mcap = mcap_usd.median()
-    if not np.isnan(median_mcap) and median_mcap > MCAP_UPPER_BOUND_USD_BN:
-        logger.warning(
-            f"[DATA QUALITY] {bank.id}: computed market cap "
-            f"({median_mcap:.1f} USD bn) exceeds {MCAP_UPPER_BOUND_USD_BN} USD bn — "
-            f"possible shares/FX unit error. "
-            f"Attempting fallback via yfinance marketCap field."
-        )
-        # Fallback: use yfinance's own marketCap (point-in-time)
-        fallback_mcap = getattr(info, "market_cap", None)
-        if fallback_mcap and fallback_mcap > 0:
-            fb_usd_bn = fallback_mcap / 1e9
-            if fb_usd_bn <= MCAP_UPPER_BOUND_USD_BN:
-                logger.info(
-                    f"[DATA QUALITY] {bank.id}: using yfinance marketCap fallback "
-                    f"({fb_usd_bn:.1f} USD bn)"
-                )
-                mcap_usd = pd.Series(
-                    fb_usd_bn, index=mcap_usd.index, name=mcap_usd.name
-                )
-            else:
-                logger.warning(
-                    f"[DATA QUALITY] {bank.id}: fallback marketCap also "
-                    f"unreasonable ({fb_usd_bn:.1f} USD bn); keeping computed value"
-                )
-        else:
-            logger.warning(
-                f"[DATA QUALITY] {bank.id}: no fallback marketCap available"
-            )
-
-    return mcap_usd
+    series = _dates(series)
+    if series.empty or currency == "USD":
+        return series
+    factor = 0.01 if currency in ("GBp", "GBX") else 1.0
+    currency = "GBP" if currency in ("GBp", "GBX") else currency
+    pairs = {"GBP": "GBPUSD=X", "HKD": "HKDUSD=X", "CHF": "CHFUSD=X",
+             "EUR": "EURUSD=X", "JPY": "JPYUSD=X", "CNY": "CNYUSD=X", "CAD": "CADUSD=X"}
+    if currency not in pairs:
+        raise DataQualityError(f"Unsupported currency: {currency}")
+    from src.market_inputs import load_series
+    external = load_series(currency, "fx_usd_per_unit", series.index.min().strftime("%Y-%m-%d"), series.index.max().strftime("%Y-%m-%d"))
+    if external is not None:
+        # Explicit feed: no fallback or forward fill without evidence for each date.
+        return (series * factor * external.reindex(series.index)).rename(series.name)
+    try:
+        fx = _yf().download(pairs[currency],
+            start=(series.index.min() - timedelta(days=7)).strftime("%Y-%m-%d"),
+            end=(series.index.max() + timedelta(days=1)).strftime("%Y-%m-%d"),
+            auto_adjust=True, progress=False, threads=False)
+        if isinstance(fx.columns, pd.MultiIndex):
+            fx.columns = fx.columns.droplevel(1)
+        rates = _dates(fx["Close"].dropna())
+        rates = rates.where(np.isfinite(rates) & (rates > 0)).dropna()
+        rates = rates.reindex(series.index, method="ffill", tolerance=pd.Timedelta(days=7))
+        return (series * factor * rates).rename(series.name)
+    except Exception as exc:
+        logger.warning("FX unavailable for %s: %s", currency, exc)
+        return pd.Series(np.nan, index=series.index, name=series.name)
 
 
 def _to_usd(series: pd.Series, ticker: str) -> pd.Series:
-    """
-    Convert a price series to USD. Only handles common currency suffixes.
-    .L → GBX (pence) → GBP → USD
-    .HK → HKD → USD
-    .PA .MI .AS .MC .DE → EUR → USD
-    .SW → CHF → USD
-    .T → JPY → USD  (uses JPYUSD=X which gives USD per JPY ≈ 0.0065)
-    .SS .SZ → CNY → USD
-    """
-    fx_pairs = {
-        ".L":  ("GBP=X",    0.01),   # GBX (pence) → GBP factor, then → USD
-        ".HK": ("HKD=X",    1.0),
-        ".PA": ("EURUSD=X", 1.0),
-        ".MI": ("EURUSD=X", 1.0),
-        ".AS": ("EURUSD=X", 1.0),
-        ".MC": ("EURUSD=X", 1.0),
-        ".DE": ("EURUSD=X", 1.0),
-        ".SW": ("CHF=X",    1.0),
-        # JPY=X returns JPY-per-USD (~155); use JPYUSD=X for USD-per-JPY (~0.0065)
-        ".T":  ("JPYUSD=X", 1.0),
-        ".SS": ("CNYUSD=X", 1.0),
-    }
-    for suffix, (fx_ticker, factor) in fx_pairs.items():
-        if ticker.endswith(suffix):
-            try:
-                yf = _yf()
-                fx = yf.download(fx_ticker, start=series.index[0].strftime("%Y-%m-%d"),
-                                 end=(series.index[-1] + timedelta(days=3)).strftime("%Y-%m-%d"),
-                                 auto_adjust=True, progress=False, threads=False)
-                if not fx.empty:
-                    if isinstance(fx.columns, pd.MultiIndex):
-                        fx.columns = fx.columns.droplevel(1)
-                    fx_rate = fx["Close"].reindex(series.index, method="ffill")
-                    return series * factor * fx_rate
-            except Exception as e:
-                logger.warning(f"FX conversion failed for {ticker}: {e}")
-    return series  # already USD or conversion failed
+    banks = [b for b in BANK_BY_ID.values() if b.yf_ticker == ticker]
+    if not banks:
+        raise DataQualityError(f"No explicit quote currency for {ticker}")
+    return convert_currency(series, banks[0].quote_currency)
 
 
 def _to_usd_bs(series: pd.Series, ticker: str) -> pd.Series:
+    banks = [b for b in BANK_BY_ID.values() if b.yf_ticker == ticker]
+    if not banks:
+        raise DataQualityError(f"No explicit reporting currency for {ticker}")
+    return convert_currency(series, banks[0].reporting_currency)
+
+
+def _verified_input(bank: Bank, field: str, start: str, end: str) -> pd.Series | None:
+    """Optional dated issuer-scope amounts, with real public availability dates.
+
+    Schema documented in docs/REPAIR.md. Inputs are absolute amounts, not billions.
+    No file means unavailable, never a fabricated substitute.
     """
-    Convert balance-sheet values (in native reporting currency, already in
-    billions) to USD billions.
-
-    Differs from _to_usd in two ways:
-      1. No pence factor for .L stocks — balance sheets are in GBP, not GBX.
-      2. Uses CNYUSD=X for .HK tickers — HK-listed Chinese banks report
-         their financials in CNY (renminbi), not HKD.
-    """
-    bs_fx_pairs = {
-        ".L":  ("GBP=X",    1.0),    # GBP (not pence) → USD
-        ".HK": ("CNYUSD=X", 1.0),    # CN banks report in CNY
-        ".PA": ("EURUSD=X", 1.0),
-        ".MI": ("EURUSD=X", 1.0),
-        ".AS": ("EURUSD=X", 1.0),
-        ".MC": ("EURUSD=X", 1.0),
-        ".DE": ("EURUSD=X", 1.0),
-        ".SW": ("CHF=X",    1.0),
-        ".T":  ("JPYUSD=X", 1.0),    # JPY → USD (direct rate)
-        ".SS": ("CNYUSD=X", 1.0),
-    }
-    if series.empty:
-        return series
-    for suffix, (fx_ticker, factor) in bs_fx_pairs.items():
-        if ticker.endswith(suffix):
-            try:
-                yf = _yf()
-                start_dt = series.index[0].strftime("%Y-%m-%d")
-                end_dt = (series.index[-1] + timedelta(days=3)).strftime("%Y-%m-%d")
-                fx = yf.download(fx_ticker, start=start_dt, end=end_dt,
-                                 auto_adjust=True, progress=False, threads=False)
-                if not fx.empty:
-                    if isinstance(fx.columns, pd.MultiIndex):
-                        fx.columns = fx.columns.droplevel(1)
-                    fx_rate = fx["Close"].reindex(series.index, method="ffill")
-                    return (series * factor * fx_rate).rename(series.name)
-            except Exception as e:
-                logger.warning(f"Balance sheet FX conversion failed for {ticker}: {e}")
-    return series  # already USD or conversion failed
-
-
-# ---------------------------------------------------------------------------
-# Debt (Total Liabilities from quarterly balance sheet)
-# ---------------------------------------------------------------------------
-def fetch_debt_series(bank: Bank, start: str, end: str) -> pd.Series:
-    """
-    Return daily total liabilities in USD billions (forward-filled from quarterly data).
-    Uses yfinance quarterly balance sheet.
-    """
-    yf = _yf()
-    tkr = yf.Ticker(bank.yf_ticker)
-    bs = tkr.quarterly_balance_sheet
-    if bs is None or bs.empty:
-        logger.warning(f"Empty balance sheet for {bank.id}")
-        return pd.Series(dtype=float)
-
-    # Try common row names for total liabilities
-    candidates = [
-        "Total Liabilities Net Minority Interest",
-        "Total Liabilities",
-        "TotalLiabilities",
-    ]
-    debt_row = None
-    for c in candidates:
-        if c in bs.index:
-            debt_row = bs.loc[c]
-            break
-
-    if debt_row is None:
-        logger.warning(f"No liabilities row found for {bank.id}")
-        return pd.Series(dtype=float)
-
-    debt_row = debt_row.dropna().sort_index()
-    debt_bn = debt_row / 1e9  # to local-currency billions
-
-    # Reindex to daily frequency and forward-fill
+    import json
+    path = Path(cfg.fundamentals_dir) / f"{bank.id}.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text())
+    if data.get("bank_id") != bank.id or data.get("scope") != "consolidated_group":
+        raise DataQualityError(f"{bank.id}: input identity/scope mismatch")
+    rows = data.get(field, [])
+    if not rows:
+        return None
+    from src.fundamentals import select_asof, validate_row, EvidenceError
+    standard = data.get("accounting_standard")
+    for row in rows:
+        validate_row(row)
+        expected_currency = data.get("currencies", {}).get(field, data.get("currency", ""))
+        if row.get("currency", expected_currency) != expected_currency:
+            raise EvidenceError("Mixed currencies in one input stream")
+        if row.get("accounting_standard", standard) != standard:
+            raise EvidenceError("Mixed accounting standards in one input stream")
     idx = pd.date_range(start, end, freq="B")
-    daily = debt_bn.reindex(idx.union(debt_bn.index)).sort_index()
-    daily = daily.ffill().reindex(idx)
+    selected = [select_asof(rows, dt.date()) for dt in idx]
+    if field == "market_cap":
+        selected = [r if r and r["effective_date"] == dt.strftime("%Y-%m-%d") else None
+                    for r, dt in zip(selected, idx)]
+    src = pd.Series([r["value"] if r else np.nan for r in selected], index=idx, dtype=float)
+    result = convert_currency(src / 1e9, data.get("currencies", {}).get(field, data.get("currency", "")))
+    import hashlib
+    result.attrs["quality"] = "supplied_publication_dates"
+    result.attrs["accounting_standard"] = standard or "unspecified"
+    result.attrs["selected_sources"] = {dt.strftime("%Y-%m-%d"): {k:r.get(k) for k in ("effective_date","available_date","source","accession","accounting_standard")} for dt,r in zip(idx,selected) if r}
+    result.attrs["input_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return result
 
-    # Convert from local reporting currency to USD
-    daily = _to_usd_bs(daily, bank.yf_ticker)
-    daily.name = f"{bank.id}_debt_usd_bn"
-    return daily
+
+def _component_market_cap(bank: Bank, start: str, end: str) -> pd.Series | None:
+    import json
+    from src.fundamentals import calculate_group_market_cap, EvidenceError
+    path = Path(cfg.fundamentals_dir) / f"{bank.id}.json"
+    if not path.exists(): return None
+    data = json.loads(path.read_text())
+    observations = data.get("equity_valuations")
+    if observations is None: return None
+    if data.get("bank_id") != bank.id or data.get("scope") != "consolidated_group":
+        raise EvidenceError("Equity input identity mismatch")
+    if set(data["expected_share_classes"]) != set(bank.equity_share_classes):
+        raise EvidenceError("Share classes do not match the issuer registry")
+    values={}; evidence={}
+    for row in observations:
+        when=row["valuation_date"]
+        rates={}
+        used_currencies = {"GBP" if c["currency"] in ("GBp", "GBX") else c["currency"] for c in row["components"]}
+        for item in row.get("fx", []):
+            if item["currency"] not in used_currencies:
+                continue
+            if item.get("source_release_date", when) > when and cfg.dataset_kind != "historical_reconstruction":
+                raise EvidenceError("FX source was published later; require explicit historical_reconstruction mode")
+            if item.get("date") != when or not item.get("source") or item.get("direction") != "USD_PER_UNIT":
+                raise EvidenceError("FX must be same-date, sourced, USD per currency unit")
+            if item["currency"] in rates:raise EvidenceError("Duplicate FX currency")
+            rates[item["currency"]]=item["rate"]
+        result=calculate_group_market_cap(row["components"],data["expected_share_classes"],when,rates)
+        if when in values:raise EvidenceError("Duplicate valuation date")
+        value=result["market_cap_usd_bn"]
+        if not np.isfinite(value) or value <= 0 or value > MCAP_UPPER_BOUND_USD_BN:
+            raise EvidenceError("Implausible or nonfinite consolidated market cap")
+        values[when]=value
+        evidence[when]={"components":result["components"], "sources":[{"share_source":c["share_source"],"price_source":c["price_source"],"shares_effective_date":c["shares_effective_date"],"shares_available_date":c["shares_available_date"],"share_count_basis":c.get("share_count_basis"),"precision":c.get("precision"),"caveat":c.get("caveat"),"price_adjustment":c.get("price_adjustment")} for c in row["components"]]}
+    series=pd.Series(values,dtype=float);series.index=pd.to_datetime(series.index)
+    series=series.reindex(pd.date_range(start,end,freq="B"))
+    series.attrs["quality"]="sourced_class_prices_times_published_shares_estimate"
+    series.attrs["selected_sources"]=evidence
+    return series
+
+
+def fetch_market_cap_series(bank: Bank, start: str, end: str) -> pd.Series:
+    components = _component_market_cap(bank, start, end)
+    if components is not None:
+        return components.rename(f"{bank.id}_mcap_usd_bn")
+    verified = _verified_input(bank, "market_cap", start, end)
+    if verified is not None:
+        return verified.rename(f"{bank.id}_mcap_usd_bn")
+    if cfg.market_inputs_dir:
+        # An explicitly selected local feed must remain offline and reproducible.
+        # Never fill its missing issuer valuations from an unrelated live vendor.
+        return pd.Series(dtype=float)
+    if not bank.supported or bank.market_cap_policy == "verified_input":
+        logger.warning("%s needs verified consolidated-group market cap", bank.id)
+        return pd.Series(dtype=float)
+    ticker = _yf().Ticker(bank.yf_ticker)
+    # Separate price used for equity valuation from dividend-adjusted return prices.
+    frame = ticker.history(start=start, end=(pd.Timestamp(end)+timedelta(days=1)).strftime("%Y-%m-%d"),
+                           auto_adjust=False, actions=True)
+    if frame is None or frame.empty:
+        return pd.Series(dtype=float)
+    # Yahoo Close may be split-adjusted. Refuse ranges crossing a split unless
+    # verified market caps are supplied, rather than mix incompatible share bases.
+    if "Stock Splits" in frame and (frame["Stock Splits"].fillna(0) != 0).any():
+        logger.warning("%s split in range: verified market caps required", bank.id)
+        return pd.Series(dtype=float)
+    price = _dates(frame["Close"])
+    shares = ticker.get_shares_full(start=(pd.Timestamp(start)-timedelta(days=180)).strftime("%Y-%m-%d"),
+                                   end=(pd.Timestamp(end)+timedelta(days=1)).strftime("%Y-%m-%d"))
+    if shares is None or shares.empty:
+        return pd.Series(dtype=float)
+    shares = _dates(shares)
+    shares = shares.reindex(price.index, method="ffill", tolerance=pd.Timedelta(days=180))
+    result = convert_currency(price * shares / 1e9, bank.quote_currency)
+    invalid = ~np.isfinite(result) | (result <= 0) | (result > MCAP_UPPER_BOUND_USD_BN)
+    if invalid.any():
+        logger.warning("[DATA QUALITY] %s market cap invalid; excluded, no constant fallback", bank.id)
+    result = result.mask(invalid).rename(f"{bank.id}_mcap_usd_bn")
+    result.attrs["quality"] = "dated_vendor_shares_not_point_in_time_verified"
+    return result
+
+
+def fetch_debt_series(bank: Bank, start: str, end: str) -> pd.Series:
+    """Only publication-dated consolidated liabilities may enter SRISK.
+
+    Yahoo balance-sheet columns contain period end, not publication date.
+    They are deliberately not forward-filled as if known at period end.
+    Supply sourced input rather than silently introducing look-ahead bias.
+    """
+    verified = _verified_input(bank, "liabilities", start, end)
+    if verified is None:
+        logger.warning("%s: publication-dated liabilities unavailable", bank.id)
+        return pd.Series(dtype=float)
+    return verified.rename(f"{bank.id}_debt_usd_bn")
 
 
 # ---------------------------------------------------------------------------
@@ -371,6 +371,8 @@ def fetch_all_prices(
 
     # Fetch bank prices
     for bank in banks:
+        if not bank.supported:
+            continue
         logger.info(f"Fetching prices: {bank.id} ({bank.yf_ticker})")
         p = fetch_prices(bank.yf_ticker, start, end, bank.ak_ticker)
         if not p.empty:

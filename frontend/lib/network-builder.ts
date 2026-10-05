@@ -8,7 +8,7 @@ import type {
   NetworkViewMode,
   SystemSnapshot
 } from "@/lib/types";
-import { average, clamp, diffSeries, normalizeCorrelation, pearsonCorrelation } from "@/lib/utils";
+import { average, diffSeries, pearsonCorrelation } from "@/lib/utils";
 
 type BuildGraphOptions = {
   metricEmphasis?: MetricEmphasis;
@@ -30,13 +30,13 @@ export function buildInterpretiveGraph(
   } = options;
 
   const nodeScores = buildNodeRiskScores(snapshot.banks);
-  const nodes: GraphNode[] = snapshot.banks.map((bank) => ({
+  const nodes: GraphNode[] = snapshot.banks.filter(bank => bank.srisk_usd_bn != null && bank.delta_covar != null).map((bank) => ({
     id: bank.bank_id,
     label: bank.bank_name,
     region: bank.region,
-    srisk: bank.srisk_usd_bn,
-    deltaCoVar: bank.delta_covar,
-    size: 18 + Math.sqrt(Math.max(bank.srisk_usd_bn, 0)) * 2.3,
+    srisk: bank.srisk_usd_bn!,
+    deltaCoVar: bank.delta_covar!,
+    size: 18 + Math.sqrt(Math.max(bank.srisk_usd_bn!, 0)) * 2.3,
     riskScore: nodeScores[bank.bank_id] ?? 0
   }));
 
@@ -54,30 +54,29 @@ export function buildInterpretiveGraph(
       const sourceBank = snapshot.banks[sourceIndex];
       const targetBank = snapshot.banks[targetIndex];
 
-      const sourceHistory = history
-        .map((item) => item.banks.find((bank) => bank.bank_id === sourceBank.bank_id)?.srisk_usd_bn)
-        .filter((value): value is number => typeof value === "number");
-      const targetHistory = history
-        .map((item) => item.banks.find((bank) => bank.bank_id === targetBank.bank_id)?.srisk_usd_bn)
-        .filter((value): value is number => typeof value === "number");
-      const sourceDeltaHistory = history
-        .map((item) => item.banks.find((bank) => bank.bank_id === sourceBank.bank_id)?.delta_covar)
-        .filter((value): value is number => typeof value === "number");
-      const targetDeltaHistory = history
-        .map((item) => item.banks.find((bank) => bank.bank_id === targetBank.bank_id)?.delta_covar)
-        .filter((value): value is number => typeof value === "number");
-
-      const sriskCorr = normalizeCorrelation(
-        pearsonCorrelation(diffSeries(sourceHistory), diffSeries(targetHistory))
-      );
-      const deltaCoVarCorr = normalizeCorrelation(
-        pearsonCorrelation(diffSeries(sourceDeltaHistory), diffSeries(targetDeltaHistory))
-      );
+      // Join on dates BEFORE differencing: both banks now use identical intervals.
+      const paired = [...new Map(history.filter(item => item.date <= snapshot.date &&
+        item.methodology_version === snapshot.methodology_version && item.calibration_id === snapshot.calibration_id).map(item => [item.date, item])).values()]
+        .sort((a, b) => a.date.localeCompare(b.date));
+      const correlation = (field: "srisk_usd_bn" | "delta_covar") => {
+        const pairs = paired.map(item => [
+          item.banks.find(bank => bank.bank_id === sourceBank.bank_id)?.[field],
+          item.banks.find(bank => bank.bank_id === targetBank.bank_id)?.[field]
+        ]).filter((pair): pair is [number, number] => pair.every(value => typeof value === "number" && Number.isFinite(value)));
+        if (pairs.length < 11) return null;
+        return pearsonCorrelation(diffSeries(pairs.map(pair => pair[0])), diffSeries(pairs.map(pair => pair[1])));
+      };
+      const sriskCorr = correlation("srisk_usd_bn");
+      const deltaCoVarCorr = correlation("delta_covar");
+      // Constant/missing series provide no evidence of an edge. Zero correlation
+      // is zero strength, not 0.5. Region is metadata, not fabricated evidence.
+      if (sriskCorr == null && deltaCoVarCorr == null) continue;
       const sameRegion = sourceBank.region === targetBank.region ? 1 : 0;
-      const weight =
-        sriskCorr * weightFactors.srisk +
-        deltaCoVarCorr * weightFactors.delta +
-        sameRegion * weightFactors.region;
+      const denominator = (sriskCorr == null ? 0 : weightFactors.srisk) +
+        (deltaCoVarCorr == null ? 0 : weightFactors.delta);
+      const weight = ((sriskCorr == null ? 0 : Math.max(0, sriskCorr) * weightFactors.srisk) +
+        (deltaCoVarCorr == null ? 0 : Math.max(0, deltaCoVarCorr) * weightFactors.delta)) / denominator;
+      if (weight <= 0) continue;
 
       rawEdges.push({
         source: sourceBank.bank_id,
@@ -92,7 +91,8 @@ export function buildInterpretiveGraph(
     }
   }
 
-  const topEdges = retainTopEdges(rawEdges, threshold);
+  const validIds = new Set(nodes.map(node => node.id));
+  const topEdges = retainTopEdges(rawEdges.filter(edge => validIds.has(edge.source) && validIds.has(edge.target)), threshold);
   const viewEdges =
     viewMode === "ego" && selectedBankId
       ? topEdges.filter(
@@ -115,7 +115,7 @@ export function buildInterpretiveGraph(
     edges: viewEdges.filter(
       (edge) => activeNodeIds.has(edge.source) && activeNodeIds.has(edge.target)
     ),
-    summary: buildNetworkSummary(viewNodes, viewEdges)
+    summary: buildNetworkSummary(viewNodes, viewEdges, snapshot, history)
   };
 }
 
@@ -143,7 +143,7 @@ function retainTopEdges(edges: GraphEdge[], threshold: number) {
   return Array.from(selected);
 }
 
-function buildNetworkSummary(nodes: GraphNode[], edges: GraphEdge[]): NetworkSummary {
+function buildNetworkSummary(nodes: GraphNode[], edges: GraphEdge[], snapshot: SystemSnapshot, history: SystemSnapshot[]): NetworkSummary {
   const degreeMap = new Map<string, number>();
   nodes.forEach((node) => degreeMap.set(node.id, 0));
   edges.forEach((edge) => {
@@ -173,9 +173,22 @@ function buildNetworkSummary(nodes: GraphNode[], edges: GraphEdge[]): NetworkSum
     })
     .reduce((sum, edge) => sum + edge.weight, 0);
 
-  const networkStressIndex = clamp(average(nodes.map((node) => node.riskScore)) * density, -10, 10);
+  // Historical percentile of the SAME current cohort's covered subtotal.
+  // Relative cross-sectional z-scores remain node colors only.
+  const ids = nodes.map(node => node.id).sort();
+  const pastTotals = [...new Map(history.filter(item => item.date < snapshot.date &&
+    item.methodology_version === snapshot.methodology_version && item.calibration_id === snapshot.calibration_id).map(item => [item.date, item])).values()]
+    .flatMap(item => {
+      const values = ids.map(id => item.banks.find(bank => bank.bank_id === id)?.srisk_usd_bn);
+      return values.every(value => typeof value === "number" && Number.isFinite(value))
+        ? [values.reduce<number>((sum, value) => sum + (value as number), 0)] : [];
+    });
+  const total = nodes.reduce((sum, node) => sum + node.srisk, 0);
+  const networkStressIndex = ids.length && pastTotals.length >= 20
+    ? 100 * pastTotals.reduce((count, value) => count + (value < total ? 1 : value === total ? 0.5 : 0), 0) / pastTotals.length : null;
 
   return {
+    density,
     totalNodes: nodes.length,
     renderedEdges: edges.length,
     densestRegion,

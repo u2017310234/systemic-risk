@@ -1,13 +1,14 @@
 import type { MetricEmphasis, Region } from "@/lib/types";
 
-export const REGION_OPTIONS: Region[] = ["US", "CN", "GB", "EU", "JP"];
+export const REGION_OPTIONS: Region[] = ["US", "CN", "GB", "EU", "JP", "CA"];
 
 export const REGION_LABELS: Record<Region, string> = {
   US: "United States",
   CN: "China",
   GB: "United Kingdom",
   EU: "Europe",
-  JP: "Japan"
+  JP: "Japan",
+  CA: "Canada"
 };
 
 export const REGION_COLORS: Record<Region, string> = {
@@ -15,7 +16,8 @@ export const REGION_COLORS: Record<Region, string> = {
   CN: "#ff7a59",
   GB: "#d57cff",
   EU: "#4ab8d9",
-  JP: "#8dd17e"
+  JP: "#8dd17e",
+  CA: "#ee91ac"
 };
 
 export const EMPHASIS_LABELS: Record<MetricEmphasis, string> = {

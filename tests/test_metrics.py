@@ -198,14 +198,8 @@ class TestSRISK:
         assert math.isnan(calc_srisk(float("nan"), 1000, 0.3))
         assert math.isnan(calc_srisk(0, 1000, 0.3))  # zero mcap
 
-    def test_srisk_positive_for_large_gsib_with_tail_dependence(self):
-        """
-        Top G-SIBs like JPM (mcap ~600B, debt ~3400B) should have positive
-        SRISK when the bank exhibits asymmetric tail dependence (higher
-        co-movement during market downturns).  Previously, using OLS beta
-        alone underestimated LRMES and produced SRISK = 0 for these banks,
-        which is unrealistic.
-        """
+    def test_srisk_follows_formula_even_when_zero(self):
+        """An asymmetric sample is evaluated by the declared formula, without forced positivity."""
         rng = np.random.default_rng(42)
         n = 500
         idx = pd.Series(rng.normal(0, 0.012, n),
@@ -223,10 +217,12 @@ class TestSRISK:
         srisk = calc_srisk(
             market_cap_usd_bn=600, debt_usd_bn=3400, lrmes=lrmes, k=0.08
         )
-        assert srisk > 0, (
-            f"SRISK={srisk:.2f} should be > 0 for JPM-like G-SIB with "
-            f"asymmetric tail dependence; LRMES={lrmes:.4f}"
-        )
+        # Zero is a legitimate result. Do not tune beta to force a positive gap.
+        data = pd.DataFrame({"bank": bank, "index": idx}).tail(252)
+        beta = np.cov(data["bank"], data["index"])[0, 1] / np.var(data["index"], ddof=1)
+        assert lrmes == pytest.approx(max(0, 1 - 0.6 ** beta))
+        assert srisk == pytest.approx(max(0, .08 * 3400 - .92 * 600 * (1-lrmes)))
+
 
 
 # ---------------------------------------------------------------------------

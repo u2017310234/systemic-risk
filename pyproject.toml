@@ -1,14 +1,14 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "gsib-systemic-risk"
-version = "1.0.0"
-description = "Daily systemic risk metrics (MES, CoVaR, SRISK) for all 29 G-SIBs"
+version = "2.3.0"
+description = "Daily systemic risk metrics (MES, CoVaR, SRISK) with audited G-SIB coverage"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = "MIT"
 keywords = ["systemic-risk", "g-sibs", "srisk", "covar", "mes", "mcp", "finance"]
 dependencies = [
     "yfinance>=0.2.36",
@@ -16,6 +16,7 @@ dependencies = [
     "pandas>=2.1.0",
     "numpy>=1.26.0",
     "statsmodels>=0.14.0",
+    "scipy>=1.11.0",
     "httpx>=0.27.0",
     "fastapi>=0.111.0",
     "uvicorn[standard]>=0.29.0",
@@ -25,10 +26,17 @@ dependencies = [
 ]
 
 [project.scripts]
+gsib-normalize-chart = "src.yahoo_inputs:main"
+gsib-readiness = "src.readiness:main"
+gsib-sec-inputs = "src.sec_inputs:main"
 gsib-pipeline = "src.pipeline:main"
-gsib-mcp = "mcp.server:app"
+gsib-mcp = "risk_mcp.server:main"
 gsib-branch-cache = "loc.branch_locator:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*", "mcp*", "loc*"]
+include = ["src*", "risk_mcp*", "loc*"]
+
+
+[project.optional-dependencies]
+test = ["pytest>=8", "build>=1"]

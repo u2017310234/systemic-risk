@@ -9,7 +9,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.pipeline import run_pipeline
+from src.pipeline import _compute_and_publish as run_pipeline
 
 
 class TestPipelineFailure:

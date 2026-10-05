@@ -1,0 +1,48 @@
+{
+  "bank_id": "ICBC",
+  "scope": "consolidated_group",
+  "accounting_standard": "IFRS",
+  "currency": "CNY",
+  "source_sha256": "6f2a8718fcac12e99c70b79cc9a7702436898fdb853c2c4541725ff06afcfee0",
+  "retrieved_asof": "2025-05-16",
+  "liabilities": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-29",
+      "value": 44834480000000,
+      "source": "https://v.icbc.com.cn/userfiles/resources/icbcltd/download/2025/25.pdf",
+      "accounting_standard": "IFRS",
+      "published_date": "2025-03-28",
+      "availability_policy": "publication_plus_one_calendar_day",
+      "page_reference": "Financial highlights / consolidated financial statements"
+    },
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-04-30",
+      "value": 47486219000000,
+      "source": "https://v.icbc.com.cn/userfiles/resources/icbcltd/download/2025/Announcement20250429_3.pdf",
+      "accounting_standard": "IFRS",
+      "published_date": "2025-04-29",
+      "availability_policy": "publication_plus_one_calendar_day",
+      "page_reference": "Consolidated statement of financial position / TOTAL LIABILITIES",
+      "source_sha256": "ecaf5b670e97dcc424ee6ba4ff44c8dd32510a47b67e22ff5028843c768be212"
+    }
+  ],
+  "published_share_classes": [
+    {
+      "share_class_id": "A",
+      "outstanding_shares": 269612212539,
+      "effective_date": "2024-12-31",
+      "available_date": "2025-04-26",
+      "source": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042501522_c.pdf"
+    },
+    {
+      "share_class_id": "H",
+      "outstanding_shares": 86794044550,
+      "effective_date": "2024-12-31",
+      "available_date": "2025-04-26",
+      "source": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042501522_c.pdf"
+    }
+  ],
+  "sample_limit": "Annual and Q1 selected disclosures; original quarterly financial statements are unaudited."
+}

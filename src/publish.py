@@ -16,7 +16,10 @@ from pathlib import Path
 import pandas as pd
 
 from src.config import cfg
-from src.universe import Bank
+from src.universe import Bank, BANKS, UNIVERSE_VERSION, UNIVERSE_SOURCE, UNIVERSE_MEMBERSHIP_AVAILABLE_FROM, universe_evidence
+import math
+import os
+import tempfile
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +68,7 @@ def publish_bank_csv(bank: Bank, date_metrics: dict[str, dict]) -> None:
     for dt_str, m in sorted(date_metrics.items()):
         rows.append({
             "date": dt_str,
+            "methodology_version": "2.0-beta-scenario",
             "mes": m.get("mes"),
             "lrmes": m.get("lrmes"),
             "covar": m.get("covar"),
@@ -84,13 +88,13 @@ def publish_bank_csv(bank: Bank, date_metrics: dict[str, dict]) -> None:
         existing = pd.read_csv(path)
         combined = (
             pd.concat([existing, new_df])
-            .drop_duplicates(subset=["date"])
+            .drop_duplicates(subset=["date"], keep="last")
             .sort_values("date")
         )
     else:
         combined = new_df.sort_values("date")
 
-    combined.to_csv(path, index=False)
+    _atomic_text(path, combined.to_csv(index=False))
     logger.debug(f"Updated {path} ({len(combined)} rows)")
 
 
@@ -103,25 +107,79 @@ def _build_payload(
     system_srisk: float,
 ) -> dict:
     """Build the standard JSON payload structure."""
-    return {
+    membership = universe_evidence(snapshot_date.isoformat())
+    expected = [b.id for b in BANKS]
+    supported = [b.id for b in BANKS if b.supported]
+    valid = [bid for bid, rec in bank_records.items()
+             if bid in supported and _finite(rec.get("srisk_usd_bn"))]
+    records = {bid: dict(rec) for bid, rec in bank_records.items() if bid in supported}
+    subtotal = sum(max(0, records[bid]["srisk_usd_bn"]) for bid in valid)
+    for bid, rec in records.items():
+        rec["srisk_share_pct"] = (round(max(0, rec["srisk_usd_bn"]) / subtotal * 100, 4)
+                                  if bid in valid and subtotal > 0 else 0.0 if bid in valid else None)
+    missing = {bid: (next(b.exclusion_reason for b in BANKS if b.id == bid) if bid not in supported else
+                    "no_record_for_date" if bid not in records else "srisk_inputs_unavailable")
+               for bid in expected if bid not in valid}
+    payload = {
+        "calibration_id": calibration_id(),
+        "data_policy_version": "2.3",
+        "dataset_kind": cfg.dataset_kind,
         "date": snapshot_date.isoformat(),
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "methodology_version": "1.0",
+        "methodology_version": "2.0-beta-scenario",
         "parameters": {
-            "srisk_k": cfg.srisk_k,
-            "covar_quantile": cfg.covar_quantile,
-            "covar_window_days": cfg.covar_window,
-            "lrmes_horizon_days": cfg.lrmes_h,
-            "lrmes_market_drop": cfg.lrmes_market_drop,
-            "mes_tail_pct": cfg.mes_tail_pct,
+            "srisk_k": cfg.srisk_k, "covar_quantile": cfg.covar_quantile,
+            "covar_window_days": cfg.covar_window, "lrmes_horizon_days": cfg.lrmes_h,
+            "lrmes_market_drop": cfg.lrmes_market_drop, "mes_tail_pct": cfg.mes_tail_pct,
+            "covar_solver_policy": "quantile_irls_with_same_objective_highs_lp_fallback",
+            "lrmes_model": "ols_beta_scenario", "horizon_is_label_only": True,
         },
-        "system_srisk_usd_bn": _round(system_srisk),
-        "bank_count": len(bank_records),
-        "banks": [
-            {**_clean(rec), "bank_id": bid}
-            for bid, rec in sorted(bank_records.items())
-        ],
+        "coverage": {
+            "universe_version": UNIVERSE_VERSION, "universe_source": membership["source"], "list_evidence": membership,
+            "membership_available_from": UNIVERSE_MEMBERSHIP_AVAILABLE_FROM, "expected_ids": expected,
+            "eligible_count": len(supported), "ineligible_ids": [b.id for b in BANKS if not b.supported],
+            "eligible_complete": set(valid) == set(supported),
+            "eligible_ids": supported, "observed_ids": sorted(records),
+            "srisk_ids": sorted(valid), "missing": missing,
+            "complete": not missing, "expected_count": len(expected),
+            "srisk_count": len(valid),
+        },
+        "system_srisk_usd_bn": _round(subtotal) if not missing else None,
+        "covered_srisk_usd_bn": _round(subtotal) if valid else None,
+        "units": {"monetary": "USD billions", "returns": "log returns over matched closing-date intervals", "shares": "percent"},
+        "share_denominator": "covered_srisk_usd_bn",
+        "bank_count": len(records),
+        "banks": [{**_clean(rec), "bank_id": bid} for bid, rec in sorted(records.items())],
     }
+
+    from src.quality import assess_quality
+    payload["quality"] = assess_quality(payload, today=snapshot_date)
+    return payload
+
+
+def _finite(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
+def calibration_id():
+    import hashlib
+    parameters = ["2.0-beta-scenario", "fundamentals-policy-2.3", cfg.dataset_kind, UNIVERSE_VERSION, cfg.srisk_k, cfg.covar_quantile,
+                  cfg.covar_window, cfg.lrmes_h, cfg.lrmes_market_drop, cfg.mes_tail_pct]
+    return hashlib.sha256(json.dumps(parameters).encode()).hexdigest()[:16]
+
+
+def common_cohort_change(previous: dict, current: dict) -> dict:
+    """Compare identical bank IDs and methodology only; never treat missing as zero."""
+    if (previous.get("methodology_version"), previous.get("calibration_id")) != (current.get("methodology_version"), current.get("calibration_id")):
+        return {"comparable": False, "reason": "methodology_changed"}
+    def values(payload):
+        return {r["bank_id"]: r["srisk_usd_bn"] for r in payload.get("banks", [])
+                if _finite(r.get("srisk_usd_bn"))}
+    before, after = values(previous), values(current)
+    ids = sorted(before.keys() & after.keys())
+    a, b = sum(before[i] for i in ids), sum(after[i] for i in ids)
+    return {"comparable": bool(ids), "bank_ids": ids, "previous": a if ids else None,
+            "current": b if ids else None, "change_pct": (b/a-1)*100 if ids and a else None}
 
 
 def _clean(record: dict) -> dict:
@@ -132,13 +190,36 @@ def _clean(record: dict) -> dict:
 def _round(v) -> float | None:
     try:
         import math
-        if math.isnan(float(v)):
+        if not math.isfinite(float(v)):
             return None
         return round(float(v), 4)
     except (TypeError, ValueError):
         return None
 
 
+def _sanitise(value):
+    if isinstance(value, dict):
+        return {k: _sanitise(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_sanitise(v) for v in value]
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
+
+
+def _atomic_text(path: Path, text: str):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, name = tempfile.mkstemp(dir=path.parent, prefix=".staging-")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(text)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(name, path)
+    finally:
+        if os.path.exists(name):
+            os.unlink(name)
+
+
 def _write_json(payload: dict, path: Path) -> None:
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False, default=str)
+    _atomic_text(path, json.dumps(_sanitise(payload), indent=2, ensure_ascii=False, allow_nan=False))

@@ -29,8 +29,8 @@ class Config:
     # ── SRISK ────────────────────────────────────────────────────────────
     srisk_k: float = _float("SRISK_K", 0.08)
     """Prudential capital ratio used in SRISK formula.
-    Default: 0.08 (Basel III Tier 1 minimum).
-    Override: set env SRISK_K=0.055 for stricter leverage ratio."""
+    Default: 0.08 (research capital ratio; not a Basel Tier 1 RWA ratio).
+    Override: set env SRISK_K explicitly for a separately versioned scenario."""
 
     # ── LRMES / MES ──────────────────────────────────────────────────────
     mes_tail_pct: float = _float("MES_TAIL_PCT", 0.05)
@@ -49,6 +49,9 @@ class Config:
     covar_window: int = _int("COVAR_WINDOW", 252)
     """Rolling window (trading days) for CoVaR quantile regression. Default 252."""
 
+    dataset_kind: str = _str("DATASET_KIND", "research_estimate")
+    market_inputs_dir: str = _str("MARKET_INPUTS_DIR", "")
+    fundamentals_dir: str = _str("FUNDAMENTALS_DIR", "inputs/fundamentals")
     # ── Data ─────────────────────────────────────────────────────────────
     data_dir: str = _str("DATA_DIR", "data")
     """Root directory for output JSON / CSV files."""

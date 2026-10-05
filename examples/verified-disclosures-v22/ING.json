@@ -1,0 +1,35 @@
+{
+  "bank_id": "ING",
+  "scope": "consolidated_group",
+  "currency": "EUR",
+  "accounting_standard": "IFRS",
+  "source_sha256": "3ea497ecef710827906c444c3221250c30ad25bd927cf125856d2242cd3da41a",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001039765.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-07",
+      "value": 970158000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/1039765/000162828025010764/0001628280-25-010764-index.html",
+      "accession": "0001628280-25-010764",
+      "filed_date": "2025-03-06",
+      "accounting_standard": "IFRS",
+      "currency": "EUR",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-07",
+      "value": 3147391173,
+      "source": "https://www.sec.gov/Archives/edgar/data/1039765/000162828025010764/0001628280-25-010764-index.html",
+      "accession": "0001628280-25-010764",
+      "filed_date": "2025-03-06",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

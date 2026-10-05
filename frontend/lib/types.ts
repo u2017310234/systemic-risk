@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const regionSchema = z.enum(["US", "CN", "GB", "EU", "JP"]);
+export const regionSchema = z.enum(["US", "CN", "GB", "EU", "JP", "CA"]);
 
 export type Region = z.infer<typeof regionSchema>;
 
@@ -12,28 +12,28 @@ const finiteNumber = z.preprocess((value) => {
   return Number.isFinite(parsed) ? parsed : undefined;
 }, z.number().optional());
 
+const metric = z.number().finite().nullable();
 export const bankMetricSchema = z.object({
-  bank_id: z.string(),
-  bank_name: z.string(),
-  region: regionSchema,
-  mes: z.number(),
-  lrmes: z.number(),
-  covar: z.number(),
-  delta_covar: z.number(),
-  srisk_usd_bn: z.number(),
-  srisk_share_pct: z.number(),
-  market_cap_usd_bn: z.number(),
-  debt_usd_bn: z.number(),
-  covar_beta: z.number().optional()
+  bank_id: z.string(), bank_name: z.string(), region: regionSchema,
+  mes: metric, lrmes: metric, covar: metric, delta_covar: metric,
+  srisk_usd_bn: metric, srisk_share_pct: metric, market_cap_usd_bn: metric,
+  debt_usd_bn: metric, covar_beta: metric.optional()
 });
-
 export const systemSnapshotSchema = z.object({
-  date: z.string(),
-  system_srisk_usd_bn: z.number(),
+  dataset_kind: z.string().optional(), calibration_id: z.string().optional(),
+  date: z.string(), methodology_version: z.literal("2.0-beta-scenario"),
+  system_srisk_usd_bn: metric, covered_srisk_usd_bn: metric.optional(),
+  coverage: z.object({ complete: z.boolean(), expected_count: z.number(), srisk_count: z.number(),
+    eligible_complete: z.boolean().optional(), eligible_count: z.number().optional(),
+    srisk_ids: z.array(z.string()), expected_ids: z.array(z.string()),
+    missing: z.record(z.string()), universe_version: z.string()
+  }).optional(),
+  quality: z.object({status:z.string(), alerts:z.array(z.object({code:z.string(), severity:z.string(), bank_id:z.string().nullable().optional(), message:z.string()}))}).optional(),
   banks: z.array(bankMetricSchema)
 });
 
 export const bankHistoryRowSchema = z.object({
+  methodology_version: z.literal("2.0-beta-scenario"),
   date: z.string(),
   mes: finiteNumber,
   lrmes: finiteNumber,
@@ -67,8 +67,8 @@ export type GraphEdge = {
   target: string;
   weight: number;
   components: {
-    sriskCorr: number;
-    deltaCoVarCorr: number;
+    sriskCorr: number | null;
+    deltaCoVarCorr: number | null;
     sameRegion: number;
   };
 };
@@ -79,7 +79,8 @@ export type NetworkSummary = {
   densestRegion: Region | "Mixed";
   mostConnectedBank: string;
   crossRegionTension: number;
-  networkStressIndex: number;
+  networkStressIndex: number | null;
+  density: number;
 };
 
 export type NetworkViewMode = "full" | "ego" | "cluster";

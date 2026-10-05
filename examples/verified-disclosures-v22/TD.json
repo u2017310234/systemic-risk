@@ -1,0 +1,35 @@
+{
+  "bank_id": "TD",
+  "scope": "consolidated_group",
+  "currency": "CAD",
+  "accounting_standard": "IFRS",
+  "source_sha256": "d05075c32f2eae74e102dc41b4fe1c63813ce7c4bfbfbe437a3e8c822ffd4124",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000947263.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2025-01-31",
+      "available_date": "2025-02-28",
+      "value": 1974550000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/947263/000156276225000034/0001562762-25-000034-index.html",
+      "accession": "0001562762-25-000034",
+      "filed_date": "2025-02-27",
+      "accounting_standard": "IFRS",
+      "currency": "CAD",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2024-10-31",
+      "available_date": "2024-12-07",
+      "value": 1750271719,
+      "source": "https://www.sec.gov/Archives/edgar/data/947263/000156276224000281/0001562762-24-000281-index.html",
+      "accession": "0001562762-24-000281",
+      "filed_date": "2024-12-06",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

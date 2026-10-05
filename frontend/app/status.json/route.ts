@@ -1,3 +1,4 @@
+import { compareBackendHealth } from "@/lib/health";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -14,10 +15,12 @@ export async function GET() {
     .catch(() => null);
   const latestDate = manifest?.lastUpdated ?? null;
   const today = new Date().toISOString().slice(0, 10);
-  let mcpOriginHealth: "ok" | "unreachable" | "not_configured" = "not_configured";
+  let mcpOriginHealth: string = "not_configured";
   if (process.env.MCP_ORIGIN_URL) {
     try {
-      mcpOriginHealth = (await fetch(`${process.env.MCP_ORIGIN_URL.replace(/\/$/, "")}/health`, { signal: AbortSignal.timeout(3000) })).ok ? "ok" : "unreachable";
+      const response = await fetch(new URL("/health", process.env.MCP_ORIGIN_URL), { signal: AbortSignal.timeout(3000), cache: "no-store" });
+      const body = response.ok ? await response.json() : {};
+      mcpOriginHealth = compareBackendHealth(response.ok, body, manifest ?? {});
     } catch { mcpOriginHealth = "unreachable"; }
   }
   return NextResponse.json({
@@ -25,7 +28,7 @@ export async function GET() {
     generated_at: new Date().toISOString(),
     cadence: manifest?.cadence ?? "weekdays, T+1",
     expected_next_update: manifest?.expected_next_update ?? (latestDate ? nextWeekday(latestDate) : null),
-    is_stale: Boolean(latestDate && today > nextWeekday(latestDate)),
+    is_stale: !latestDate || today > nextWeekday(latestDate),
     mcp_origin_health: mcpOriginHealth
   });
 }

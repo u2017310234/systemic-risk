@@ -1,0 +1,23 @@
+{
+  "bank_id": "GLE",
+  "scope": "consolidated_group",
+  "currency": "EUR",
+  "accounting_standard": "IFRS",
+  "source_sha256": "c5fb17bdb5a95bef6aa8304ec84bce1822126e5b499a564b01eebe6cc568f168",
+  "manual_balance_check": {
+    "assets": 1554388000000,
+    "liabilities": 1474322000000,
+    "equity": 80066000000,
+    "residual": 0
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-01",
+      "source": "https://www.societegenerale.com/sites/default/files/societe-generale-q1-2025-financial-results-press-release-en.pdf",
+      "accounting_standard": "IFRS",
+      "currency": "EUR",
+      "value": 1474322000000
+    }
+  ]
+}

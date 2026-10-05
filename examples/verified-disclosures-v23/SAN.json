@@ -1,0 +1,123 @@
+{
+  "bank_id": "SAN",
+  "scope": "consolidated_group",
+  "currency": "EUR",
+  "accounting_standard": "IFRS",
+  "source_sha256": "13b500c113c078605a6244a53ddee26f98598a7bd44001bb6dd5ce5ca2258f66",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000891478.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-01",
+      "value": 1729754000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/891478/000089147825000054/0000891478-25-000054-index.html",
+      "accession": "0000891478-25-000054",
+      "filed_date": "2025-02-28",
+      "accounting_standard": "IFRS",
+      "currency": "EUR",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-01",
+      "value": 15152492322,
+      "source": "https://www.sec.gov/Archives/edgar/data/891478/000089147825000054/0000891478-25-000054-index.html",
+      "accession": "0000891478-25-000054",
+      "filed_date": "2025-02-28",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "equity_valuations": [
+    {
+      "valuation_date": "2025-05-16",
+      "components": [
+        {
+          "share_class_id": "ordinary",
+          "instrument_type": "ordinary",
+          "currency": "EUR",
+          "outstanding_shares": 15152492322,
+          "shares_effective_date": "2024-12-31",
+          "shares_available_date": "2025-03-01",
+          "share_source": "https://www.sec.gov/Archives/edgar/data/891478/000089147825000054/0000891478-25-000054-index.html",
+          "price": 6.913000106811523,
+          "price_date": "2025-05-16",
+          "price_basis": "unadjusted",
+          "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/SAN.MC",
+          "split_basis": "2025-05-16_share_units",
+          "price_split_basis": "2025-05-16_share_units",
+          "price_adjustment": {
+            "provider_split_adjusted_close": 6.913000106811523,
+            "future_split_undo_factor": 1.0,
+            "later_splits": []
+          }
+        }
+      ],
+      "fx": [
+        {
+          "currency": "EUR",
+          "rate": 1.1141,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CHF",
+          "rate": 1.1910433539780847,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CAD",
+          "rate": 0.7147451933385748,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "GBP",
+          "rate": 1.3257,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "JPY",
+          "rate": 0.006848376934666484,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "HKD",
+          "rate": 0.12797051559320732,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CNY",
+          "rate": 0.13871549452073798,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        }
+      ]
+    }
+  ],
+  "expected_share_classes": [
+    "ordinary"
+  ]
+}

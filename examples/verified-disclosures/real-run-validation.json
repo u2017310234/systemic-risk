@@ -1,0 +1,45 @@
+{
+  "scope": "historical reconstruction, selected disclosures; not a vintage backtest or current ranking",
+  "date": "2025-05-16",
+  "banks": [
+    {
+      "bank_id": "BARC",
+      "observations": 252,
+      "beta_independent": 1.717848302439649,
+      "lrmes_independent": 0.5841875370692882,
+      "srisk_independent_usd_bn": 129.75403536266447,
+      "srisk_pipeline_usd_bn": 129.754035,
+      "absolute_gap_usd_bn": 3.6266447978050564e-07
+    },
+    {
+      "bank_id": "ICBC",
+      "observations": 252,
+      "beta_independent": 0.5716773721738104,
+      "lrmes_independent": 0.2532519627160442,
+      "srisk_independent_usd_bn": 300.34378347650147,
+      "srisk_pipeline_usd_bn": 300.343783,
+      "absolute_gap_usd_bn": 4.7650149781475193e-07
+    },
+    {
+      "bank_id": "JPM",
+      "observations": 252,
+      "beta_independent": 0.9697532634281367,
+      "lrmes_independent": 0.39065752663079634,
+      "srisk_independent_usd_bn": 0,
+      "srisk_pipeline_usd_bn": 0.0,
+      "absolute_gap_usd_bn": 0.0
+    },
+    {
+      "bank_id": "SMFG",
+      "observations": 252,
+      "beta_independent": 0.9553661452579529,
+      "lrmes_independent": 0.3861627843495671,
+      "srisk_independent_usd_bn": 107.81940426623146,
+      "srisk_pipeline_usd_bn": 107.819404,
+      "absolute_gap_usd_bn": 2.662314528834031e-07
+    }
+  ],
+  "json_csv_validation": "passed",
+  "market_sources": "Wind adjusted close anchored to 2025-05-16; FTSE and Nikkei bounded requests; FX Fed H10 released 2025-05-19",
+  "point_in_time_certified": false
+}

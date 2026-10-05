@@ -1,0 +1,123 @@
+{
+  "bank_id": "MFG",
+  "scope": "consolidated_group",
+  "currency": "JPY",
+  "accounting_standard": "J-GAAP",
+  "source_sha256": "40e4198ea42b5f6249f2830ae12c6bb2c3fd1e8e90a14641bcf0192260b244ae",
+  "manual_balance_check": {
+    "assets": 283320404000000,
+    "liabilities": 272796651000000,
+    "equity": 10523753000000,
+    "residual": 0
+  },
+  "liabilities": [
+    {
+      "value": 272796651000000,
+      "currency": "JPY",
+      "accounting_standard": "J-GAAP",
+      "source": "https://cdn.prod.website-files.com/67cb23eaf0c6c4d4080e059a/685028cbfb401efcae3bdea2_data24_fy.pdf",
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-16"
+    }
+  ],
+  "published_shares": [
+    {
+      "value": 2509524492,
+      "currency": "shares",
+      "accounting_standard": "J-GAAP",
+      "source": "https://cdn.prod.website-files.com/67cb23eaf0c6c4d4080e059a/685028cbfb401efcae3bdea2_data24_fy.pdf",
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-16",
+      "issued_shares": 2513757794,
+      "treasury_shares": 4233302
+    }
+  ],
+  "equity_valuations": [
+    {
+      "valuation_date": "2025-05-16",
+      "components": [
+        {
+          "share_class_id": "ordinary",
+          "instrument_type": "ordinary",
+          "currency": "JPY",
+          "outstanding_shares": 2509524492,
+          "shares_effective_date": "2025-03-31",
+          "shares_available_date": "2025-05-16",
+          "share_source": "https://cdn.prod.website-files.com/67cb23eaf0c6c4d4080e059a/685028cbfb401efcae3bdea2_data24_fy.pdf",
+          "price": 3690.0,
+          "price_date": "2025-05-16",
+          "price_basis": "unadjusted",
+          "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/8411.T",
+          "split_basis": "2025-05-16_share_units",
+          "price_split_basis": "2025-05-16_share_units",
+          "price_adjustment": {
+            "provider_split_adjusted_close": 3690.0,
+            "future_split_undo_factor": 1.0,
+            "later_splits": []
+          }
+        }
+      ],
+      "fx": [
+        {
+          "currency": "EUR",
+          "rate": 1.1141,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CHF",
+          "rate": 1.1910433539780847,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CAD",
+          "rate": 0.7147451933385748,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "GBP",
+          "rate": 1.3257,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "JPY",
+          "rate": 0.006848376934666484,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "HKD",
+          "rate": 0.12797051559320732,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CNY",
+          "rate": 0.13871549452073798,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        }
+      ]
+    }
+  ],
+  "expected_share_classes": [
+    "ordinary"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "bank_id": "STAN",
+  "scope": "consolidated_group",
+  "currency": "USD",
+  "accounting_standard": "IFRS",
+  "source_sha256": "bd0b2543394c9111ba8473b79d4659338a8158a07b22f13f8452dd27f8b6dc9d",
+  "manual_balance_check": {
+    "assets": 874446000000.0,
+    "liabilities": 821978000000.0,
+    "equity": 52468000000.0,
+    "residual": 0.0,
+    "precision": "million native currency; MUFG independently rounded down"
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-03",
+      "source": "https://www.sc.com/en/uploads/sites/66/content/docs/standard-chartered-plc-q1-2025-results.pdf",
+      "accounting_standard": "IFRS",
+      "currency": "USD",
+      "value": 821978000000
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-03",
+      "source": "https://www.sc.com/en/uploads/sites/66/content/docs/standard-chartered-plc-q1-2025-results.pdf",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "value": 2384000000,
+      "precision": "rounded to nearest million; not exact daily share count"
+    }
+  ]
+}

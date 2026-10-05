@@ -1,0 +1,127 @@
+{
+  "bank_id": "GLE",
+  "scope": "consolidated_group",
+  "currency": "EUR",
+  "accounting_standard": "IFRS",
+  "source_sha256": "c5fb17bdb5a95bef6aa8304ec84bce1822126e5b499a564b01eebe6cc568f168",
+  "manual_balance_check": {
+    "assets": 1554388000000,
+    "liabilities": 1474322000000,
+    "equity": 80066000000,
+    "residual": 0
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-01",
+      "source": "https://www.societegenerale.com/sites/default/files/societe-generale-q1-2025-financial-results-press-release-en.pdf",
+      "accounting_standard": "IFRS",
+      "currency": "EUR",
+      "value": 1474322000000
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-01",
+      "source": "https://www.societegenerale.com/sites/default/files/societe-generale-q1-2025-financial-results-press-release-en.pdf",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "value": 783671000,
+      "share_count_basis": "issuer_period_end_excludes_treasury_and_buybacks_includes_group_trading_shares",
+      "precision": "reported in thousands; not daily exact shares",
+      "caveat": "Issuer NAPS denominator is end-period, not EPS weighted average; includes group trading shares, so not a fully harmonized net-share convention."
+    }
+  ],
+  "equity_valuations": [
+    {
+      "valuation_date": "2025-05-16",
+      "components": [
+        {
+          "share_class_id": "ordinary",
+          "instrument_type": "ordinary",
+          "currency": "EUR",
+          "outstanding_shares": 783671000,
+          "shares_effective_date": "2025-03-31",
+          "shares_available_date": "2025-05-01",
+          "share_source": "https://www.societegenerale.com/sites/default/files/societe-generale-q1-2025-financial-results-press-release-en.pdf",
+          "price": 48.31999969482422,
+          "price_date": "2025-05-16",
+          "price_basis": "unadjusted",
+          "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/GLE.PA",
+          "split_basis": "2025-05-16_share_units",
+          "price_split_basis": "2025-05-16_share_units",
+          "price_adjustment": {
+            "provider_split_adjusted_close": 48.31999969482422,
+            "future_split_undo_factor": 1.0,
+            "later_splits": []
+          },
+          "share_count_basis": "issuer_period_end_excludes_treasury_and_buybacks_includes_group_trading_shares",
+          "precision": "reported in thousands; not daily exact shares",
+          "caveat": "Issuer NAPS denominator is end-period, not EPS weighted average; includes group trading shares, so not a fully harmonized net-share convention."
+        }
+      ],
+      "fx": [
+        {
+          "currency": "EUR",
+          "rate": 1.1141,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CHF",
+          "rate": 1.1910433539780847,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CAD",
+          "rate": 0.7147451933385748,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "GBP",
+          "rate": 1.3257,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "JPY",
+          "rate": 0.006848376934666484,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "HKD",
+          "rate": 0.12797051559320732,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CNY",
+          "rate": 0.13871549452073798,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        }
+      ]
+    }
+  ],
+  "expected_share_classes": [
+    "ordinary"
+  ]
+}

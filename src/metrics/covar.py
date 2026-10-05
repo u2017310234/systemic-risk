@@ -156,53 +156,71 @@ def calc_covar_rolling(
 def _quantile_regression(x: np.ndarray, y: np.ndarray, q: float) -> tuple[float, float]:
     """
     Fit y = α + β·x at quantile q using statsmodels QuantReg.
-    Falls back to a simple pinball-loss gradient descent if statsmodels
-    is unavailable.
+    On IRLS failure, solve the identical pinball objective as a linear program.
+    If both solvers fail, the estimate remains unavailable.
 
     Returns:
         (alpha, beta) or (nan, nan) on failure.
     """
     n = len(x)
-    if n < 30:
+    if n < 30 or not 0 < q < 1 or not np.isfinite(x).all() or not np.isfinite(y).all() or np.std(x) == 0:
         return float("nan"), float("nan")
 
     X = np.column_stack([np.ones(n), x])
     try:
         from statsmodels.regression.quantile_regression import QuantReg
         with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
+            warnings.simplefilter("error")
             qr = QuantReg(y, X)
             res = qr.fit(q=q, max_iter=1000)
         params = res.params
         return float(params[0]), float(params[1])
     except Exception as e:
-        logger.debug(f"QuantReg failed, falling back to SGD: {e}")
-
-    # Lightweight fallback: subgradient method
-    return _pinball_sgd(X, y, q)
+        logger.warning("QuantReg IRLS failed; trying same-objective LP: %s", e)
+        return _quantile_regression_lp(x, y, q)
 
 
-def _pinball_sgd(X: np.ndarray, y: np.ndarray, q: float,
-                 lr: float = 0.01, epochs: int = 500) -> tuple[float, float]:
-    """Minimal pinball-loss SGD as fallback."""
+def _quantile_regression_lp(x: np.ndarray, y: np.ndarray, q: float) -> tuple[float, float]:
+    """Exact quantile-loss formulation: y = a + b*x + u - v, u/v >= 0.
+
+    Standardization improves conditioning without changing the minimizer.
+    Validate primal residual and pinball objective before accepting the fit.
+    No OLS or differently defined risk estimator is substituted.
+    """
+    failure=(float("nan"),float("nan"))
+    if len(x)<30 or len(x)!=len(y) or not 0<q<1 or not np.isfinite(x).all() or not np.isfinite(y).all():return failure
+    xm,ym=float(np.mean(x)),float(np.mean(y));xs,ys=float(np.std(x)),float(np.std(y))
+    if xs<=0:return failure
+    if ys==0:return ym,0.
     try:
-        n, p = X.shape
-        theta = np.zeros(p)
-        for _ in range(epochs):
-            pred = X @ theta
-            residual = y - pred
-            grad = np.where(residual >= 0, -q, (1 - q)) @ X / n
-            theta -= lr * grad
-        return float(theta[0]), float(theta[1])
-    except Exception:
-        return float("nan"), float("nan")
+        from scipy.optimize import linprog
+        from scipy.sparse import csr_matrix,eye,hstack
+        xx=(x-xm)/xs; yy=(y-ym)/ys;n=len(x)
+        design=np.column_stack([np.ones(n),xx])
+        constraints=hstack([csr_matrix(design),eye(n),-eye(n)],format='csr')
+        objective=np.r_[np.zeros(2),np.full(n,q),np.full(n,1-q)]
+        fit=linprog(objective,A_eq=constraints,b_eq=yy,
+                    bounds=[(None,None)]*2+[(0,None)]*(2*n),method='highs-ds',
+                    options={'time_limit':10.,'dual_feasibility_tolerance':1e-9,'primal_feasibility_tolerance':1e-9})
+        if not fit.success or not np.isfinite(fit.x).all():return failure
+        if np.max(np.abs(constraints@fit.x-yy))>1e-7:return failure
+        residual=yy-design@fit.x[:2]
+        loss=float(np.sum(np.where(residual>=0,q*residual,(q-1)*residual)))
+        dual=float(yy@fit.eqlin.marginals)
+        if abs(loss-fit.fun)>1e-7*max(1.,abs(loss)) or abs(loss-dual)>1e-7*max(1.,abs(loss)):return failure
+        beta=ys/xs*float(fit.x[1]);alpha=ym+ys*float(fit.x[0])-beta*xm
+        if not np.isfinite([alpha,beta]).all():return failure
+        return alpha,beta
+    except Exception as exc:
+        logger.warning('Quantile LP failed: %s',exc)
+        return failure
 
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 def _align(bank: pd.Series, index: pd.Series) -> pd.DataFrame:
-    return pd.DataFrame({"bank": bank, "index": index}).dropna()
+    return pd.DataFrame({"bank": bank, "index": index}).replace([np.inf, -np.inf], np.nan).dropna().sort_index()
 
 
 def _nan_result() -> dict:

@@ -1,0 +1,36 @@
+{
+  "bank_id": "MUFG",
+  "scope": "consolidated_group",
+  "currency": "JPY",
+  "accounting_standard": "J-GAAP",
+  "source_sha256": "d16d4bc70ce2eb9832ad53e9dbfb2c5301c6a5d65dcc50973d5f939c3b674d2c",
+  "manual_balance_check": {
+    "assets": 413113501000000.0,
+    "liabilities": 391385368000000.0,
+    "equity": 21728132000000.0,
+    "residual": 1000000.0,
+    "precision": "million native currency; MUFG independently rounded down"
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-16",
+      "source": "https://www.mufg.jp/dam/ir/fs/2024/pdf/summary2503_en.pdf",
+      "accounting_standard": "J-GAAP",
+      "currency": "JPY",
+      "value": 391385368000000
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-16",
+      "source": "https://www.mufg.jp/dam/ir/fs/2024/pdf/summary2503_en.pdf",
+      "accounting_standard": "J-GAAP",
+      "currency": "shares",
+      "value": 11506516975,
+      "issued_shares": 12067710920,
+      "treasury_shares": 561193945
+    }
+  ]
+}

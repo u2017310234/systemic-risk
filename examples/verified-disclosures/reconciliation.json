@@ -1,0 +1,70 @@
+{
+  "kind": "real_disclosure_reconciliation_not_risk_estimates",
+  "checks": [
+    {
+      "bank_id": "JPM",
+      "period_end": "2024-12-31",
+      "currency": "USD",
+      "assets": 4002814000000,
+      "liabilities": 3658056000000,
+      "equity": 344758000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/19617/000001961725000270/jpm-20241231.htm",
+      "source_api_sha256": "1ba256b88d172b809505576b43254a8039039ecf9004eb1b528ddeaadf488913",
+      "reported_market_cap": 670618000000,
+      "closing_price": 239.71,
+      "reported_shares_rounded": 2797600000,
+      "market_cap_reconstructed": 670612696000.0,
+      "precision_note": "Shares rounded to 0.1 million; market cap reported to USD million. Retrospective year-end reconciliation, not a PIT observation.",
+      "balance_residual": 0
+    },
+    {
+      "bank_id": "BARC",
+      "period_end": "2024-12-31",
+      "currency": "GBP",
+      "assets": 1518202000000,
+      "liabilities": 1445721000000,
+      "equity": 72481000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/312069/000031206925000114/bcs-20241231.htm",
+      "source_api_sha256": "93b69089ac754fdbc62d02eb256c07ed959478347b9a6321b9564f95f966fbe8",
+      "reported_outstanding_shares": 14419599565,
+      "market_cap_status": "unverified_missing_same_date_unadjusted_price",
+      "balance_residual": 0
+    },
+    {
+      "bank_id": "ICBC",
+      "period_end": "2024-12-31",
+      "currency": "CNY",
+      "assets": 48821746000000,
+      "liabilities": 44834480000000,
+      "equity": 3987266000000,
+      "source": "https://v.icbc.com.cn/userfiles/resources/icbcltd/download/2025/25.pdf",
+      "source_sha256": "6f2a8718fcac12e99c70b79cc9a7702436898fdb853c2c4541725ff06afcfee0",
+      "share_class_counts": {
+        "A": 269612212539,
+        "H": 86794044550
+      },
+      "share_count_total": 356406257089,
+      "share_source": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042501522_c.pdf",
+      "market_cap_status": "unverified_missing_class_prices_and_FX",
+      "balance_residual": 0
+    },
+    {
+      "bank_id": "SMFG",
+      "period_end": "2025-03-31",
+      "currency": "JPY",
+      "accounting_standard": "J-GAAP",
+      "assets": 306282015000000,
+      "liabilities": 291440506000000,
+      "equity": 14841509000000,
+      "source": "https://www.smfg.co.jp/english/investor/financial/latest_statement/2025_3/2025_fy_e01.pdf",
+      "source_sha256": "59322083468adba8cb85c94ff7a2e497ad796f2ba86482ca66ef8c82eb513e44",
+      "issued_shares": 3884445458,
+      "treasury_shares": 10651848,
+      "outstanding_shares": 3873793610,
+      "market_cap_status": "unverified_missing_unadjusted_price",
+      "balance_residual": 0
+    }
+  ],
+  "market_history_status": "Wind retrieved all four equity and four benchmark series; Yahoo 429 and Stooq 404 were not bypassed. Raw licensed history omitted from source bundle.",
+  "full_srisk_recalculation": "Four-bank selected-disclosure historical reconstruction completed; not a full-universe or point-in-time forecast"
+}

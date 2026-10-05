@@ -10,7 +10,7 @@ import {
 
 export type DataManifest = {
   dates: string[];
-  snapshots?: Array<{ date: string; bank_count: number }>;
+  snapshots?: Array<{ date: string; bank_count: number; coverage?: {srisk_count:number; expected_count:number; eligible_complete?:boolean; complete?:boolean} }>;
   lastUpdated: string;
   cadence?: string;
   expected_next_update?: string | null;
@@ -73,14 +73,7 @@ export async function fetchSnapshotSeries(
   const manifest = await fetchManifest();
   const normalizedEndDate =
     endDate && manifest.dates.includes(endDate) ? endDate : manifest.lastUpdated;
-  const endIndex = manifest.dates.indexOf(normalizedEndDate);
-  // System-wide totals from partial snapshots are not comparable. Keep those
-  // snapshots selectable, but never use them to build an aggregate trend.
-  const completeDates = manifest.snapshots
-    ? manifest.snapshots.filter((snapshot) => snapshot.bank_count >= 28).map((snapshot) => snapshot.date)
-    : manifest.dates;
-  const boundedEnd = completeDates.filter((date) => date <= normalizedEndDate);
-  const dates = boundedEnd.slice(Math.max(0, boundedEnd.length - lookback));
+  const dates = manifest.dates.filter(date => date <= normalizedEndDate).slice(-lookback);
   const snapshots = await Promise.all(dates.map((date) => fetchSnapshotByDate(date, region)));
   return { dates, snapshots };
 }
@@ -120,6 +113,28 @@ function filterSnapshotByRegion(snapshot: SystemSnapshot, region: Region): Syste
   return {
     ...snapshot,
     banks,
-    system_srisk_usd_bn: banks.reduce((sum, bank) => sum + bank.srisk_usd_bn, 0)
+    system_srisk_usd_bn: null,
+    covered_srisk_usd_bn: banks.some(bank => bank.srisk_usd_bn != null) ? banks.reduce((sum, bank) => sum + (bank.srisk_usd_bn ?? 0), 0) : null
   };
+}
+
+
+// One fixed cohort across every plotted point; omit incomplete dates, never zero-fill.
+export function comparableTotals(snapshots: SystemSnapshot[], current: SystemSnapshot) {
+  const ids = current.banks.filter(bank => bank.srisk_usd_bn != null).map(bank => bank.bank_id);
+  if (!ids.length) return [];
+  return snapshots.filter(item => item.methodology_version === current.methodology_version && item.calibration_id === current.calibration_id).flatMap(item => {
+    const values = ids.map(id => item.banks.find(bank => bank.bank_id === id)?.srisk_usd_bn);
+    return values.every(value => typeof value === "number" && Number.isFinite(value))
+      ? [{ date: item.date, value: values.reduce<number>((sum, value) => sum + (value as number), 0) }] : [];
+  });
+}
+
+// Record counts do not establish usable SRISK coverage. Partial dates remain
+// visible by default, and a fully observed eligible cohort may still omit
+// non-listed G-SIB groups.
+export function availableSnapshotDates(manifest: DataManifest | undefined, includeIncomplete = true): string[] {
+  if (!manifest) return [];
+  if (includeIncomplete) return manifest.dates;
+  return manifest.snapshots?.filter(item => item.coverage?.eligible_complete === true).map(item => item.date) ?? [];
 }

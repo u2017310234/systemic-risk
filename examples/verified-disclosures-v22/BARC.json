@@ -1,0 +1,33 @@
+{
+  "bank_id": "BARC",
+  "scope": "consolidated_group",
+  "currency": "GBP",
+  "accounting_standard": "IFRS",
+  "source_sha256": "93b69089ac754fdbc62d02eb256c07ed959478347b9a6321b9564f95f966fbe8",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000312069.json",
+  "liabilities": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-02-14",
+      "value": 1445721000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/312069/000031206925000114/0000312069-25-000114-index.html",
+      "accession": "0000312069-25-000114",
+      "filed_date": "2025-02-13",
+      "accounting_standard": "IFRS",
+      "currency": "GBP",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2025-04-30",
+      "available_date": "2025-05-02",
+      "value": 14280379348,
+      "source": "https://www.sec.gov/Archives/edgar/data/312069/000165495425006355/maybatch.htm",
+      "accounting_standard": "IFRS",
+      "published_date": "2025-05-01",
+      "currency": "shares",
+      "availability_policy": "embedded_issuer_RNS_date_plus_one_day; SEC copy filed later; original release date cross-check remains advisable"
+    }
+  ]
+}

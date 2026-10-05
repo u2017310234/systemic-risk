@@ -23,7 +23,7 @@ class TestLRMESMethodology:
 
         # Replicate the LRMES entry from mcp/server.py get_methodology()
         # If server.py is refactored, this test should be updated to call it.
-        formula_file = Path(__file__).parent.parent / "mcp" / "server.py"
+        formula_file = Path(__file__).parent.parent / "risk_mcp" / "server.py"
         source = formula_file.read_text(encoding="utf-8")
 
         # The correct formula uses β_OLS (no separate ρ, no √h)
@@ -40,7 +40,7 @@ class TestLRMESMethodology:
         """
         The LRMES parameters section must NOT list ρ as a separate parameter.
         """
-        formula_file = Path(__file__).parent.parent / "mcp" / "server.py"
+        formula_file = Path(__file__).parent.parent / "risk_mcp" / "server.py"
         source = formula_file.read_text(encoding="utf-8")
 
         # The parameters dict should not have a "ρ" key for LRMES

@@ -25,10 +25,10 @@ export function NetworkSummary({ summary, currentDate }: { summary: NetworkSumma
           value={summary.densestRegion === "Mixed" ? t.network.mixed : regionLabel(summary.densestRegion as Region)}
         />
         <Metric label={t.network.mostConnected} value={summary.mostConnectedBank} />
-        <Metric label={t.network.stressIndex} value={formatDelta(summary.networkStressIndex)} />
+        <Metric label="SRISK historical percentile (0–100)" value={formatDelta(summary.networkStressIndex)} />
       </div>
       <p className="mt-4 text-sm text-muted">
-        {t.network.crossRegionTension}: <span className="text-text">{formatDelta(summary.crossRegionTension)}</span>
+        Density: {formatDelta(summary.density)} · Minimum 20 prior comparable dates; N/A means insufficient data. {t.network.crossRegionTension}: <span className="text-text">{formatDelta(summary.crossRegionTension)}</span>
       </p>
     </Panel>
   );

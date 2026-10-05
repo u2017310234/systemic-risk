@@ -11,7 +11,7 @@ const dictionaries = {
     shell: {
       eyebrow: "系统性风险前端 V1",
       title: "全球系统重要性银行风险监测",
-      description: "危机中哪些全球最大银行可能出现资本缺口？每日更新 29 家 FSB 指定 G-SIB 的 SRISK、MES、LRMES、CoVaR 和 Delta CoVaR。当前覆盖 28 家：BK 数据止于 2026-07-02。",
+      description: "基于版本化的 29 家银行研究样本，展示 MES、CoVaR 与资本缺口情景估计。覆盖情况随日期和输入完整性变化；缺失值不代表零风险。",
       lastUpdated: "最后更新",
       dashboard: "仪表盘",
       network: "网络",
@@ -34,7 +34,8 @@ const dictionaries = {
       CN: "中国",
       GB: "英国",
       EU: "欧洲",
-      JP: "日本"
+      JP: "日本",
+      CA: "加拿大"
     },
     emphasis: {
       balanced: "均衡",
@@ -145,7 +146,7 @@ const dictionaries = {
     shell: {
       eyebrow: "Systemic Risk Frontend V1",
       title: "G-SIB systemic risk monitor",
-      description: "Which of the world’s 29 designated biggest banks would be short of capital in a crisis? Daily SRISK, MES, LRMES, CoVaR and Delta CoVaR. 28 are currently covered because BK ends 2026-07-02.",
+      description: "Research scenarios for a versioned 29-bank universe. Coverage varies by date and input availability. Missing values are unknown, not zero risk.",
       lastUpdated: "Last updated",
       dashboard: "Dashboard",
       network: "Network",
@@ -168,7 +169,8 @@ const dictionaries = {
       CN: "China",
       GB: "United Kingdom",
       EU: "Europe",
-      JP: "Japan"
+      JP: "Japan",
+      CA: "Canada"
     },
     emphasis: {
       balanced: "Balanced",

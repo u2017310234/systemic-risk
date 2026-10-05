@@ -1,0 +1,391 @@
+{
+  "asof": "2025-05-16",
+  "dataset_kind": "historical_reconstruction",
+  "universe_version": "fsb-2023-membership-verified-v2.2",
+  "list_evidence": {
+    "list_year": "2024",
+    "source": "https://www.fsb.org/uploads/P261124.pdf",
+    "available_date": "2024-11-27",
+    "published_date": "2024-11-26",
+    "membership_version": "fsb-2023-membership-verified-v2.2",
+    "scope": "verified_membership_not_regulatory_capital_bucket_calibration"
+  },
+  "expected_count": 29,
+  "eligible_count": 27,
+  "ready_count": 13,
+  "eligible_complete": false,
+  "full_universe_complete": false,
+  "scope_note": "Unlisted groups remain in the denominator; eligible completeness is not full-system coverage.",
+  "banks": [
+    {
+      "bank_id": "JPM",
+      "name": "JPMorgan Chase",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 344,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 4006.436,
+      "market_cap_usd_bn": 743.5745212092801
+    },
+    {
+      "bank_id": "BAC",
+      "name": "Bank of America",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 280,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 3053.843,
+      "market_cap_usd_bn": 336.59954304307
+    },
+    {
+      "bank_id": "C",
+      "name": "Citigroup",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 300,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 2358.256,
+      "market_cap_usd_bn": 141.4247942496
+    },
+    {
+      "bank_id": "WFC",
+      "name": "Wells Fargo",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 303,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 1767.405,
+      "market_cap_usd_bn": 247.90361873628004
+    },
+    {
+      "bank_id": "GS",
+      "name": "Goldman Sachs",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 300,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 1641.881,
+      "market_cap_usd_bn": 189.94386346584
+    },
+    {
+      "bank_id": "MS",
+      "name": "Morgan Stanley",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 280,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 1192.449,
+      "market_cap_usd_bn": 212.05890630444
+    },
+    {
+      "bank_id": "BK",
+      "name": "Bank of New York Mellon",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 300,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 397.068,
+      "market_cap_usd_bn": 64.43916604995
+    },
+    {
+      "bank_id": "STT",
+      "name": "State Street",
+      "region": "US",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 303,
+      "accounting_standard": "US-GAAP",
+      "liabilities_usd_bn": 346.001,
+      "market_cap_usd_bn": 28.030500643480003
+    },
+    {
+      "bank_id": "ICBC",
+      "name": "Industrial & Commercial Bank of China",
+      "region": "CN",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 334,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 6587.074351505059,
+      "market_cap_usd_bn": 329.86821191082396
+    },
+    {
+      "bank_id": "CCB",
+      "name": "China Construction Bank",
+      "region": "CN",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "missing_fundamentals_file"
+      ],
+      "matched_closes": 0
+    },
+    {
+      "bank_id": "ABC",
+      "name": "Agricultural Bank of China",
+      "region": "CN",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 0,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 5781.100291302535
+    },
+    {
+      "bank_id": "BOC",
+      "name": "Bank of China",
+      "region": "CN",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 0,
+      "accounting_standard": "PRC-GAAP",
+      "liabilities_usd_bn": 4580.304341794976
+    },
+    {
+      "bank_id": "BOCOM",
+      "name": "Bank of Communications",
+      "region": "CN",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 274,
+      "accounting_standard": "PRC-GAAP",
+      "liabilities_usd_bn": 1957.5982799278668
+    },
+    {
+      "bank_id": "HSBC",
+      "name": "HSBC Holdings",
+      "region": "GB",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 304,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 2824.775,
+      "market_cap_usd_bn": 210.03818062852875
+    },
+    {
+      "bank_id": "BARC",
+      "name": "Barclays",
+      "region": "GB",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 300,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 1916.5923297000002,
+      "market_cap_usd_bn": 61.62202892484992
+    },
+    {
+      "bank_id": "STAN",
+      "name": "Standard Chartered",
+      "region": "GB",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 0,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 821.978
+    },
+    {
+      "bank_id": "BNP",
+      "name": "BNP Paribas",
+      "region": "EU",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "missing_fundamentals_file"
+      ],
+      "matched_closes": 0
+    },
+    {
+      "bank_id": "ACA",
+      "name": "Groupe Crédit Agricole",
+      "region": "EU",
+      "eligible": false,
+      "ready": false,
+      "issues": [
+        "listed_subsidiary_not_consolidated_group_equity"
+      ]
+    },
+    {
+      "bank_id": "GLE",
+      "name": "Société Générale",
+      "region": "EU",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 0,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 1642.5421402
+    },
+    {
+      "bank_id": "BPCE",
+      "name": "Groupe BPCE",
+      "region": "EU",
+      "eligible": false,
+      "ready": false,
+      "issues": [
+        "unlisted_without_own_equity_data"
+      ]
+    },
+    {
+      "bank_id": "DBK",
+      "name": "Deutsche Bank",
+      "region": "EU",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "liabilities_unavailable_at_date",
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 0,
+      "accounting_standard": "IFRS"
+    },
+    {
+      "bank_id": "UBS",
+      "name": "UBS Group",
+      "region": "EU",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "invalid_input: Quarantined market instrument: Response is USD/New York trading data, not the requested CHF Swiss ordinary stock; identity unverified."
+      ]
+    },
+    {
+      "bank_id": "ING",
+      "name": "ING Groep",
+      "region": "EU",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 0,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 1080.8530278
+    },
+    {
+      "bank_id": "SAN",
+      "name": "Banco Santander",
+      "region": "EU",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "insufficient_price_history_for_pipeline",
+        "insufficient_matched_returns",
+        "no_same_day_matched_close",
+        "market_cap_unavailable_at_date"
+      ],
+      "matched_closes": 0,
+      "accounting_standard": "IFRS",
+      "liabilities_usd_bn": 1927.1189314
+    },
+    {
+      "bank_id": "RBC",
+      "name": "Royal Bank of Canada",
+      "region": "CA",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "invalid_input: Quarantined market instrument: Response endpoint is 224.44 with CNY turnover; not verified as S&P/TSX Composite. No substitution permitted."
+      ]
+    },
+    {
+      "bank_id": "TD",
+      "name": "Toronto-Dominion Bank",
+      "region": "CA",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "invalid_input: Quarantined market instrument: Response endpoint is 224.44 with CNY turnover; not verified as S&P/TSX Composite. No substitution permitted."
+      ]
+    },
+    {
+      "bank_id": "MUFG",
+      "name": "Mitsubishi UFJ Financial",
+      "region": "JP",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 272,
+      "accounting_standard": "J-GAAP",
+      "liabilities_usd_bn": 2680.354526777121,
+      "market_cap_usd_bn": 153.42547973103
+    },
+    {
+      "bank_id": "SMFG",
+      "name": "Sumitomo Mitsui Financial",
+      "region": "JP",
+      "eligible": true,
+      "ready": true,
+      "issues": [],
+      "matched_closes": 297,
+      "accounting_standard": "J-GAAP",
+      "liabilities_usd_bn": 1995.8944391179043,
+      "market_cap_usd_bn": 91.81755707581152
+    },
+    {
+      "bank_id": "MFG",
+      "name": "Mizuho Financial Group",
+      "region": "JP",
+      "eligible": true,
+      "ready": false,
+      "issues": [
+        "missing_fundamentals_file"
+      ],
+      "matched_closes": 274
+    }
+  ]
+}

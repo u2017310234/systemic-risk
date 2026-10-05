@@ -1,0 +1,35 @@
+{
+  "bank_id": "SAN",
+  "scope": "consolidated_group",
+  "currency": "EUR",
+  "accounting_standard": "IFRS",
+  "source_sha256": "13b500c113c078605a6244a53ddee26f98598a7bd44001bb6dd5ce5ca2258f66",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000891478.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-01",
+      "value": 1729754000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/891478/000089147825000054/0000891478-25-000054-index.html",
+      "accession": "0000891478-25-000054",
+      "filed_date": "2025-02-28",
+      "accounting_standard": "IFRS",
+      "currency": "EUR",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2024-12-31",
+      "available_date": "2025-03-01",
+      "value": 15152492322,
+      "source": "https://www.sec.gov/Archives/edgar/data/891478/000089147825000054/0000891478-25-000054-index.html",
+      "accession": "0000891478-25-000054",
+      "filed_date": "2025-02-28",
+      "accounting_standard": "IFRS",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

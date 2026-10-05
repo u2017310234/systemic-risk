@@ -8,7 +8,7 @@ import { REGION_OPTIONS } from "@/lib/constants";
 import { ErrorState } from "@/components/shared/error-state";
 import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { useI18n } from "@/lib/i18n";
-import { fetchManifest } from "@/lib/public-data";
+import { fetchManifest, availableSnapshotDates } from "@/lib/public-data";
 import type { Region } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -29,9 +29,9 @@ export function AppShell({ children }: AppShellProps) {
   const lastUpdated = manifestQuery.data?.lastUpdated ?? "";
   const selectedRegion = searchParams.get("region") ?? "ALL";
   const selectedDate = searchParams.get("date") ?? lastUpdated;
-  const showPartial = searchParams.get("partial") === "1";
-  const snapshotCounts = new Map(manifestQuery.data?.snapshots?.map((item) => [item.date, item.bank_count]) ?? []);
-  const visibleDates = showPartial ? dates : dates.filter((date) => (snapshotCounts.get(date) ?? 28) >= 28);
+  const showPartial = searchParams.get("partial") !== "0";
+  const snapshotCounts = new Map(manifestQuery.data?.snapshots?.map((item) => [item.date, item.coverage]) ?? []);
+  const visibleDates = availableSnapshotDates(manifestQuery.data, showPartial);
 
   if (manifestQuery.isLoading) {
     return <PageSkeleton chartCount={2} />;
@@ -128,14 +128,14 @@ export function AppShell({ children }: AppShellProps) {
               >
                 {visibleDates.map((date) => (
                   <option key={date} value={date}>
-                    {date}{(snapshotCounts.get(date) ?? 28) < 28 ? ` (${snapshotCounts.get(date)}/29)` : ""}
+                    {date}{` (${snapshotCounts.get(date)?.srisk_count ?? "?"}/${snapshotCounts.get(date)?.expected_count ?? "?"})`}
                   </option>
                 ))}
               </select>
             </label>
             <label className="flex items-center gap-2 text-xs text-muted">
-              <input type="checkbox" checked={showPartial} onChange={(event) => updateParam("partial", event.target.checked ? "1" : "")} />
-              Show partial dates
+              <input type="checkbox" checked={showPartial} onChange={(event) => updateParam("partial", event.target.checked ? "1" : "0")} />
+              Include incomplete dates (SRISK coverage)
             </label>
           </div>
         </div>

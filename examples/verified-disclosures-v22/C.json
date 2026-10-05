@@ -1,0 +1,35 @@
+{
+  "bank_id": "C",
+  "scope": "consolidated_group",
+  "currency": "USD",
+  "accounting_standard": "US-GAAP",
+  "source_sha256": "0913163e3739b14249cdc7149210788edbe9cb9f378a06694360607488e046db",
+  "source_api": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000831001.json",
+  "share_tag": "dei:EntityCommonStockSharesOutstanding",
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-09",
+      "value": 2358256000000,
+      "source": "https://www.sec.gov/Archives/edgar/data/831001/000083100125000086/0000831001-25-000086-index.html",
+      "accession": "0000831001-25-000086",
+      "filed_date": "2025-05-08",
+      "accounting_standard": "US-GAAP",
+      "currency": "USD",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ],
+  "published_shares": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-05-09",
+      "value": 1867733680,
+      "source": "https://www.sec.gov/Archives/edgar/data/831001/000083100125000086/0000831001-25-000086-index.html",
+      "accession": "0000831001-25-000086",
+      "filed_date": "2025-05-08",
+      "accounting_standard": "US-GAAP",
+      "currency": "shares",
+      "availability_policy": "selected_SEC_filing_plus_one_calendar_day_not_first_public_disclosure"
+    }
+  ]
+}

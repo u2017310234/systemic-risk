@@ -16,7 +16,7 @@ import { PageSkeleton } from "@/components/shared/page-skeleton";
 import { Panel } from "@/components/shared/panel";
 import { useI18n } from "@/lib/i18n";
 import { buildInterpretiveGraph } from "@/lib/network-builder";
-import { fetchManifest, fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
+import { availableSnapshotDates, fetchManifest, fetchSnapshotByDate, fetchSnapshotSeries } from "@/lib/public-data";
 import type { BankMetric, MetricEmphasis, NetworkViewMode } from "@/lib/types";
 
 export function NetworkView() {
@@ -27,9 +27,7 @@ export function NetworkView() {
     queryKey: ["data-manifest"],
     queryFn: fetchManifest
   });
-  const dates = manifestQuery.data?.snapshots
-    ? manifestQuery.data.snapshots.filter((item) => item.bank_count >= 28).map((item) => item.date)
-    : manifestQuery.data?.dates ?? [];
+  const dates = availableSnapshotDates(manifestQuery.data, searchParams.get("partial") !== "0");
   const selectedDate = searchParams.get("date") ?? dates.at(-1) ?? "";
   const region = searchParams.get("region") ?? undefined;
   const thresholdFromUrl = Number(searchParams.get("threshold") ?? 0.6);
@@ -76,7 +74,7 @@ export function NetworkView() {
   const topBanks = useMemo(
     () =>
       snapshotQuery.data?.banks
-        ? [...snapshotQuery.data.banks].sort((left, right) => right.srisk_usd_bn - left.srisk_usd_bn)
+        ? [...snapshotQuery.data.banks].sort((left, right) => (right.srisk_usd_bn ?? -1) - (left.srisk_usd_bn ?? -1))
         : [],
     [snapshotQuery.data?.banks]
   );

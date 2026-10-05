@@ -1,0 +1,24 @@
+{
+  "bank_id": "BOC",
+  "scope": "consolidated_group",
+  "currency": "CNY",
+  "accounting_standard": "PRC-GAAP",
+  "source_sha256": "e0e69585d594eaf4616fbfdec69b068b26dae5fcc873bad3387490c2a2b666f7",
+  "manual_balance_check": {
+    "assets": 35987147000000.0,
+    "liabilities": 33019414000000.0,
+    "equity": 2967733000000.0,
+    "residual": 0.0,
+    "precision": "million native currency; MUFG independently rounded down"
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-04-30",
+      "source": "https://www.bankofchina.com/investor/ir3/202504/P020250429641814992886.pdf",
+      "accounting_standard": "PRC-GAAP",
+      "currency": "CNY",
+      "value": 33019414000000
+    }
+  ]
+}

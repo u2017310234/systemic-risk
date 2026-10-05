@@ -1,0 +1,149 @@
+{
+  "bank_id": "BOCOM",
+  "scope": "consolidated_group",
+  "currency": "CNY",
+  "accounting_standard": "PRC-GAAP",
+  "source_sha256": "a56f756f1a40dc85e3455c3bae5f42142e040310da568a4e98c05edef7e0f8ef",
+  "manual_balance_check": {
+    "assets": 15288895000000.0,
+    "liabilities": 14112326000000.0,
+    "equity": 1176569000000.0,
+    "residual": 0.0,
+    "precision": "million native currency; MUFG independently rounded down"
+  },
+  "liabilities": [
+    {
+      "effective_date": "2025-03-31",
+      "available_date": "2025-04-30",
+      "source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0429/2025042903111_c.pdf",
+      "accounting_standard": "PRC-GAAP",
+      "currency": "CNY",
+      "value": 14112326000000
+    }
+  ],
+  "published_share_classes": [
+    {
+      "share_class_id": "A",
+      "outstanding_shares": 39250864015,
+      "shares_effective_date": "2024-12-31",
+      "shares_available_date": "2025-03-22",
+      "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0321/2025032101699_c.pdf"
+    },
+    {
+      "share_class_id": "H",
+      "outstanding_shares": 35011862630,
+      "shares_effective_date": "2024-12-31",
+      "shares_available_date": "2025-03-22",
+      "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0321/2025032101699_c.pdf"
+    }
+  ],
+  "equity_valuations": [
+    {
+      "valuation_date": "2025-05-16",
+      "components": [
+        {
+          "share_class_id": "A",
+          "instrument_type": "ordinary",
+          "currency": "CNY",
+          "outstanding_shares": 39250864015,
+          "shares_effective_date": "2024-12-31",
+          "shares_available_date": "2025-03-22",
+          "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0321/2025032101699_c.pdf",
+          "price": 7.579999923706055,
+          "price_date": "2025-05-16",
+          "price_basis": "unadjusted",
+          "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/601328.SS",
+          "split_basis": "2025-05-16_share_units",
+          "price_split_basis": "2025-05-16_share_units",
+          "price_adjustment": {
+            "provider_split_adjusted_close": 7.579999923706055,
+            "future_split_undo_factor": 1.0,
+            "later_splits": []
+          }
+        },
+        {
+          "share_class_id": "H",
+          "instrument_type": "ordinary",
+          "currency": "HKD",
+          "outstanding_shares": 35011862630,
+          "shares_effective_date": "2024-12-31",
+          "shares_available_date": "2025-03-22",
+          "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0321/2025032101699_c.pdf",
+          "price": 7.179999828338623,
+          "price_date": "2025-05-16",
+          "price_basis": "unadjusted",
+          "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/3328.HK",
+          "split_basis": "2025-05-16_share_units",
+          "price_split_basis": "2025-05-16_share_units",
+          "price_adjustment": {
+            "provider_split_adjusted_close": 7.179999828338623,
+            "future_split_undo_factor": 1.0,
+            "later_splits": []
+          }
+        }
+      ],
+      "fx": [
+        {
+          "currency": "EUR",
+          "rate": 1.1141,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CHF",
+          "rate": 1.1910433539780847,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CAD",
+          "rate": 0.7147451933385748,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "GBP",
+          "rate": 1.3257,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "JPY",
+          "rate": 0.006848376934666484,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "HKD",
+          "rate": 0.12797051559320732,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        },
+        {
+          "currency": "CNY",
+          "rate": 0.13871549452073798,
+          "date": "2025-05-16",
+          "source_release_date": "2025-05-19",
+          "direction": "USD_PER_UNIT",
+          "source": "https://www.federalreserve.gov/releases/h10/20250519/"
+        }
+      ]
+    }
+  ],
+  "expected_share_classes": [
+    "A",
+    "H"
+  ]
+}

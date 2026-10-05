@@ -1,7 +1,7 @@
 import type { Language } from "@/lib/i18n";
 
-export function formatUsdBn(value: number | undefined, language: Language = "en") {
-  if (value === undefined || Number.isNaN(value)) {
+export function formatUsdBn(value: number | null | undefined, language: Language = "en") {
+  if (value == null || !Number.isFinite(value)) {
     return "N/A";
   }
   return new Intl.NumberFormat("en-US", {
@@ -10,15 +10,15 @@ export function formatUsdBn(value: number | undefined, language: Language = "en"
   }).format(value) + (language === "zh" ? " 十亿美元" : " bn");
 }
 
-export function formatPercent(value: number | undefined) {
-  if (value === undefined || Number.isNaN(value)) {
+export function formatPercent(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) {
     return "N/A";
   }
   return `${value.toFixed(1)}%`;
 }
 
-export function formatDelta(value: number | undefined) {
-  if (value === undefined || Number.isNaN(value)) {
+export function formatDelta(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) {
     return "N/A";
   }
   return value.toFixed(4);
