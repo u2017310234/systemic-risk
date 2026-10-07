@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gsib-systemic-risk"
-version = "2.3.0"
+version = "2.4.0"
 description = "Daily systemic risk metrics (MES, CoVaR, SRISK) with audited G-SIB coverage"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 keywords = ["systemic-risk", "g-sibs", "srisk", "covar", "mes", "mcp", "finance"]
 dependencies = [
+    "exchange-calendars>=4.5,<5",
     "yfinance>=0.2.36",
     "akshare>=1.12.0",
     "pandas>=2.1.0",

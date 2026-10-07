@@ -34,8 +34,8 @@ export function NetworkGraph({
           if (params.dataType === "node") {
             return `${params.data.label}<br/>${t.network.nodeTooltipSrisk}: ${Number(params.data.srisk).toFixed(1)} bn<br/>${t.network.nodeTooltipDelta}: ${Number(params.data.deltaCoVar).toFixed(4)}`;
           }
-          const edgeData = params.data as unknown as { weight: number; components: GraphEdge["components"] };
-          return `${t.network.edgeWeight}: ${edgeData.weight.toFixed(3)}<br/>${t.network.sriskCorr}: ${(edgeData.components.sriskCorr?.toFixed(3) ?? "N/A")}<br/>${t.network.deltaCorr}: ${(edgeData.components.deltaCoVarCorr?.toFixed(3) ?? "N/A")}<br/>${t.network.sameRegion}: ${edgeData.components.sameRegion}`;
+          const edgeData = params.data as unknown as GraphEdge;
+          return `${t.network.edgeWeight}: ${edgeData.weight.toFixed(3)}<br/>${t.network.sriskCorr}: ${(edgeData.components.sriskCorr?.toFixed(3) ?? "N/A")}<br/>${t.network.deltaCorr}: ${(edgeData.components.deltaCoVarCorr?.toFixed(3) ?? "N/A")}<br/>${t.network.sameRegion}: ${edgeData.components.sameRegion}<br/>${Object.entries(edgeData.diagnostics ?? {}).map(([metric,d]) => `${metric}: n=${d.observations}, ${d.start} → ${d.end}; half-window r=${d.firstHalf?.toFixed(2) ?? "N/A"}/${d.secondHalf?.toFixed(2) ?? "N/A"}`).join("<br/>")}<br/>Co-movement; no causal transmission claim`;
         }
       },
       series: [

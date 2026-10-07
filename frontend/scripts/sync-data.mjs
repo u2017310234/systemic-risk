@@ -12,6 +12,8 @@ const locDatasetPath = path.join(repoRoot, "loc", "gsib_branches.json");
 const targetDir = path.join(process.cwd(), "public", "data");
 
 async function main() {
+  const payload = JSON.parse(await fs.readFile(path.join(sourceDir, "latest.json"), "utf8"));
+  if (payload.methodology_version !== "2.0-beta-scenario" || !payload.calibration_id) throw new Error("Incompatible default data; install the verified demo or recompute");
   await fs.rm(targetDir, { recursive: true, force: true });
   await fs.mkdir(targetDir, { recursive: true });
   await fs.copyFile(path.join(sourceDir, "latest.json"), path.join(targetDir, "latest.json"));
@@ -56,6 +58,7 @@ async function writeManifest(dataDir) {
   const snapshots = await Promise.all(
     dates.map(async (date) => {
       const snapshot = JSON.parse(await fs.readFile(path.join(historyDir, `${date}.json`), "utf8"));
+      if (snapshot.date !== date || snapshot.calibration_id !== latestSnapshot.calibration_id || snapshot.methodology_version !== latestSnapshot.methodology_version) throw new Error(`Mixed snapshot identity: ${date}`);
       return { date, bank_count: Number(snapshot.bank_count ?? snapshot.banks?.length ?? 0), coverage: snapshot.coverage, methodology_version: snapshot.methodology_version };
     })
   );
@@ -64,11 +67,16 @@ async function writeManifest(dataDir) {
     // `dates` remains for older clients; `snapshots` is the authoritative, quality-aware form.
     dates,
     snapshots,
+    dataset_kind: latestSnapshot.dataset_kind,
+    parameters: latestSnapshot.parameters,
+    quality: latestSnapshot.quality,
+    publication: latestSnapshot.publication,
+    snapshot_generated_at: latestSnapshot.generated_at,
     calibration_id: latestSnapshot.calibration_id,
     methodology_version: latestSnapshot.methodology_version,
     lastUpdated,
-    cadence: "weekdays, T+1",
-    expected_next_update: nextWeekday(lastUpdated),
+    cadence: latestSnapshot.dataset_kind === "historical_reconstruction" ? "historical single-day demonstration" : "exchange sessions; publication gate",
+    expected_next_update: latestSnapshot.dataset_kind === "historical_reconstruction" ? null : nextWeekday(lastUpdated),
     generated_at: generatedAt
   };
   await fs.writeFile(path.join(dataDir, "manifest.json"), JSON.stringify(manifest, null, 2));

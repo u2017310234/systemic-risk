@@ -1,0 +1,9 @@
+OK  get_latest_metrics()
+    banks: 27
+OK  get_srisk_ranking(top_n=5)
+OK  get_delta_covar_ranking(top_n=5)
+OK  get_historical(bank_id='JPM')
+OK  get_methodology()
+OK  path-traversal date rejected
+
+MCP TOOL CHECK PASSED — the server's tools return data.

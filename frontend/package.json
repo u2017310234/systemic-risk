@@ -1,6 +1,6 @@
 {
   "name": "systemic-risk",
-  "version": "0.1.0",
+  "version": "2.4.0",
   "private": true,
   "scripts": {
     "sync-data": "node scripts/sync-data.mjs",
@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:cloudflare": "npm run sync-data && node scripts/build-cloudflare.mjs",
+    "deploy:cloudflare": "npm run build:cloudflare && wrangler deploy"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.75.5",
@@ -32,6 +34,7 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.23.15",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "wrangler": "^4.148.0"
   }
 }

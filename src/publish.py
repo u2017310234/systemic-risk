@@ -69,6 +69,8 @@ def publish_bank_csv(bank: Bank, date_metrics: dict[str, dict]) -> None:
         rows.append({
             "date": dt_str,
             "methodology_version": "2.0-beta-scenario",
+            "calibration_id": calibration_id(),
+            "dataset_kind": cfg.dataset_kind,
             "mes": m.get("mes"),
             "lrmes": m.get("lrmes"),
             "covar": m.get("covar"),
@@ -120,9 +122,16 @@ def _build_payload(
     missing = {bid: (next(b.exclusion_reason for b in BANKS if b.id == bid) if bid not in supported else
                     "no_record_for_date" if bid not in records else "srisk_inputs_unavailable")
                for bid in expected if bid not in valid}
+    from src.calendar_status import session_status
+    from datetime import timedelta
+    evaluation = datetime.combine(snapshot_date + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc)
+    bank_status = {b.id: session_status(b, snapshot_date.isoformat(), snapshot_date.isoformat() if b.id in records else None, now=evaluation) for b in BANKS}
+    for bid in records:
+        if records[bid].get("srisk_usd_bn") is None:
+            bank_status[bid]["status"] = "insufficient_input"
     payload = {
         "calibration_id": calibration_id(),
-        "data_policy_version": "2.3",
+        "data_policy_version": "2.4",
         "dataset_kind": cfg.dataset_kind,
         "date": snapshot_date.isoformat(),
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -135,6 +144,7 @@ def _build_payload(
             "lrmes_model": "ols_beta_scenario", "horizon_is_label_only": True,
         },
         "coverage": {
+            "bank_status": bank_status,
             "universe_version": UNIVERSE_VERSION, "universe_source": membership["source"], "list_evidence": membership,
             "membership_available_from": UNIVERSE_MEMBERSHIP_AVAILABLE_FROM, "expected_ids": expected,
             "eligible_count": len(supported), "ineligible_ids": [b.id for b in BANKS if not b.supported],
@@ -163,7 +173,7 @@ def _finite(value):
 
 def calibration_id():
     import hashlib
-    parameters = ["2.0-beta-scenario", "fundamentals-policy-2.3", cfg.dataset_kind, UNIVERSE_VERSION, cfg.srisk_k, cfg.covar_quantile,
+    parameters = ["2.0-beta-scenario", "fundamentals-policy-2.4", cfg.dataset_kind, UNIVERSE_VERSION, cfg.srisk_k, cfg.covar_quantile,
                   cfg.covar_window, cfg.lrmes_h, cfg.lrmes_market_drop, cfg.mes_tail_pct]
     return hashlib.sha256(json.dumps(parameters).encode()).hexdigest()[:16]
 

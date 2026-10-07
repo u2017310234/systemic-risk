@@ -9,6 +9,8 @@ import {
 } from "@/lib/types";
 
 export type DataManifest = {
+  dataset_kind?: string; calibration_id?: string; methodology_version?: string;
+  quality?: {status: string};
   dates: string[];
   snapshots?: Array<{ date: string; bank_count: number; coverage?: {srisk_count:number; expected_count:number; eligible_complete?:boolean; complete?:boolean} }>;
   lastUpdated: string;
@@ -55,8 +57,8 @@ export async function fetchLatestSnapshot(region?: string) {
 
 export async function fetchSnapshotByDate(date?: string, region?: string) {
   const manifest = await fetchManifest();
-  const requestedDate =
-    date && manifest.dates.includes(date) ? date : manifest.lastUpdated;
+  if (date && !manifest.dates.includes(date)) throw new Error(`No snapshot for ${date}`);
+  const requestedDate = date ?? manifest.lastUpdated;
   const response = await fetch(`/data/history/${requestedDate}.json`, { cache: "no-store" });
   if (!response.ok) {
     throw new Error("Failed to load snapshot");
@@ -71,8 +73,7 @@ export async function fetchSnapshotSeries(
   region?: string
 ) {
   const manifest = await fetchManifest();
-  const normalizedEndDate =
-    endDate && manifest.dates.includes(endDate) ? endDate : manifest.lastUpdated;
+  const normalizedEndDate = endDate ?? manifest.lastUpdated;
   const dates = manifest.dates.filter(date => date <= normalizedEndDate).slice(-lookback);
   const snapshots = await Promise.all(dates.map((date) => fetchSnapshotByDate(date, region)));
   return { dates, snapshots };
@@ -86,8 +87,7 @@ export async function fetchBankHistory(bankId: string) {
   const raw = await response.text();
   const parsed = csvParse(raw);
   return parsed
-    .map((row) => bankHistoryRowSchema.safeParse(row))
-    .flatMap((result) => (result.success ? [result.data] : []));
+    .map((row) => bankHistoryRowSchema.parse(row));
 }
 
 export function buildMiniTrend(rows: BankHistoryRow[], field: keyof BankHistoryRow, limit = 30) {

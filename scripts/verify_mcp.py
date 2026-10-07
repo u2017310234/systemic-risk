@@ -13,11 +13,9 @@ REPO = Path(__file__).resolve().parent.parent
 # config reads DATA_DIR from the environment AT IMPORT TIME, so set it first.
 os.environ["DATA_DIR"] = str(REPO / "data")
 
-# Import the repo's mcp/server.py as the top-level module `server`, while keeping
-# the pip-installed `mcp` SDK importable. We put ONLY <repo>/mcp on sys.path so
-# that `import mcp` inside server.py resolves to the pip SDK, not the repo folder.
-sys.path.insert(0, str(REPO / "mcp"))
-import server  # noqa: E402  (this is repo/mcp/server.py)
+sys.path.insert(0, str(REPO))
+from risk_mcp import server
+
 
 
 def ok(name, res):

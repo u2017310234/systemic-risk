@@ -3,5 +3,10 @@
   "name": "systemic-risk",
   "main": "cloudflare-worker.ts",
   "compatibility_date": "2026-08-03",
-  "assets": { "directory": "out", "binding": "ASSETS" }
+  "assets": {
+    "directory": "out",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "404-page"
+  }
 }

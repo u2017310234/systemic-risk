@@ -50,6 +50,9 @@ class Config:
     """Rolling window (trading days) for CoVaR quantile regression. Default 252."""
 
     dataset_kind: str = _str("DATASET_KIND", "research_estimate")
+    publication_mode: str = _str("PUBLICATION_MODE", "research")
+    min_publication_coverage: float = _float("MIN_PUBLICATION_COVERAGE", 0.8)
+    market_close_grace_minutes: int = _int("MARKET_CLOSE_GRACE_MINUTES", 120)
     market_inputs_dir: str = _str("MARKET_INPUTS_DIR", "")
     fundamentals_dir: str = _str("FUNDAMENTALS_DIR", "inputs/fundamentals")
     # ── Data ─────────────────────────────────────────────────────────────

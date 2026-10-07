@@ -14,11 +14,9 @@ jobs:
         with:
           node-version: '22'
       - run: pip install '.[test]'
-      - run: pytest tests loc/test_branch_locator.py -q
+      - run: python -m pytest tests loc/test_branch_locator.py -q
         env:
           RISK_QA_OUTPUT: /tmp/systemic-risk-qa-data
       - run: python -m build --wheel
-      - run: npm ci && npm test && npm run typecheck && npm run build
+      - run: npm ci && npm test && npm run typecheck && npm run build && npm run build:cloudflare && npx wrangler deploy --dry-run
         working-directory: frontend
-        env:
-          DATA_SOURCE_DIR: /tmp/systemic-risk-qa-data

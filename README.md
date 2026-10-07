@@ -1,57 +1,65 @@
-# Systemic Risk — 核心修复版 v2.3
+# Systemic Risk — v2.4
 
-以版本化的 29 家银行研究样本为基础，计算 MES、CoVaR/ΔCoVaR，以及 OLS-beta 累积下行情景下的资本缺口近似。
+29 家银行研究样本的 MES、CoVaR/ΔCoVaR 与 OLS-beta 情景 SRISK 服务。包含 Python 计算流水线、MCP 接口及 Next.js / Cloudflare 前端。
 
-基线仓库：<https://github.com/u2017310234/systemic-risk>，commit `2d0ee5079a814026a67c6c027205355572dff2a2`。
+**本包默认即可运行历史演示。附带数据为 2025-05-16 的 27 家银行历史重建，并非当前风险数据。** 原始审计来源保留在 `examples/verified-disclosures-v23/`；没有改写其 v2.3 校准身份，也没有虚构后续时间序列。
 
-## 先读这些
+本次修改基于仓库 `bf3d7dea569600974088e37593ff49090c54de40`。完整交付说明见 [docs/DELIVERY_V24.md](docs/DELIVERY_V24.md)，历史修复记录见 `docs/REPAIR_V23.md` 等文件。
 
-- [第四轮：27 家可计算样本补齐、拆股处理和 CoVaR 数值核验](docs/REPAIR_V23.md)
+## 本地启动
 
-- [第三轮：29 家名单核验、数据预检与剩余缺口](docs/REPAIR_V22.md)
-
-- [第二轮真实数据核账](docs/REAL_DATA_RECONCILIATION.md)
-- [新增数据接口与告警](docs/DATA_PIPELINE_V21.md)
-- [修复清单、输入格式、运行和方法边界](docs/REPAIR.md)
-- [实际验证结果](docs/VALIDATION.md)
-- [基本面文件格式示例](inputs/fundamentals.example.json)，纯合成示例，不是银行真实数据
-
-本包是本地修复结果，未改远端仓库或线上部署。没有携带旧版风险数值；旧结果须重新计算。附带 27 家银行的选定披露资料历史重建结果及 29 家适用性检查，并明确标记其范围。缺少真实披露日期、集团市值等输入时，SRISK 返回空值，不能当作零风险。
-
-## 核心变化
-
-- 报价币、报表币和汇率方向明确；失败不冒充美元
-- 不再把 BPCE 当成 GLE；多股类或上市子公司与集团口径不符时要求核实数据
-- 日期匹配、数据覆盖范围、零值和空值明确
-- JSON/CSV 同批计算并校验，原子提交，失败不损坏上一批
-- 前端相关性按相同日期区间计算，系统历史百分位与横截面相对分数分开
-- MCP SDK 不再被本地同名模块遮蔽，入口为 `gsib-mcp` 或 `risk_mcp.server:app`
-
-## 快速测试
+Python 3.11+、Node.js 22+，命令从项目根目录执行。
 
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-pip install '.[test]'
-pytest tests loc/test_branch_locator.py -q
+python -m pip install '.[test]'
+python -m pytest tests loc/test_branch_locator.py -q
+uvicorn risk_mcp.server:app --host 0.0.0.0 --port 8000
+```
+
+另开终端：
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+前端：`http://localhost:3000`。MCP：`http://localhost:8000/mcp`。后端健康：`/health`。前端可独立展示默认样本，不依赖 MCP 在线。需要前端转发 MCP 时设置 `MCP_ORIGIN_URL=http://127.0.0.1:8000`。
+
+## 本次变化
+
+- Actions 安装项目本身并通过 `python -m pytest` 执行；生产任务先检查输入，测试失败或质量门槛未通过不发布。
+- 新增研究、历史和生产模式。生产按交易日历及收市宽限检查可计算银行的新鲜度，默认至少 80%；失败保留旧指针，记录 `data/last-attempt.json`。
+- 明确休市、尚未到计算时点、缺行情、输入/计算失败及不适用。旧值单独注明观察日期，不补进当日排名与合计。
+- MCP 排名带校准、参数、质量和覆盖信息；方法说明读取快照参数；增加敏感性与同银行变化归因。
+- 增加配对移动块 bootstrap 和按时间切分的预测评分验证入口；不会拿单日样本冒充历史回测。
+- 前端全站显示数据性质；单银行页展示场景表；网络边显示有效样本数、时间范围及半窗口相关性。
+- Cloudflare 生成真实 `out/` 静态资源，由 Worker 转发 MCP、提供状态与数据 CORS。保留普通 Next.js 构建。
+
+## 构建与部署
+
+```bash
 cd frontend
 npm ci
 npm test
-npm run typecheck
+npm run build                  # 普通 Next.js，npm start 启动
+npm run build:cloudflare       # Cloudflare 静态资源 + Worker
+npx wrangler deploy --dry-run  # 只验证，不发布
+# 账号授权、域名和 MCP_ORIGIN_URL 配置完成后：
+npx wrangler deploy
 ```
 
-生产运行及前端构建需要先准备数据，详见修复说明。离线测试不请求市场数据。
+Cloudflare Git 集成根目录设为 `frontend`，构建命令 `npm ci && npm run build:cloudflare`，部署命令 `npx wrangler deploy`。这是 **Workers** 项目，不能把 `.next` 当作静态资源上传。MCP Python 服务独立部署；根目录提供 Dockerfile。外部域名需加入后端 `MCP_ALLOWED_HOSTS`。
 
-## 不应声称的能力
+## 启用真实生产更新
 
-它不是已校准的危机预测模型，名单已核对 2023、2024、2025 三版，按计算日选择当时已发布版；已完成 27 家银行在 2025-05-16 的选定披露资料历史重建，27 家方法可计算、2 家集团不具备直接上市权益输入；未完成全样本、全历史重算。供应商历史股数仍不等于经验证的 point-in-time 数据。部署前应补齐来源、重新计算并与独立基准对照。
+1. 按 `inputs/fundamentals.example.json` 和 `docs/REPAIR.md`，准备有来源、真实可用日期、集团口径的 `inputs/fundamentals/BANK_ID.json`。示例是假数据，不能复制冒充生产输入。
+2. 行情默认由供应商抓取；离线输入用 `MARKET_INPUTS_DIR`，格式见 `docs/DATA_PIPELINE_V21.md`。确保已配置的数据路径在 GitHub runner 上实际存在。
+3. 在 Actions 手动执行验证。定时运行需要仓库变量 `RISK_PRODUCTION_ENABLED=true`；默认关闭，避免演示仓库反复发布空结果。计划为工作日 23:15 UTC。
+4. 本地显式生产命令：`python -m src.production_preflight`，然后 `python -m src.pipeline --mode production`。历史重算使用 `--mode historical --end YYYY-MM-DD`，并指定独立 `DATA_DIR`。
 
-## 不下载原始行情的 UI 演示
+不同校准不可直接拼接。前端构建时用 `DATA_SOURCE_DIR`，后端用 `DATA_DIR` 指向同一已发布批次。此压缩包没有替你更新远端仓库、Cloudflare 或 Azure。
 
-```bash
-python -m src.demo --snapshot examples/verified-disclosures-v23/reconstructed-snapshot.json --output demo-data
-cd frontend
-DATA_SOURCE_DIR=../demo-data npm run build
-```
-
-这是标明日期的单日历史重建，目标目录必须为空。它不提供虚构的历史走势或当前风险判断。
+LRMES 是 OLS-beta 情景近似，不是动态危机模拟；资本率不是 Basel 风险加权资本率；统计联动不等于双边敞口或因果传染。真实全历史重算和独立样本外效果仍需后续数据支持。

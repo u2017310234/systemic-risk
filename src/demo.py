@@ -23,7 +23,7 @@ def install_demo(snapshot:Path,output:Path):
     fields=['date','methodology_version','mes','lrmes','covar','delta_covar','covar_beta','srisk_usd_bn','srisk_share_pct','market_cap_usd_bn','debt_usd_bn']
     for bank in payload['banks']:
         with (output/'banks'/f"{bank['bank_id']}.csv").open('w',newline='') as f:
-            w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerow({k:day if k=='date' else payload['methodology_version'] if k=='methodology_version' else bank.get(k) for k in fields})
+            w=csv.DictWriter(f,fieldnames=fields,lineterminator='\n');w.writeheader();w.writerow({k:day if k=='date' else payload['methodology_version'] if k=='methodology_version' else bank.get(k) for k in fields})
     (output/'DEMO.txt').write_text('Historical single-day reconstruction for UI review. No invented time history or current-risk claim.\n')
     from src.pipeline import validate_batch
     validate_batch(output)

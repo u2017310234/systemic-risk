@@ -17,7 +17,7 @@ type AppShellProps = {
 };
 
 export function AppShell({ children }: AppShellProps) {
-  const { t, regionLabel } = useI18n();
+  const { t, regionLabel, lang } = useI18n();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -140,6 +140,13 @@ export function AppShell({ children }: AppShellProps) {
           </div>
         </div>
       </header>
+      <aside className="mt-4 rounded-2xl border border-accent/40 bg-panel p-4 text-sm" role="status">
+        <strong>{manifestQuery.data.dataset_kind === "historical_reconstruction"
+          ? (lang === "zh" ? "历史重建演示 · 非当日监测" : "Historical reconstruction · not current monitoring")
+          : (lang === "zh" ? "研究模型估计" : "Research model estimates")}</strong>
+        <p className="mt-1 text-muted">{selectedDate} · {manifestQuery.data.methodology_version} · {manifestQuery.data.calibration_id}</p>
+        <p className="mt-1 text-muted">{lang === "zh" ? "缺失值不代表零。排名和汇总仅使用同日数据；历史不足时不生成趋势或网络连边。" : "Missing is not zero. Rankings and totals use same-day observations; insufficient history produces no trend or network edges."}</p>
+      </aside>
       <div className="pb-10">{children}</div>
       <footer className="pb-6 text-center text-xs text-muted">
         <p><a className="hover:text-text" href="/data/latest.json">Data: /data/latest.json</a> · <a className="hover:text-text" href="/mcp">MCP: /mcp</a> · <a className="hover:text-text" href="https://github.com/u2017310234/systemic-risk">GitHub</a></p>

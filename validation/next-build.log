@@ -1,0 +1,58 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> systemic-risk@2.4.0 build
+> npm run sync-data && next build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> systemic-risk@2.4.0 sync-data
+> node scripts/sync-data.mjs
+
+Synced data from <validation-workspace>/systemic-risk/data to <validation-workspace>/systemic-risk/frontend/public/data
+   ▲ Next.js 15.5.15
+   - Experiments (use with caution):
+     · cpus: 2
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully in 3.0s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/37) ...
+   Generating static pages (9/37) 
+   Generating static pages (18/37) 
+   Generating static pages (27/37) 
+ ✓ Generating static pages (37/37)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                     4.5 kB         139 kB
+├ ○ /_not-found                            137 B         102 kB
+├ ƒ /api/[...path]                         137 B         102 kB
+├ ● /bank/[bankId]                       3.76 kB         138 kB
+├   ├ /bank/JPM
+├   ├ /bank/BAC
+├   ├ /bank/C
+├   └ [+26 more paths]
+├ ○ /data-access                         1.91 kB         136 kB
+├ ○ /globe                               4.34 kB         139 kB
+├ ƒ /mcp                                   137 B         102 kB
+├ ○ /network                             7.94 kB         142 kB
+├ ƒ /status.json                           137 B         102 kB
+└ ○ /zh/data-access                      1.91 kB         136 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/255-4f212684648fcab9.js         46 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js  54.2 kB
+  └ other shared chunks (total)          1.96 kB
+
+
+ƒ Middleware                             34.3 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

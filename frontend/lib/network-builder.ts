@@ -58,13 +58,24 @@ export function buildInterpretiveGraph(
       const paired = [...new Map(history.filter(item => item.date <= snapshot.date &&
         item.methodology_version === snapshot.methodology_version && item.calibration_id === snapshot.calibration_id).map(item => [item.date, item])).values()]
         .sort((a, b) => a.date.localeCompare(b.date));
+      const diagnostics: NonNullable<GraphEdge["diagnostics"]> = {};
       const correlation = (field: "srisk_usd_bn" | "delta_covar") => {
-        const pairs = paired.map(item => [
+        const valid = paired.filter(item => [sourceBank.bank_id,targetBank.bank_id].every(id => {
+          const value=item.banks.find(bank => bank.bank_id===id)?.[field];
+          return typeof value === "number" && Number.isFinite(value);
+        }));
+        const pairs = valid.map(item => [
           item.banks.find(bank => bank.bank_id === sourceBank.bank_id)?.[field],
           item.banks.find(bank => bank.bank_id === targetBank.bank_id)?.[field]
         ]).filter((pair): pair is [number, number] => pair.every(value => typeof value === "number" && Number.isFinite(value)));
+        const x=diffSeries(pairs.map(pair => pair[0])), y=diffSeries(pairs.map(pair => pair[1]));
+        const mid=Math.floor(x.length/2);
+        const first=x.length>=20 ? pearsonCorrelation(x.slice(0,mid),y.slice(0,mid)) : null;
+        const second=x.length>=20 ? pearsonCorrelation(x.slice(mid),y.slice(mid)) : null;
+        diagnostics[field]={observations:x.length,start:valid[0]?.date ?? null,end:valid.at(-1)?.date ?? null,
+          firstHalf:first,secondHalf:second,stableSign:first == null || second == null ? null : Math.sign(first)===Math.sign(second)};
         if (pairs.length < 11) return null;
-        return pearsonCorrelation(diffSeries(pairs.map(pair => pair[0])), diffSeries(pairs.map(pair => pair[1])));
+        return pearsonCorrelation(x,y);
       };
       const sriskCorr = correlation("srisk_usd_bn");
       const deltaCoVarCorr = correlation("delta_covar");
@@ -82,6 +93,7 @@ export function buildInterpretiveGraph(
         source: sourceBank.bank_id,
         target: targetBank.bank_id,
         weight,
+        diagnostics,
         components: {
           sriskCorr,
           deltaCoVarCorr,

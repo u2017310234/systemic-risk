@@ -17,10 +17,11 @@ export const bankMetricSchema = z.object({
   bank_id: z.string(), bank_name: z.string(), region: regionSchema,
   mes: metric, lrmes: metric, covar: metric, delta_covar: metric,
   srisk_usd_bn: metric, srisk_share_pct: metric, market_cap_usd_bn: metric,
-  debt_usd_bn: metric, covar_beta: metric.optional()
+  debt_usd_bn: metric, covar_beta: metric.optional(), beta_ols: metric.optional()
 });
 export const systemSnapshotSchema = z.object({
   dataset_kind: z.string().optional(), calibration_id: z.string().optional(),
+  parameters: z.record(z.unknown()).optional(), generated_at: z.string().optional(),
   date: z.string(), methodology_version: z.literal("2.0-beta-scenario"),
   system_srisk_usd_bn: metric, covered_srisk_usd_bn: metric.optional(),
   coverage: z.object({ complete: z.boolean(), expected_count: z.number(), srisk_count: z.number(),
@@ -66,6 +67,7 @@ export type GraphEdge = {
   source: string;
   target: string;
   weight: number;
+  diagnostics?: Record<string, {observations:number; start:string | null; end:string | null; firstHalf:number | null; secondHalf:number | null; stableSign:boolean | null}>;
   components: {
     sriskCorr: number | null;
     deltaCoVarCorr: number | null;

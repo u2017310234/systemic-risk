@@ -2,7 +2,8 @@ import { compareBackendHealth, type BackendHealth } from "./lib/health";
 /** Cloudflare entrypoint. Bind ASSETS and set MCP_ORIGIN (including /mcp). */
 export interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
-  MCP_ORIGIN: string;
+  MCP_ORIGIN?: string;
+  MCP_ORIGIN_URL?: string;
 }
 const SITE = "https://systemic-risk.2017310234.workers.dev";
 const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS", "Access-Control-Allow-Headers": "Content-Type, If-None-Match" };
@@ -15,21 +16,26 @@ function nextWeekday(date: string) {
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+    const origin = env.MCP_ORIGIN_URL ? new URL("/mcp", env.MCP_ORIGIN_URL).href : env.MCP_ORIGIN;
     if (url.pathname === "/mcp") {
       const headers = new Headers(request.headers); headers.delete("host");
       // Preserve mcp-session-id and return the untouched stream for SSE.
-      const upstream = await fetch(env.MCP_ORIGIN, { method: request.method, headers, body: request.body, redirect: "manual" });
+      if (!origin) return json({error:"MCP origin not configured"},503);
+      let upstream: Response;
+      try { upstream = await fetch(origin, { method: request.method, headers, body: request.body, redirect: "manual" }); }
+      catch { return json({error:"MCP origin unavailable"},502); }
       const out = new Headers(upstream.headers); out.set("Cache-Control", "no-store");
       return new Response(upstream.body, { status: upstream.status, headers: out });
     }
     if (url.pathname.startsWith("/api/")) return json({ error: "No REST API on this deployment", mcp: `${SITE}/mcp`, data: `${SITE}/data/latest.json`, docs: `${SITE}/llms.txt` }, 404);
     if (url.pathname === "/status.json") {
       const manifestResponse = await env.ASSETS.fetch(new Request(new URL("/data/manifest.json", url), request));
-      const data: { lastUpdated?: string; cadence?: string; expected_next_update?: string; calibration_id?: string; methodology_version?: string } = manifestResponse.ok ? await manifestResponse.json() : {};
-      let mcpOriginHealth = "unreachable";
-      try { const response = await fetch(new URL("/health", env.MCP_ORIGIN), { signal: AbortSignal.timeout(3000) }); const body = response.ok ? await response.json() as BackendHealth : {}; mcpOriginHealth = compareBackendHealth(response.ok, body, data); } catch {}
-      const expected = data.expected_next_update ?? (data.lastUpdated ? nextWeekday(data.lastUpdated) : null);
-      return json({ latest_date: data.lastUpdated ?? null, generated_at: new Date().toISOString(), cadence: data.cadence ?? "weekdays, T+1", expected_next_update: expected, is_stale: !data.lastUpdated || Boolean(expected && new Date().toISOString().slice(0, 10) > expected), mcp_origin_health: mcpOriginHealth });
+      const data: { lastUpdated?: string; cadence?: string; expected_next_update?: string; calibration_id?: string; methodology_version?: string; dataset_kind?: string } = manifestResponse.ok ? await manifestResponse.json() : {};
+      let mcpOriginHealth = origin ? "unreachable" : "not_configured";
+      try { if (!origin) throw new Error("not configured"); const response = await fetch(new URL("/health", origin), { signal: AbortSignal.timeout(3000) }); const body = response.ok ? await response.json() as BackendHealth : {}; mcpOriginHealth = compareBackendHealth(response.ok, body, data); } catch {}
+      const historical = data.dataset_kind === "historical_reconstruction";
+      const expected = historical ? null : data.expected_next_update ?? (data.lastUpdated ? nextWeekday(data.lastUpdated) : null);
+      return json({ latest_date: data.lastUpdated ?? null, generated_at: new Date().toISOString(), cadence: data.cadence ?? "weekdays, T+1", expected_next_update: expected, dataset_kind: data.dataset_kind, is_stale: historical ? null : !data.lastUpdated || Boolean(expected && new Date().toISOString().slice(0, 10) > expected), mcp_origin_health: mcpOriginHealth });
     }
     if (url.pathname.startsWith("/data/")) {
       if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });

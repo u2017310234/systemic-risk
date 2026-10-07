@@ -64,7 +64,7 @@ def run_pipeline(target_date: date, start_date: date, bank_ids: list[str] | None
         old_dir = cfg.data_dir
         try:
             cfg.data_dir = str(staged)
-            _compute_and_publish(target_date, start_date, bank_ids)
+            observations = _compute_and_publish(target_date, start_date, bank_ids)
             latest_path = staged / "latest.json"
             if not latest_path.exists():
                 raise RuntimeError("Batch has no latest snapshot")
@@ -77,12 +77,28 @@ def run_pipeline(target_date: date, start_date: date, bank_ids: list[str] | None
             from src.quality import assess_quality
             selected = json.loads(latest_path.read_text())
             prior = json.loads((previous / "latest.json").read_text()) if previous != root else None
-            selected["quality"] = assess_quality(selected, prior, today=date.fromisoformat(selected["date"]))
+            selected["quality"] = assess_quality(selected, prior, today=(date.today() if cfg.publication_mode == "production" else date.fromisoformat(selected["date"])))
+            from src.calendar_status import publication_report
+            report = publication_report(selected, observations or {}, target_date.isoformat())
+            report["run"] = name
+            selected["publication"] = report
+            _write_json(report, root / "last-attempt.json")
+            if report["decision"] == "rejected":
+                raise RuntimeError("Publication rejected: " + ", ".join(report["reasons"]))
             _write_json(selected, latest_path)
             _write_json(selected["quality"], staged / "quality-report.json")
             # Verify JSON/CSV for every regenerated snapshot before commit.
             validate_batch(staged)
             _write_json({"run": name, "methodology_version": "2.0-beta-scenario"}, root / "current.json")
+        except Exception as exc:
+            attempt_path = root / "last-attempt.json"
+            report = json.loads(attempt_path.read_text()) if attempt_path.exists() else {}
+            if report.get("decision") != "rejected" or report.get("run") != name:
+                report = {"decision":"rejected", "mode":cfg.publication_mode,
+                          "target_date":target_date.isoformat(), "run":name,
+                          "error":f"{type(exc).__name__}: {exc}"}
+            _write_json(report, attempt_path)
+            raise
         finally:
             cfg.data_dir = old_dir
         # Failed staging directories stay unreferenced for diagnosis; readers never see them.
@@ -128,6 +144,7 @@ def _compute_and_publish(
 
     all_results: dict[str, dict] = {}  # bank_id → {date → metrics}
     failed_banks: list[str] = []
+    failures: dict[str, str] = {}
 
     for bank in banks:
         if not bank.supported:
@@ -143,6 +160,7 @@ def _compute_and_publish(
                 failed_banks.append(bank.id)
         except Exception as e:
             failed_banks.append(bank.id)
+            failures[bank.id] = f"{type(e).__name__}: {e}"
             logger.error(f"  ✗ {bank.id} failed: {e}", exc_info=True)
 
     # Publish daily snapshots
@@ -206,6 +224,8 @@ def _compute_and_publish(
         if bank.id in all_results:
             publish_bank_csv(bank, all_results[bank.id])
     logger.info("Pipeline complete.")
+    return {bank.id: {"srisk_date": max((d for d,m in all_results.get(bank.id, {}).items() if m.get("srisk_usd_bn") is not None), default=None),
+                      "failure": failures.get(bank.id)} for bank in banks}
 
 
 def process_bank(bank, start_str: str, end_str: str) -> dict | None:
@@ -332,7 +352,10 @@ def main():
                         help="End date for historical range YYYY-MM-DD (default: today)")
     parser.add_argument("--banks", default=None,
                         help="Comma-separated bank IDs to process (default: all)")
+    parser.add_argument("--mode", choices=["research", "historical", "production"], default=cfg.publication_mode)
     args = parser.parse_args()
+    cfg.publication_mode = args.mode
+    if args.mode == "historical": cfg.dataset_kind = "historical_reconstruction"
 
     today = date.today()
 

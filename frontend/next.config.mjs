@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    cpus: 2,
     optimizePackageImports: ["echarts", "zod"]
   },
   async headers() {

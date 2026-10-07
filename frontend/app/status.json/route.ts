@@ -27,8 +27,9 @@ export async function GET() {
     latest_date: latestDate,
     generated_at: new Date().toISOString(),
     cadence: manifest?.cadence ?? "weekdays, T+1",
-    expected_next_update: manifest?.expected_next_update ?? (latestDate ? nextWeekday(latestDate) : null),
-    is_stale: !latestDate || today > nextWeekday(latestDate),
+    dataset_kind: manifest?.dataset_kind,
+    expected_next_update: manifest?.dataset_kind === "historical_reconstruction" ? null : manifest?.expected_next_update ?? (latestDate ? nextWeekday(latestDate) : null),
+    is_stale: manifest?.dataset_kind === "historical_reconstruction" ? null : !latestDate || today > nextWeekday(latestDate),
     mcp_origin_health: mcpOriginHealth
   });
 }

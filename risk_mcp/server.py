@@ -49,7 +49,7 @@ logger = logging.getLogger("mcp-server")
 
 transport_security = TransportSecuritySettings(
     enable_dns_rebinding_protection=True,
-    allowed_hosts=[
+    allowed_hosts=[h.strip() for h in os.getenv("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()] + [
         "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io",
         "systemic-risk-mcp.jollydune-d1aeed5e.southeastasia.azurecontainerapps.io:*",
         "localhost:*",
@@ -166,6 +166,21 @@ def _load_bank_csv(bank_id: str) -> pd.DataFrame | None:
     return None
 
 
+def _metadata(payload):
+    return {key: payload.get(key) for key in (
+        "date", "generated_at", "dataset_kind", "calibration_id", "methodology_version",
+        "parameters", "coverage", "quality", "publication", "provenance", "data_policy_version", "units", "share_denominator")}
+
+
+def _snapshot_on(day):
+    if not is_valid_date(day):
+        raise ValueError("Invalid date. Expected YYYY-MM-DD")
+    payload = _load_json(f"history/{day}.json")
+    if not payload or payload.get("methodology_version") != "2.0-beta-scenario":
+        raise ValueError("No compatible snapshot for requested date")
+    return payload
+
+
 # ---------------------------------------------------------------------------
 # MCP Tools
 # ---------------------------------------------------------------------------
@@ -198,7 +213,20 @@ def get_latest_metrics(
         bid = bank_id.upper()
         match = [b for b in banks_list if b.get("bank_id") == bid]
         if not match:
-            return {"error": f"Bank '{bid}' not found. Valid IDs: {[b.id for b in BANKS]}"}
+            if bid not in BANK_BY_ID:
+                return {"error": f"Unknown bank '{bid}'"}
+            # Individual lookup may expose an older record, never carry it into aggregates.
+            history = _active_root() / "history"
+            for file in sorted(history.glob("*.json"), reverse=True):
+                if file.stem >= payload["date"]: continue
+                old = _load_json(f"history/{file.name}")
+                if not old or old.get("calibration_id") != payload.get("calibration_id"): continue
+                record = next((b for b in old.get("banks", []) if b.get("bank_id") == bid and b.get("srisk_usd_bn") is not None), None)
+                if record:
+                    return {**_metadata(old), "requested_date":payload["date"], "as_of":old["date"],
+                            "status":"previous_observation", "banks":[record], "aggregate_scope":"none; individual historical lookup"}
+            return {**_metadata(payload), "status":"unavailable", "bank_id":bid,
+                    "reason":payload.get("coverage",{}).get("missing",{}).get(bid, "No observation for this date"), "banks":[]}
         return {**{k: v for k, v in payload.items() if k != "banks"}, "banks": match, "returned_bank_count": len(match), "aggregate_scope": "entire snapshot before bank filter"}
 
     if region:
@@ -265,7 +293,18 @@ def get_historical(
         if hasattr(r.get("date"), "isoformat"):
             r["date"] = r["date"].isoformat()
 
+    metadata_by_date = {}
+    for row in records:
+        day = row["date"][:10]
+        local = _active_root() / "history" / f"{day}.json"
+        if local.exists():
+            snapshot = json.loads(local.read_text())
+            metadata_by_date[day] = _metadata(snapshot)
+        else:
+            metadata_by_date[day] = {"date":day, "status":"snapshot_metadata_unavailable"}
     return {
+        "metadata_by_date": metadata_by_date,
+        "metadata_scope": "per observation date; never inferred from today's configuration",
         "bank_id": bid,
         "bank_name": bank.name,
         "region": bank.region,
@@ -318,6 +357,7 @@ def get_srisk_ranking(
     )[:top_n]
 
     return {
+        **_metadata(payload),
         "date": payload.get("date"),
         "system_srisk_usd_bn": payload.get("system_srisk_usd_bn"),
         "coverage": payload.get("coverage"),
@@ -327,6 +367,9 @@ def get_srisk_ranking(
         "ranking": [
             {
                 "rank": i + 1,
+                "market_cap_evidence": b.get("market_cap_evidence"),
+                "liabilities_evidence": b.get("liabilities_evidence"),
+                "fundamentals_input_sha256": b.get("fundamentals_input_sha256"),
                 "bank_id": b.get("bank_id"),
                 "bank_name": b.get("bank_name"),
                 "region": b.get("region"),
@@ -382,6 +425,7 @@ def get_delta_covar_ranking(
     )[:top_n]  # most negative first = most systemic
 
     return {
+        **_metadata(payload),
         "date": payload.get("date"),
         "coverage": payload.get("coverage"),
         "covered_srisk_usd_bn": payload.get("covered_srisk_usd_bn"),
@@ -391,6 +435,9 @@ def get_delta_covar_ranking(
         "ranking": [
             {
                 "rank": i + 1,
+                "market_cap_evidence": b.get("market_cap_evidence"),
+                "liabilities_evidence": b.get("liabilities_evidence"),
+                "fundamentals_input_sha256": b.get("fundamentals_input_sha256"),
                 "bank_id": b.get("bank_id"),
                 "bank_name": b.get("bank_name"),
                 "region": b.get("region"),
@@ -413,7 +460,11 @@ def get_methodology() -> dict:
         Dict describing MES, LRMES, CoVaR, ΔCoVaR, SRISK formulas,
         data sources, index choices, and configurable parameters.
     """
+    snapshot = _load_latest() or {}
+    parameters = snapshot.get("parameters", {})
     return {
+        **_metadata(snapshot),
+        "parameter_scope": "published snapshot" if parameters else "configuration defaults; no snapshot parameters available",
         "title": "G-SIBs Systemic Risk Metrics — Methodology",
         "version": "2.0-beta-scenario",
         "metrics": {
@@ -422,15 +473,15 @@ def get_methodology() -> dict:
                 "reference": "Acharya, Pedersen, Philippon & Richardson (2010)",
                 "formula": "MES_i = E[r_i | r_m ≤ VaR_τ(r_m)]",
                 "description": "Mean return of bank i on days when the market falls below its τ-th percentile.",
-                "default_tau": cfg.mes_tail_pct,
+                "default_tau": parameters.get("mes_tail_pct", cfg.mes_tail_pct),
             },
             "LRMES": {
                 "full_name": "Long-Run Marginal Expected Shortfall",
                 "reference": "Custom OLS-beta scenario proxy; not the Brownlees–Engle dynamic estimator",
                 "formula": "LRMES = 1 - exp(log(1-D) · β_OLS)",
                 "parameters": {
-                    "D": f"Market drop scenario = {cfg.lrmes_market_drop:.0%}",
-                    "h": f"Horizon = {cfg.lrmes_h} trading days (scenario label; not in the closed form)",
+                    "D": f"Market drop scenario = {parameters.get('lrmes_market_drop', cfg.lrmes_market_drop):.0%}",
+                    "h": f"Horizon = {parameters.get('lrmes_horizon_days', cfg.lrmes_h)} trading days (scenario label; not in the closed form)",
                     "beta_OLS": "Cov(bank log returns, index log returns) / Var(index log returns)",
                 },
             },
@@ -451,10 +502,10 @@ def get_methodology() -> dict:
                 "reference": "Brownlees & Engle (2017)",
                 "formula": "SRISK_i = max(0, k·Debt_i - (1-k)·W_i·(1-LRMES_i))",
                 "parameters": {
-                    "k": f"Prudential capital ratio = {cfg.srisk_k:.0%} (configurable via SRISK_K env var)",
+                    "k": f"Prudential capital ratio = {parameters.get('srisk_k', cfg.srisk_k):.0%} (configurable via SRISK_K env var)",
                     "Debt": "Total liabilities (USD bn, quarterly balance sheet)",
                     "W": "Market capitalisation (USD bn)",
-                    "LRMES": f"OLS-beta loss proxy; drop={cfg.lrmes_market_drop}, horizon label={cfg.lrmes_h}",
+                    "LRMES": f"OLS-beta loss proxy; drop={parameters.get('lrmes_market_drop', cfg.lrmes_market_drop)}, horizon label={parameters.get('lrmes_horizon_days', cfg.lrmes_h)}",
                 },
             },
         },
@@ -470,10 +521,41 @@ def get_methodology() -> dict:
             "GB": "^FTSE (FTSE 100) — post-Brexit separate benchmark",
             "EU": "^STOXX50E (EURO STOXX 50) — eurozone systemic reference",
             "JP": "^N225 (Nikkei 225) — domestic systemic reference",
+            "CA": "^GSPTSE (S&P/TSX Composite)",
         },
-        "rolling_window_days": cfg.covar_window,
-        "universe": "legacy-research-29-v2; not a claim of current FSB membership",
+        "rolling_window_days": parameters.get("covar_window_days", cfg.covar_window),
+        "universe": snapshot.get("coverage", {}).get("universe_version"),
     }
+
+
+@mcp.tool()
+def get_sensitivity(bank_id: str, date: str | None = None,
+                    market_drops: list[float] | None = None,
+                    capital_ratios: list[float] | None = None) -> dict:
+    """Fixed-input OLS-beta scenario grid. A range, not a confidence interval."""
+    from src.analysis import scenario_grid
+    try:
+        payload = _snapshot_on(date) if date else _load_latest()
+        if not payload: return {"error":"No snapshot"}
+        if payload.get("methodology_version") != "2.0-beta-scenario": return {"error":"Incompatible methodology"}
+        bank = next((b for b in payload["banks"] if b["bank_id"] == bank_id.upper()), {})
+        return {**_metadata(payload), "input_evidence":{key:bank.get(key) for key in
+                    ("market_cap_evidence", "liabilities_evidence", "fundamentals_input_sha256")},
+                "analysis":scenario_grid(bank,payload.get("parameters",{}),market_drops,capital_ratios)}
+    except ValueError as exc:
+        return {"error":str(exc)}
+
+
+@mcp.tool()
+def get_change_explanation(bank_id: str, previous_date: str, current_date: str) -> dict:
+    """Exact Shapley change attribution for the same bank and model calibration."""
+    from src.analysis import explain_change
+    try:
+        previous, current = _snapshot_on(previous_date), _snapshot_on(current_date)
+        return {**_metadata(current), "previous_metadata":_metadata(previous),
+                "analysis":explain_change(previous,current,bank_id.upper())}
+    except ValueError as exc:
+        return {"error":str(exc)}
 
 
 # ---------------------------------------------------------------------------
@@ -488,7 +570,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="G-SIBs Systemic Risk MCP",
     description="Research systemic-risk metrics with explicit coverage and missing inputs",
-    version="2.1.0",
+    version="2.4.0",
     lifespan=lifespan,
 )
 
@@ -509,11 +591,12 @@ async def health():
     # Liveness remains explicit even when the dataset is incomplete or stale.
     return {"service_status":"ok", "data_status":quality["status"],
             "status":"ok" if quality["status"]=="ok" else "degraded",
+            "dataset_kind":payload.get("dataset_kind") if payload else None,
             "data_date":payload.get("date") if payload else None,
             "calibration_id":payload.get("calibration_id") if payload else None,
             "methodology_version":payload.get("methodology_version") if payload else None,
             "coverage":payload.get("coverage") if payload else None,
-            "quality":quality,"server":"gsib-systemic-risk-mcp","version":"2.1.0"}
+            "quality":quality,"server":"gsib-systemic-risk-mcp","version":"2.4.0"}
 
 
 @app.get("/")
