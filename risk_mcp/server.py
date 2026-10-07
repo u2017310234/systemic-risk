@@ -169,7 +169,7 @@ def _load_bank_csv(bank_id: str) -> pd.DataFrame | None:
 def _metadata(payload):
     return {key: payload.get(key) for key in (
         "date", "generated_at", "dataset_kind", "calibration_id", "methodology_version",
-        "parameters", "coverage", "quality", "publication", "provenance", "data_policy_version", "units", "share_denominator")}
+        "parameters", "coverage", "quality", "publication", "provenance", "data_policy_version", "fundamentals_policy", "units", "share_denominator")}
 
 
 def _snapshot_on(day):
@@ -512,7 +512,7 @@ def get_methodology() -> dict:
         "data_sources": {
             "prices": "Yahoo Finance; no silent cross-listing fallback",
             "market_cap": "Dated vendor shares × non-dividend-adjusted price; split ranges and multi-class/group mismatch require verified inputs",
-            "debt": "Sourced consolidated liabilities, activated only at actual public availability date",
+            "debt": "Verified disclosure-dated inputs, or explicitly labeled current Yahoo research inputs; see fundamentals_policy and per-bank evidence",
             "fx_conversion": "All monetary values converted to USD via daily FX rates from Yahoo Finance",
         },
         "covar_index_by_region": {
@@ -570,7 +570,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="G-SIBs Systemic Risk MCP",
     description="Research systemic-risk metrics with explicit coverage and missing inputs",
-    version="2.4.0",
+    version="2.4.2",
     lifespan=lifespan,
 )
 
@@ -596,7 +596,7 @@ async def health():
             "calibration_id":payload.get("calibration_id") if payload else None,
             "methodology_version":payload.get("methodology_version") if payload else None,
             "coverage":payload.get("coverage") if payload else None,
-            "quality":quality,"server":"gsib-systemic-risk-mcp","version":"2.4.0"}
+            "quality":quality,"server":"gsib-systemic-risk-mcp","version":"2.4.2"}
 
 
 @app.get("/")

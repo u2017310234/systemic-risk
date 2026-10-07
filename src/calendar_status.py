@@ -71,19 +71,29 @@ def publication_report(payload, observations, target_date, *, now=None):
             state['input_failure'] = observation['failure']
             if state['status'] == 'missing_data': state['status'] = 'fetch_or_calculation_failed'
         states[bank.id] = state
+    if cfg.publication_basis not in {'srisk','market_metrics'}:
+        raise ValueError('PUBLICATION_BASIS must be srisk or market_metrics')
+    metric_status = {}
+    for metric in ('mes','lrmes','covar','delta_covar','srisk_usd_bn'):
+        metric_status[metric] = {bank.id:session_status(bank,current_day,
+            observations.get(bank.id,{}).get('metric_dates',{}).get(metric),now=now) for bank in BANKS if bank.supported}
     eligible = [b.id for b in BANKS if b.supported]
     ready = [bid for bid in eligible if states[bid].get('up_to_date')]
     reasons = []
     if not 0 < cfg.min_publication_coverage <= 1:
         raise ValueError('MIN_PUBLICATION_COVERAGE must be in (0,1]')
-    if not payload.get('coverage', {}).get('srisk_count'): reasons.append('NO_SRISK')
+    if cfg.publication_basis == 'market_metrics':
+        ready = [bid for bid in eligible if all(metric_status[m][bid].get('up_to_date') for m in ('mes','lrmes','covar','delta_covar'))]
+    elif not payload.get('coverage', {}).get('srisk_count'): reasons.append('NO_SRISK')
     if len(ready)/len(eligible) < cfg.min_publication_coverage: reasons.append('INSUFFICIENT_FRESH_ELIGIBLE_COVERAGE')
     if payload.get('dataset_kind') in ('historical_reconstruction','synthetic_test'): reasons.append('NON_PRODUCTION_DATASET')
     if target_date > current_day: reasons.append('FUTURE_TARGET')
     if any(a.get('severity') == 'error' for a in payload.get('quality',{}).get('alerts',[])):
         reasons.append('QUALITY_ERROR')
     return {'mode':cfg.publication_mode, 'target_date':target_date,
-            'evaluated_at':now.isoformat(), 'fresh_eligible_count':len(ready),
+            'evaluated_at':now.isoformat(), 'basis':cfg.publication_basis, 'fresh_eligible_count':len(ready),
+            'metric_status':metric_status,
+            'fresh_count_by_metric':{m:sum(bool(s.get('up_to_date')) for s in by_bank.values()) for m,by_bank in metric_status.items()},
             'eligible_count':len(eligible), 'minimum_ratio':cfg.min_publication_coverage,
             'bank_status':states, 'reasons':reasons,
             'decision':'rejected' if reasons and cfg.publication_mode=='production' else 'accepted'}

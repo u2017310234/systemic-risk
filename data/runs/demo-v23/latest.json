@@ -1,0 +1,2392 @@
+{
+  "calibration_id": "e282cd5d8dc33af3",
+  "data_policy_version": "2.3",
+  "dataset_kind": "historical_reconstruction",
+  "date": "2025-05-16",
+  "generated_at": "2026-10-04T16:43:13.371594+00:00",
+  "methodology_version": "2.0-beta-scenario",
+  "parameters": {
+    "srisk_k": 0.08,
+    "covar_quantile": 0.05,
+    "covar_window_days": 252,
+    "lrmes_horizon_days": 22,
+    "lrmes_market_drop": 0.4,
+    "mes_tail_pct": 0.05,
+    "covar_solver_policy": "quantile_irls_with_same_objective_highs_lp_fallback",
+    "lrmes_model": "ols_beta_scenario",
+    "horizon_is_label_only": true
+  },
+  "coverage": {
+    "universe_version": "fsb-2023-membership-verified-v2.2",
+    "universe_source": "https://www.fsb.org/uploads/P261124.pdf",
+    "list_evidence": {
+      "list_year": "2024",
+      "source": "https://www.fsb.org/uploads/P261124.pdf",
+      "available_date": "2024-11-27",
+      "published_date": "2024-11-26",
+      "membership_version": "fsb-2023-membership-verified-v2.2",
+      "scope": "verified_membership_not_regulatory_capital_bucket_calibration"
+    },
+    "membership_available_from": "2023-11-28",
+    "expected_ids": [
+      "JPM",
+      "BAC",
+      "C",
+      "WFC",
+      "GS",
+      "MS",
+      "BK",
+      "STT",
+      "ICBC",
+      "CCB",
+      "ABC",
+      "BOC",
+      "BOCOM",
+      "HSBC",
+      "BARC",
+      "STAN",
+      "BNP",
+      "ACA",
+      "GLE",
+      "BPCE",
+      "DBK",
+      "UBS",
+      "ING",
+      "SAN",
+      "RBC",
+      "TD",
+      "MUFG",
+      "SMFG",
+      "MFG"
+    ],
+    "eligible_count": 27,
+    "ineligible_ids": [
+      "ACA",
+      "BPCE"
+    ],
+    "eligible_complete": true,
+    "eligible_ids": [
+      "JPM",
+      "BAC",
+      "C",
+      "WFC",
+      "GS",
+      "MS",
+      "BK",
+      "STT",
+      "ICBC",
+      "CCB",
+      "ABC",
+      "BOC",
+      "BOCOM",
+      "HSBC",
+      "BARC",
+      "STAN",
+      "BNP",
+      "GLE",
+      "DBK",
+      "UBS",
+      "ING",
+      "SAN",
+      "RBC",
+      "TD",
+      "MUFG",
+      "SMFG",
+      "MFG"
+    ],
+    "observed_ids": [
+      "ABC",
+      "BAC",
+      "BARC",
+      "BK",
+      "BNP",
+      "BOC",
+      "BOCOM",
+      "C",
+      "CCB",
+      "DBK",
+      "GLE",
+      "GS",
+      "HSBC",
+      "ICBC",
+      "ING",
+      "JPM",
+      "MFG",
+      "MS",
+      "MUFG",
+      "RBC",
+      "SAN",
+      "SMFG",
+      "STAN",
+      "STT",
+      "TD",
+      "UBS",
+      "WFC"
+    ],
+    "srisk_ids": [
+      "ABC",
+      "BAC",
+      "BARC",
+      "BK",
+      "BNP",
+      "BOC",
+      "BOCOM",
+      "C",
+      "CCB",
+      "DBK",
+      "GLE",
+      "GS",
+      "HSBC",
+      "ICBC",
+      "ING",
+      "JPM",
+      "MFG",
+      "MS",
+      "MUFG",
+      "RBC",
+      "SAN",
+      "SMFG",
+      "STAN",
+      "STT",
+      "TD",
+      "UBS",
+      "WFC"
+    ],
+    "missing": {
+      "ACA": "listed_subsidiary_not_consolidated_group_equity",
+      "BPCE": "unlisted_without_own_equity_data"
+    },
+    "complete": false,
+    "expected_count": 29,
+    "srisk_count": 27
+  },
+  "system_srisk_usd_bn": null,
+  "covered_srisk_usd_bn": 2746.9793,
+  "units": {
+    "monetary": "USD billions",
+    "returns": "log returns over matched closing-date intervals",
+    "shares": "percent"
+  },
+  "share_denominator": "covered_srisk_usd_bn",
+  "bank_count": 27,
+  "banks": [
+    {
+      "bank_name": "Agricultural Bank of China",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "1288.HK",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "A",
+            "outstanding_shares": 319244210777,
+            "shares_age_days": 136,
+            "usd": 247548229568.07196
+          },
+          {
+            "share_class_id": "H",
+            "outstanding_shares": 30738823096,
+            "shares_age_days": 136,
+            "usd": 19864999103.920406
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.abchina.com.cn/cn/AboutABC/investor_relations/announcements/h-announcement/202503/P020250328727621058319.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/601288.SS",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-29",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 5.590000152587891,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          },
+          {
+            "share_source": "https://www.abchina.com.cn/cn/AboutABC/investor_relations/announcements/h-announcement/202503/P020250328727621058319.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/1288.HK",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-29",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 5.050000190734863,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://www.abchina.com/en/investor-relations/corporate-announcements/Announcements/202504/W020250429532708701578.pdf",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "f13403e7240cb1db5b3bd131c26a8c72ac3400a9c955dddfe35cb1f0ee04b82a",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.021821,
+      "lrmes": 0.241588,
+      "covar": -0.035535,
+      "delta_covar": -0.016529,
+      "covar_beta": 0.568231,
+      "srisk_usd_bn": 275.903305,
+      "market_cap_usd_bn": 267.413229,
+      "debt_usd_bn": 5781.100291,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 10.0439,
+      "bank_id": "ABC"
+    },
+    {
+      "bank_name": "Bank of America",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "BAC",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 7531876103,
+            "shares_age_days": 17,
+            "usd": 336599532699.61224
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/70858/000007085825000200/0000070858-25-000200-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/BAC",
+            "shares_effective_date": "2025-04-29",
+            "shares_available_date": "2025-05-01",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 44.689998626708984,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-01",
+        "source": "https://www.sec.gov/Archives/edgar/data/70858/000007085825000200/0000070858-25-000200-index.html",
+        "accession": "0000070858-25-000200",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "6c007ee36db72c08a415ad963147469684d185affe2f744dd4b53d2b0b5d6e4f",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.035428,
+      "lrmes": 0.399886,
+      "covar": -0.028377,
+      "delta_covar": -0.010847,
+      "covar_beta": 0.46293,
+      "srisk_usd_bn": 58.469281,
+      "market_cap_usd_bn": 336.599533,
+      "debt_usd_bn": 3053.843,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 2.1285,
+      "bank_id": "BAC"
+    },
+    {
+      "bank_name": "Barclays",
+      "region": "GB",
+      "covar_index": "^FTSE",
+      "security_ticker": "BARC.L",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 14280379348,
+            "shares_age_days": 16,
+            "usd": 61622028924.84992
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/312069/000165495425006355/maybatch.htm",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/BARC.L",
+            "shares_effective_date": "2025-04-30",
+            "shares_available_date": "2025-05-02",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 325.5,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2024-12-31",
+        "available_date": "2025-02-14",
+        "source": "https://www.sec.gov/Archives/edgar/data/312069/000031206925000114/0000312069-25-000114-index.html",
+        "accession": "0000312069-25-000114",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "c10f304c3d95ba45fe9f24b50a936ac98d6ed77df4d69d3eba7f76f884dbcd3c",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.035932,
+      "lrmes": 0.584955,
+      "covar": -0.021522,
+      "delta_covar": -0.010921,
+      "covar_beta": 0.319679,
+      "srisk_usd_bn": 129.797551,
+      "market_cap_usd_bn": 61.622029,
+      "debt_usd_bn": 1916.59233,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 4.7251,
+      "bank_id": "BARC"
+    },
+    {
+      "bank_name": "Bank of New York Mellon",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "BK",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 715434285,
+            "shares_age_days": 46,
+            "usd": 64439166049.95
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/1390777/000139077725000084/0001390777-25-000084-index.html",
+            "price_source": "Wind BK.N; afdate=20250516; historical series acquired 2026-10-04; not vintage verified; endpoint anchored at valuation date",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-03",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": null
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-03",
+        "source": "https://www.sec.gov/Archives/edgar/data/1390777/000139077725000084/0001390777-25-000084-index.html",
+        "accession": "0001390777-25-000084",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "4746717fadb4d7a237d30bd8b2b10655980b91b58b7ca988437effb6c5dbb425",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.027981,
+      "lrmes": 0.366506,
+      "covar": -0.027528,
+      "delta_covar": -0.01356,
+      "covar_beta": 0.53634,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 64.439166,
+      "debt_usd_bn": 397.068,
+      "data_quality_warnings": [
+        "historical_feed_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "BK"
+    },
+    {
+      "bank_name": "BNP Paribas",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "BNP.PA",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 1129554473,
+            "shares_age_days": 136,
+            "usd": 99907283952.04997
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://reports.invest.bnpparibas/esef/2024/bnpp-2024-12-31-en.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/BNP.PA",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-21",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 79.38999938964844,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2024-12-31",
+        "available_date": "2025-03-21",
+        "source": "https://reports.invest.bnpparibas/esef/2024/bnpp-2024-12-31-en.html",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "36eb63c0bb7d4418723029de8bf1989e1f10956df4085b65c5672ebc55659d9b",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.032405,
+      "lrmes": 0.427706,
+      "covar": -0.027557,
+      "delta_covar": -0.015101,
+      "covar_beta": 0.523272,
+      "srisk_usd_bn": 176.525117,
+      "market_cap_usd_bn": 99.907284,
+      "debt_usd_bn": 2864.091515,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 6.4262,
+      "bank_id": "BNP"
+    },
+    {
+      "bank_name": "Bank of China",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "3988.HK",
+      "accounting_standard": "PRC-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "A",
+            "outstanding_shares": 210765514846,
+            "shares_age_days": 136,
+            "usd": 164601175295.2114
+          },
+          {
+            "share_class_id": "H",
+            "outstanding_shares": 83622276395,
+            "shares_age_days": 136,
+            "usd": 49974538620.80076
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.boc.cn/investor/ir3/202503/P020250326687482371928.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/601988.SS",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-27",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 5.630000114440918,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          },
+          {
+            "share_source": "https://www.boc.cn/investor/ir3/202503/P020250326687482371928.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/3988.HK",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-27",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 4.670000076293945,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://www.bankofchina.com/investor/ir3/202504/P020250429641814992886.pdf",
+        "accession": null,
+        "accounting_standard": "PRC-GAAP"
+      },
+      "fundamentals_input_sha256": "a34512df9eb1c03f232044b25966a15181414af8c916691224950bb5ef1c46d9",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.023004,
+      "lrmes": 0.276557,
+      "covar": -0.042068,
+      "delta_covar": -0.024612,
+      "covar_beta": 1.085951,
+      "srisk_usd_bn": 223.609617,
+      "market_cap_usd_bn": 214.575714,
+      "debt_usd_bn": 4580.304342,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 8.1402,
+      "bank_id": "BOC"
+    },
+    {
+      "bank_name": "Bank of Communications",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "3328.HK",
+      "accounting_standard": "PRC-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "A",
+            "outstanding_shares": 39250864015,
+            "shares_age_days": 136,
+            "usd": 41270848417.13091
+          },
+          {
+            "share_class_id": "H",
+            "outstanding_shares": 35011862630,
+            "shares_age_days": 136,
+            "usd": 32169889519.626255
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0321/2025032101699_c.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/601328.SS",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-22",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 7.579999923706055,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          },
+          {
+            "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0321/2025032101699_c.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/3328.HK",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-22",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 7.179999828338623,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0429/2025042903111_c.pdf",
+        "accession": null,
+        "accounting_standard": "PRC-GAAP"
+      },
+      "fundamentals_input_sha256": "fadd1e19696237460d5c2523339da830d457bd9f38afb7c2d50945668bfa0b2f",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.017115,
+      "lrmes": 0.259709,
+      "covar": -0.042428,
+      "delta_covar": -0.022809,
+      "covar_beta": 0.956233,
+      "srisk_usd_bn": 106.589739,
+      "market_cap_usd_bn": 73.440738,
+      "debt_usd_bn": 1957.59828,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 3.8803,
+      "bank_id": "BOCOM"
+    },
+    {
+      "bank_name": "Citigroup",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "C",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 1867733680,
+            "shares_age_days": 46,
+            "usd": 141424796529.54834
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/831001/000083100125000086/0000831001-25-000086-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/C",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-09",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 75.72000122070312,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-09",
+        "source": "https://www.sec.gov/Archives/edgar/data/831001/000083100125000086/0000831001-25-000086-index.html",
+        "accession": "0000831001-25-000086",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "9c89563147d7fa42031ef71220ed1af22ab88c3dcd23bdbb33f63cd02f5b34e6",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.042531,
+      "lrmes": 0.478073,
+      "covar": -0.031695,
+      "delta_covar": -0.017562,
+      "covar_beta": 0.494029,
+      "srisk_usd_bn": 120.752104,
+      "market_cap_usd_bn": 141.424797,
+      "debt_usd_bn": 2358.256,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 4.3958,
+      "bank_id": "C"
+    },
+    {
+      "bank_name": "China Construction Bank",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "0939.HK",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "A",
+            "outstanding_shares": 9593657606,
+            "shares_age_days": 136,
+            "usd": 12216643050.46913
+          },
+          {
+            "share_class_id": "H",
+            "outstanding_shares": 240417319880,
+            "shares_age_days": 136,
+            "usd": 212902994754.7427
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0328/2025032800700.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/601939.SS",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-29",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 9.180000305175781,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          },
+          {
+            "share_source": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0328/2025032800700.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/0939.HK",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-29",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 6.920000076293945,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0429/2025042901137.pdf",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "8e5b39aa7b7b3de1a509a75e0030cabe76b5e5503c850739f5a46b1c1f07569a",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.0248,
+      "lrmes": 0.27611,
+      "covar": -0.030756,
+      "delta_covar": -0.01378,
+      "covar_beta": 0.639067,
+      "srisk_usd_bn": 287.122042,
+      "market_cap_usd_bn": 225.119638,
+      "debt_usd_bn": 5463.086004,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 10.4523,
+      "bank_id": "CCB"
+    },
+    {
+      "bank_name": "Deutsche Bank",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "DBK.DE",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 1942000000,
+            "shares_age_days": 46,
+            "usd": 53970557318.72712
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/1159508/000115950825000028/db20250429991.htm",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/DBK.DE",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-04-30",
+            "share_count_basis": "issued_minus_treasury_excludes_unissued_vested_awards",
+            "precision": "reported in 0.1 million shares; estimate",
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 24.94499969482422,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://www.sec.gov/Archives/edgar/data/1159508/000115950825000028/db20250429991.htm",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "0ececa4f38527a494e2d3f4373f47ca290a1ca8e89c52ed2a9f54f3f99e90837",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.04378,
+      "lrmes": 0.517538,
+      "covar": -0.022808,
+      "delta_covar": -0.010463,
+      "covar_beta": 0.330115,
+      "srisk_usd_bn": 95.235752,
+      "market_cap_usd_bn": 53.970557,
+      "debt_usd_bn": 1489.892615,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 3.4669,
+      "bank_id": "DBK"
+    },
+    {
+      "bank_name": "Société Générale",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "GLE.PA",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 783671000,
+            "shares_age_days": 46,
+            "usd": 42187605181.90673
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.societegenerale.com/sites/default/files/societe-generale-q1-2025-financial-results-press-release-en.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/GLE.PA",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-01",
+            "share_count_basis": "issuer_period_end_excludes_treasury_and_buybacks_includes_group_trading_shares",
+            "precision": "reported in thousands; not daily exact shares",
+            "caveat": "Issuer NAPS denominator is end-period, not EPS weighted average; includes group trading shares, so not a fully harmonized net-share convention.",
+            "price_adjustment": {
+              "provider_split_adjusted_close": 48.31999969482422,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-01",
+        "source": "https://www.societegenerale.com/sites/default/files/societe-generale-q1-2025-financial-results-press-release-en.pdf",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "5aa2deee49ad608134a0ed0d39cad4ea50fbb1bb2b39b10a73a34b45e2b1bc2e",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.03797,
+      "lrmes": 0.470014,
+      "covar": -0.022192,
+      "delta_covar": -0.00781,
+      "covar_beta": 0.291555,
+      "srisk_usd_bn": 110.833256,
+      "market_cap_usd_bn": 42.187605,
+      "debt_usd_bn": 1642.54214,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 4.0347,
+      "bank_id": "GLE"
+    },
+    {
+      "bank_name": "Goldman Sachs",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "GS",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 306841128,
+            "shares_age_days": 25,
+            "usd": 189943872455.32617
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/886982/000088698225000009/0000886982-25-000009-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/GS",
+            "shares_effective_date": "2025-04-21",
+            "shares_available_date": "2025-05-03",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 619.030029296875,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-03",
+        "source": "https://www.sec.gov/Archives/edgar/data/886982/000088698225000009/0000886982-25-000009-index.html",
+        "accession": "0000886982-25-000009",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "15f436efb9805b8bc6312fd6af0652a9d198bdc0a93668b119b2e0feae8eede7",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.041936,
+      "lrmes": 0.503707,
+      "covar": -0.02729,
+      "delta_covar": -0.016177,
+      "covar_beta": 0.511996,
+      "srisk_usd_bn": 44.62405,
+      "market_cap_usd_bn": 189.943872,
+      "debt_usd_bn": 1641.881,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 1.6245,
+      "bank_id": "GS"
+    },
+    {
+      "bank_name": "HSBC Holdings",
+      "region": "GB",
+      "covar_index": "^FTSE",
+      "security_ticker": "HSBA.L",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 17946950582,
+            "shares_age_days": 136,
+            "usd": 210038177724.19864
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/1089113/000108911325000040/0001089113-25-000040-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/HSBA.L",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-02-21",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 882.7999877929688,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2024-12-31",
+        "available_date": "2025-02-21",
+        "source": "https://www.sec.gov/Archives/edgar/data/1089113/000108911325000040/0001089113-25-000040-index.html",
+        "accession": "0001089113-25-000040",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "78efef6172e93c0b2731ffa8248ca77ec4347281cc49590d847970b4a63f8c36",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.030849,
+      "lrmes": 0.47044,
+      "covar": -0.018598,
+      "delta_covar": -0.011011,
+      "covar_beta": 0.394905,
+      "srisk_usd_bn": 123.652353,
+      "market_cap_usd_bn": 210.038178,
+      "debt_usd_bn": 2824.775,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 4.5014,
+      "bank_id": "HSBC"
+    },
+    {
+      "bank_name": "Industrial & Commercial Bank of China",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "1398.HK",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "A",
+            "outstanding_shares": 269612212539,
+            "shares_age_days": 136,
+            "usd": 267779636654.13806
+          },
+          {
+            "share_class_id": "H",
+            "outstanding_shares": 86794044550,
+            "shares_age_days": 136,
+            "usd": 62088571244.79738
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042501522_c.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/601398.SS",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-04-26",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 7.159999847412109,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          },
+          {
+            "share_source": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042501522_c.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/1398.HK",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-04-26",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 5.590000152587891,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://v.icbc.com.cn/userfiles/resources/icbcltd/download/2025/Announcement20250429_3.pdf",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "d2b1b07c8e5d4d4a339379e24aa7a4ed7e2568ac37d354df9a3153639ff20934",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.022952,
+      "lrmes": 0.253738,
+      "covar": -0.032205,
+      "delta_covar": -0.015903,
+      "covar_beta": 0.637236,
+      "srisk_usd_bn": 300.491245,
+      "market_cap_usd_bn": 329.868208,
+      "debt_usd_bn": 6587.074352,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 10.939,
+      "bank_id": "ICBC"
+    },
+    {
+      "bank_name": "ING Groep",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "INGA.AS",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 3147391173,
+            "shares_age_days": 136,
+            "usd": 66462363878.33538
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/1039765/000162828025010764/0001628280-25-010764-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/INGA.AS",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-07",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 18.95400047302246,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2024-12-31",
+        "available_date": "2025-03-07",
+        "source": "https://www.sec.gov/Archives/edgar/data/1039765/000162828025010764/0001628280-25-010764-index.html",
+        "accession": "0001628280-25-010764",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "ded4baddac02c1c25a4aef87c78d7467741d01dcaec5c4dd941c33b75df7c2e5",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.029504,
+      "lrmes": 0.394954,
+      "covar": -0.023529,
+      "delta_covar": -0.010565,
+      "covar_beta": 0.525742,
+      "srisk_usd_bn": 49.472472,
+      "market_cap_usd_bn": 66.462364,
+      "debt_usd_bn": 1080.853028,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 1.801,
+      "bank_id": "ING"
+    },
+    {
+      "bank_name": "JPMorgan Chase",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "JPM",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 2779094488,
+            "shares_age_days": 46,
+            "usd": 743574514424.3813
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/19617/000001961725000421/0000019617-25-000421-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/JPM",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-02",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 267.55999755859375,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-02",
+        "source": "https://www.sec.gov/Archives/edgar/data/19617/000001961725000421/0000019617-25-000421-index.html",
+        "accession": "0000019617-25-000421",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "a633c44ae34fbacaa48fb482c630e51444f21d3b0e26c56d70b480baff9ec3f4",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.03169,
+      "lrmes": 0.390627,
+      "covar": -0.027557,
+      "delta_covar": -0.013164,
+      "covar_beta": 0.489234,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 743.574514,
+      "debt_usd_bn": 4006.436,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "JPM"
+    },
+    {
+      "bank_name": "Mizuho Financial Group",
+      "region": "JP",
+      "covar_index": "^N225",
+      "security_ticker": "8411.T",
+      "accounting_standard": "J-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 2509524492,
+            "shares_age_days": 46,
+            "usd": 63416966001.09574
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://cdn.prod.website-files.com/67cb23eaf0c6c4d4080e059a/685028cbfb401efcae3bdea2_data24_fy.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/8411.T",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-16",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 3690.0,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-16",
+        "source": "https://cdn.prod.website-files.com/67cb23eaf0c6c4d4080e059a/685028cbfb401efcae3bdea2_data24_fy.pdf",
+        "accession": null,
+        "accounting_standard": "J-GAAP"
+      },
+      "fundamentals_input_sha256": "a7016bc9d9232aab363c3c7a63c92a4eca5dd6235b4beda3adc23299f7ad363a",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.068092,
+      "lrmes": 0.445795,
+      "covar": -0.034204,
+      "delta_covar": -0.016931,
+      "covar_beta": 0.517321,
+      "srisk_usd_bn": 117.122802,
+      "market_cap_usd_bn": 63.416966,
+      "debt_usd_bn": 1868.214293,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 4.2637,
+      "bank_id": "MFG"
+    },
+    {
+      "bank_name": "Morgan Stanley",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "MS",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 1604319158,
+            "shares_age_days": 16,
+            "usd": 212058894554.05554
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/895421/000089542125000343/0000895421-25-000343-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/MS",
+            "shares_effective_date": "2025-04-30",
+            "shares_available_date": "2025-05-06",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 132.17999267578125,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-06",
+        "source": "https://www.sec.gov/Archives/edgar/data/895421/000089542125000343/0000895421-25-000343-index.html",
+        "accession": "0000895421-25-000343",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "a8cb72e89267485afefffcb18e4d237599eb2ed3b464ad5dee84a4ae39532152",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.045414,
+      "lrmes": 0.500325,
+      "covar": -0.025454,
+      "delta_covar": -0.012667,
+      "covar_beta": 0.395245,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 212.058895,
+      "debt_usd_bn": 1192.449,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "MS"
+    },
+    {
+      "bank_name": "Mitsubishi UFJ Financial",
+      "region": "JP",
+      "covar_index": "^N225",
+      "security_ticker": "8306.T",
+      "accounting_standard": "J-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 11506516975,
+            "shares_age_days": 46,
+            "usd": 153425479731.03
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.mufg.jp/dam/ir/fs/2024/pdf/summary2503_en.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/8306.T",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-16",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 1947.0,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-16",
+        "source": "https://www.mufg.jp/dam/ir/fs/2024/pdf/summary2503_en.pdf",
+        "accession": null,
+        "accounting_standard": "J-GAAP"
+      },
+      "fundamentals_input_sha256": "27ebc539d3b2b78a0396fd84d1f2185d8cfe2f30de0bdddbff5e3464203b875a",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.06786,
+      "lrmes": 0.433889,
+      "covar": -0.033761,
+      "delta_covar": -0.016738,
+      "covar_beta": 0.581537,
+      "srisk_usd_bn": 134.520939,
+      "market_cap_usd_bn": 153.42548,
+      "debt_usd_bn": 2680.354527,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 4.897,
+      "bank_id": "MUFG"
+    },
+    {
+      "bank_name": "Royal Bank of Canada",
+      "region": "CA",
+      "covar_index": "^GSPTSE",
+      "security_ticker": "RY.TO",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 1415080299,
+            "shares_age_days": 197,
+            "usd": 177848412975.47076
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/1000275/000119312524270294/0001193125-24-270294-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/RY.TO",
+            "shares_effective_date": "2024-10-31",
+            "shares_available_date": "2024-12-05",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 175.83999633789062,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-01-31",
+        "available_date": "2025-02-28",
+        "source": "https://www.sec.gov/Archives/edgar/data/1000275/000119312525037542/0001193125-25-037542-index.html",
+        "accession": "0001193125-25-037542",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "7d2955f1769d7be67cd609ec59f3b03c992a288265db4fde382b83908ad4f483",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.020245,
+      "lrmes": 0.3479,
+      "covar": -0.019067,
+      "delta_covar": -0.010522,
+      "covar_beta": 0.5714,
+      "srisk_usd_bn": 10.965172,
+      "market_cap_usd_bn": 177.848413,
+      "debt_usd_bn": 1470.776213,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 0.3992,
+      "bank_id": "RBC"
+    },
+    {
+      "bank_name": "Banco Santander",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "SAN.MC",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 15152492322,
+            "shares_age_days": 136,
+            "usd": 116701062597.16177
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/891478/000089147825000054/0000891478-25-000054-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/SAN.MC",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-01",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 6.913000106811523,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2024-12-31",
+        "available_date": "2025-03-01",
+        "source": "https://www.sec.gov/Archives/edgar/data/891478/000089147825000054/0000891478-25-000054-index.html",
+        "accession": "0000891478-25-000054",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "cd878761291fb51f6420da60d6b818fb5ab7dd85a3e4c96a7dffa762c36654ad",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.039387,
+      "lrmes": 0.50038,
+      "covar": -0.024242,
+      "delta_covar": -0.01361,
+      "covar_beta": 0.404248,
+      "srisk_usd_bn": 100.527822,
+      "market_cap_usd_bn": 116.701063,
+      "debt_usd_bn": 1927.118931,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 3.6596,
+      "bank_id": "SAN"
+    },
+    {
+      "bank_name": "Sumitomo Mitsui Financial",
+      "region": "JP",
+      "covar_index": "^N225",
+      "security_ticker": "8316.T",
+      "accounting_standard": "J-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 3873793610,
+            "shares_age_days": 46,
+            "usd": 91817557075.81152
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.smfg.co.jp/english/investor/financial/latest_statement/2025_3/2025_fy_e01.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/8316.T",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-15",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 1730.5,
+              "future_split_undo_factor": 2.0,
+              "later_splits": [
+                {
+                  "date": "2026-09-29",
+                  "factor": 2.0
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-15",
+        "source": "https://www.smfg.co.jp/english/investor/financial/latest_statement/2025_3/2025_fy_e01.pdf",
+        "accession": null,
+        "accounting_standard": "J-GAAP"
+      },
+      "fundamentals_input_sha256": "9c8a9c5a64cef3af8078cea52422712ce670deb47728dcebd2db47b87ab16752",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.060583,
+      "lrmes": 0.384864,
+      "covar": -0.037861,
+      "delta_covar": -0.020481,
+      "covar_beta": 0.619616,
+      "srisk_usd_bn": 107.709659,
+      "market_cap_usd_bn": 91.817557,
+      "debt_usd_bn": 1995.894439,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 3.921,
+      "bank_id": "SMFG"
+    },
+    {
+      "bank_name": "Standard Chartered",
+      "region": "GB",
+      "covar_index": "^FTSE",
+      "security_ticker": "STAN.L",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 2384000000,
+            "shares_age_days": 46,
+            "usd": 36376995888.0
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sc.com/en/uploads/sites/66/content/docs/standard-chartered-plc-q1-2025-results.pdf",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/STAN.L",
+            "shares_effective_date": "2025-03-31",
+            "shares_available_date": "2025-05-03",
+            "share_count_basis": null,
+            "precision": "rounded to nearest million; not exact daily share count",
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 1151.0,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-03",
+        "source": "https://www.sc.com/en/uploads/sites/66/content/docs/standard-chartered-plc-q1-2025-results.pdf",
+        "accession": null,
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "4c375a983eec4c3718006452be98853291f681ec0eb11a03fc3cd4fa0b926297",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.036368,
+      "lrmes": 0.490954,
+      "covar": -0.013206,
+      "delta_covar": -0.004323,
+      "covar_beta": 0.164228,
+      "srisk_usd_bn": 48.722069,
+      "market_cap_usd_bn": 36.376996,
+      "debt_usd_bn": 821.978,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 1.7737,
+      "bank_id": "STAN"
+    },
+    {
+      "bank_name": "State Street",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "STT",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 285181612,
+            "shares_age_days": 17,
+            "usd": 28030500904.571564
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/93751/000009375125000226/0000093751-25-000226-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/STT",
+            "shares_effective_date": "2025-04-29",
+            "shares_available_date": "2025-05-02",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 98.29000091552734,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-05-02",
+        "source": "https://www.sec.gov/Archives/edgar/data/93751/000009375125000226/0000093751-25-000226-index.html",
+        "accession": "0000093751-25-000226",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "190aa51990c9a840ff84fc3a3c455fa1e526a75d638e39a491a8f203fb5bec43",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.033956,
+      "lrmes": 0.404226,
+      "covar": -0.028742,
+      "delta_covar": -0.013979,
+      "covar_beta": 0.451403,
+      "srisk_usd_bn": 12.316236,
+      "market_cap_usd_bn": 28.030501,
+      "debt_usd_bn": 346.001,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 0.4484,
+      "bank_id": "STT"
+    },
+    {
+      "bank_name": "Toronto-Dominion Bank",
+      "region": "CA",
+      "covar_index": "^GSPTSE",
+      "security_ticker": "TD.TO",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 1750271719,
+            "shares_age_days": 197,
+            "usd": 112377179417.20622
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/947263/000156276224000281/0001562762-24-000281-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/TD.TO",
+            "shares_effective_date": "2024-10-31",
+            "shares_available_date": "2024-12-07",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 89.83000183105469,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-01-31",
+        "available_date": "2025-02-28",
+        "source": "https://www.sec.gov/Archives/edgar/data/947263/000156276225000034/0001562762-25-000034-index.html",
+        "accession": "0001562762-25-000034",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "682b485c159767556c42666e92f314bd30569028b0caf2e5d5bb59545242e328",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.013638,
+      "lrmes": 0.267797,
+      "covar": -0.019748,
+      "delta_covar": -0.009248,
+      "covar_beta": 0.517333,
+      "srisk_usd_bn": 37.203756,
+      "market_cap_usd_bn": 112.377179,
+      "debt_usd_bn": 1411.300122,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 1.3544,
+      "bank_id": "TD"
+    },
+    {
+      "bank_name": "UBS Group",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "UBSG.SW",
+      "accounting_standard": "IFRS",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 3174825251,
+            "shares_age_days": 136,
+            "usd": 104932587798.0586
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/1610520/000161052025000023/0001610520-25-000023-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/UBSG.SW",
+            "shares_effective_date": "2024-12-31",
+            "shares_available_date": "2025-03-18",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 27.75,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2024-12-31",
+        "available_date": "2025-03-18",
+        "source": "https://www.sec.gov/Archives/edgar/data/1610520/000161052025000023/0001610520-25-000023-index.html",
+        "accession": "0001610520-25-000023",
+        "accounting_standard": "IFRS"
+      },
+      "fundamentals_input_sha256": "abc523400605681945b2982399c6dff7f28d57ffa681cec69b134dff91707f32",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.042114,
+      "lrmes": 0.461426,
+      "covar": -0.024122,
+      "delta_covar": -0.013953,
+      "covar_beta": 0.434385,
+      "srisk_usd_bn": 66.363473,
+      "market_cap_usd_bn": 104.932588,
+      "debt_usd_bn": 1479.454,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 2.4159,
+      "bank_id": "UBS"
+    },
+    {
+      "bank_name": "Wells Fargo",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "WFC",
+      "accounting_standard": "US-GAAP",
+      "market_cap_evidence": {
+        "components": [
+          {
+            "share_class_id": "ordinary",
+            "outstanding_shares": 3254182446,
+            "shares_age_days": 29,
+            "usd": 247903619729.3777
+          }
+        ],
+        "sources": [
+          {
+            "share_source": "https://www.sec.gov/Archives/edgar/data/72971/000007297125000129/0000072971-25-000129-index.html",
+            "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/WFC",
+            "shares_effective_date": "2025-04-17",
+            "shares_available_date": "2025-04-30",
+            "share_count_basis": null,
+            "precision": null,
+            "caveat": null,
+            "price_adjustment": {
+              "provider_split_adjusted_close": 76.18000030517578,
+              "future_split_undo_factor": 1.0,
+              "later_splits": []
+            }
+          }
+        ]
+      },
+      "liabilities_evidence": {
+        "effective_date": "2025-03-31",
+        "available_date": "2025-04-30",
+        "source": "https://www.sec.gov/Archives/edgar/data/72971/000007297125000129/0000072971-25-000129-index.html",
+        "accession": "0000072971-25-000129",
+        "accounting_standard": "US-GAAP"
+      },
+      "fundamentals_input_sha256": "d80388b9a23664dfc3a2218cddd07372eb2b550450a4dad4961206f2e3a536aa",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "sourced_class_prices_times_published_shares_estimate",
+        "liabilities": "supplied_publication_dates"
+      },
+      "mes": -0.034859,
+      "lrmes": 0.417099,
+      "covar": -0.027297,
+      "delta_covar": -0.010772,
+      "covar_beta": 0.372814,
+      "srisk_usd_bn": 8.449444,
+      "market_cap_usd_bn": 247.90362,
+      "debt_usd_bn": 1767.405,
+      "data_quality_warnings": [
+        "historical_reconstruction_not_vintage_verified",
+        "sourced_class_prices_times_published_shares_estimate"
+      ],
+      "srisk_share_pct": 0.3076,
+      "bank_id": "WFC"
+    }
+  ],
+  "quality": {
+    "status": "warning",
+    "srisk_coverage_ratio": 0.9310344827586207,
+    "alerts": [
+      {
+        "code": "INCOMPLETE_UNIVERSE",
+        "severity": "warning",
+        "bank_id": null,
+        "message": "Covered subtotal is not the full-system total"
+      },
+      {
+        "code": "MIXED_ACCOUNTING_BASES",
+        "severity": "warning",
+        "bank_id": null,
+        "message": "Cross-country balance sheets are not harmonized (including derivative netting): IFRS, J-GAAP, PRC-GAAP, US-GAAP"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ABC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ABC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "ABC",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BAC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BAC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "Liabilities period is 136 days old"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BK",
+        "message": "historical_feed_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BK",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BNP",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BNP",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "BNP",
+        "message": "Liabilities period is 136 days old"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "BNP",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "BOC",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOCOM",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOCOM",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "BOCOM",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "C",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "C",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "CCB",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "CCB",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "CCB",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "DBK",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "DBK",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "SHARE_COUNT_PRECISION",
+        "severity": "warning",
+        "bank_id": "DBK",
+        "message": "reported in 0.1 million shares; estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GLE",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GLE",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "SHARE_BASIS_VARIANT",
+        "severity": "warning",
+        "bank_id": "GLE",
+        "message": "Issuer NAPS denominator is end-period, not EPS weighted average; includes group trading shares, so not a fully harmonized net-share convention."
+      },
+      {
+        "code": "SHARE_COUNT_PRECISION",
+        "severity": "warning",
+        "bank_id": "GLE",
+        "message": "reported in thousands; not daily exact shares"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GS",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GS",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "HSBC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "HSBC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "HSBC",
+        "message": "Liabilities period is 136 days old"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "HSBC",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ING",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ING",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "ING",
+        "message": "Liabilities period is 136 days old"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "ING",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "JPM",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "JPM",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MFG",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MFG",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MS",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MS",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MUFG",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MUFG",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "RBC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "RBC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "RBC",
+        "message": "Liabilities period is 105 days old"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "RBC",
+        "message": "Published share count is 197 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SAN",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SAN",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "SAN",
+        "message": "Liabilities period is 136 days old"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "SAN",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "LATER_SPLIT_RESTORED",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "Historical close restored by factor 2.0 to valuation-date share units; retrospective data"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STAN",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STAN",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "SHARE_COUNT_PRECISION",
+        "severity": "warning",
+        "bank_id": "STAN",
+        "message": "rounded to nearest million; not exact daily share count"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STT",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STT",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "TD",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "TD",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "TD",
+        "message": "Liabilities period is 105 days old"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "TD",
+        "message": "Published share count is 197 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "UBS",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "UBS",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      },
+      {
+        "code": "OLD_FUNDAMENTALS",
+        "severity": "warning",
+        "bank_id": "UBS",
+        "message": "Liabilities period is 136 days old"
+      },
+      {
+        "code": "OLD_SHARE_COUNT",
+        "severity": "warning",
+        "bank_id": "UBS",
+        "message": "Published share count is 136 days old; repurchases/issuance may change market cap"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "WFC",
+        "message": "historical_reconstruction_not_vintage_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "WFC",
+        "message": "sourced_class_prices_times_published_shares_estimate"
+      }
+    ],
+    "thresholds": {
+      "min_srisk_coverage": 0.8,
+      "snapshot_max_calendar_days": 7,
+      "fundamentals_warning_days": 100
+    }
+  }
+}

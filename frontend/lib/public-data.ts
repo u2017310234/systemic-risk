@@ -9,7 +9,7 @@ import {
 } from "@/lib/types";
 
 export type DataManifest = {
-  dataset_kind?: string; calibration_id?: string; methodology_version?: string;
+  fundamentals_policy?: string; dataset_kind?: string; calibration_id?: string; methodology_version?: string;
   quality?: {status: string};
   dates: string[];
   snapshots?: Array<{ date: string; bank_count: number; coverage?: {srisk_count:number; expected_count:number; eligible_complete?:boolean; complete?:boolean} }>;

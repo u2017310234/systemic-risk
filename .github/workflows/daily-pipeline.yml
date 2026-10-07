@@ -17,6 +17,11 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || vars.RISK_PRODUCTION_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    env:
+      FUNDAMENTALS_POLICY: yahoo_daily
+      PUBLICATION_BASIS: market_metrics
+      DATASET_KIND: research_estimate
+      VENDOR_CACHE_DIR: inputs/vendor-cache
 
     steps:
       - name: Checkout repository
@@ -32,26 +37,40 @@ jobs:
         run: python -m pip install '.[test]'
 
       - name: Test core before publication
+        env:
+          FUNDAMENTALS_POLICY: verified
+          PUBLICATION_BASIS: srisk
         run: python -m pytest tests -q
+
+      - name: Restore vendor observations
+        uses: actions/cache@v4
+        with:
+          path: inputs/vendor-cache
+          key: yahoo-daily-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: yahoo-daily-${{ runner.os }}-
 
       - name: Verify production inputs
         run: python -m src.production_preflight
 
-      - name: Run pipeline (today's date)
+      - name: Update available data
+        id: update
         env:
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_BRANCH: ${{ github.ref_name }}
-        run: python -m src.pipeline --mode production
+        run: python -m src.workflow_run
 
       - name: Preserve publication diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: publication-diagnostics
-          path: data/last-attempt.json
+          path: |
+            data/last-attempt.json
+            inputs/vendor-cache/
           if-no-files-found: ignore
 
       - name: Commit and push data
+        if: steps.update.outputs.published == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

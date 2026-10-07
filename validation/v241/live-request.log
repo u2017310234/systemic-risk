@@ -1,0 +1,14 @@
+2026-10-07 09:42:17,870 [INFO] pipeline: Pipeline start: 2025-08-25 → 2026-10-07, 1 banks
+2026-10-07 09:42:17,870 [INFO] pipeline: Processing JPM (JPMorgan Chase)
+2026-10-07 09:42:24,720 [WARNING] yfinance: Crumb fetch rate-limited (HTTP 429), continuing without crumb
+2026-10-07 09:42:32,531 [ERROR] yfinance: 
+1 Failed download:
+2026-10-07 09:42:32,531 [ERROR] yfinance: ['JPM']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
+2026-10-07 09:42:32,536 [WARNING] src.fetcher: No price data found for JPM (2025-08-25 to 2026-10-07)
+2026-10-07 09:42:32,536 [WARNING] pipeline:   Insufficient price data for JPM
+{
+  "started_at": "2026-10-07T16:42:17.488668+00:00",
+  "source": "live_yahoo",
+  "status": "failed",
+  "error": "RuntimeError: Pipeline produced no data: all 1 banks failed (JPM)"
+}

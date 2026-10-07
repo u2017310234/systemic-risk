@@ -1,0 +1,39 @@
+name: Live Yahoo end-to-end acceptance
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      VENDOR_CACHE_DIR: acceptance-vendor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: python -m pip install '.[test]'
+      - name: Real Yahoo, metrics, JSON/CSV and MCP transport
+        id: live
+        run: python -m src.acceptance --banks JPM,BAC --output acceptance-data --report acceptance-report.json --allow-unavailable
+      - name: Build frontend from the same live batch
+        if: steps.live.outputs.ready == 'true'
+        working-directory: frontend
+        env:
+          DATA_SOURCE_DIR: ../acceptance-data
+        run: npm ci && npm run build:cloudflare && npx wrangler deploy --dry-run
+      - name: Save evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-yahoo-acceptance
+          path: |
+            acceptance-report.json
+            acceptance-data/
+            acceptance-vendor/
+          if-no-files-found: warn

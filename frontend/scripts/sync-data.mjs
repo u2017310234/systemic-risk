@@ -68,6 +68,7 @@ async function writeManifest(dataDir) {
     dates,
     snapshots,
     dataset_kind: latestSnapshot.dataset_kind,
+    fundamentals_policy: latestSnapshot.fundamentals_policy,
     parameters: latestSnapshot.parameters,
     quality: latestSnapshot.quality,
     publication: latestSnapshot.publication,

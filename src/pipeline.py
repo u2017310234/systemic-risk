@@ -21,6 +21,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.config import cfg
+from src.operational import DataUnavailable, PublicationRejected
 from src.universe import BANKS, BANK_BY_ID, UNIVERSE_MEMBERSHIP_AVAILABLE_FROM, universe_evidence
 from src.fetcher import fetch_prices, fetch_market_cap_series, fetch_debt_series, MCAP_UPPER_BOUND_USD_BN
 from src.metrics.mes import calc_lrmes_rolling, calc_mes_rolling
@@ -41,6 +42,10 @@ def run_pipeline(target_date: date, start_date: date, bank_ids: list[str] | None
     Local publisher lock prevents concurrent writers from losing corrections.
     Legacy v1 files are not copied into the repaired v2 series.
     """
+    if cfg.fundamentals_policy not in {"verified", "yahoo_daily"}:
+        raise ValueError("Unknown FUNDAMENTALS_POLICY")
+    if cfg.fundamentals_policy == "yahoo_daily" and (cfg.publication_mode == "historical" or cfg.dataset_kind == "historical_reconstruction" or target_date != date.today()):
+        raise ValueError("yahoo_daily is for today's research run only; historical runs require verified inputs")
     universe_evidence(target_date.isoformat())
     import json, shutil, uuid, fcntl
     from src.storage import active_root
@@ -57,6 +62,11 @@ def run_pipeline(target_date: date, start_date: date, bank_ids: list[str] | None
         previous = active_root(root)
         if bank_ids and previous != root:
             raise ValueError("Subset runs require a separate DATA_DIR; cannot overwrite an existing full publication")
+        if previous != root:
+            previous_payload = json.loads((previous / "latest.json").read_text())
+            # Explicit demo-to-live bootstrap: never copy demo records into a new calibration.
+            if previous.name == "demo-v23" and (previous / "DEMO.txt").exists() and previous_payload.get("dataset_kind") == "historical_reconstruction" and cfg.dataset_kind == "research_estimate":
+                previous = root
         if previous != root:
             if json.loads((previous / "latest.json").read_text()).get("calibration_id") != calibration_id():
                 raise ValueError("Calibration changed; use a separate DATA_DIR and full recomputation")
@@ -84,7 +94,7 @@ def run_pipeline(target_date: date, start_date: date, bank_ids: list[str] | None
             selected["publication"] = report
             _write_json(report, root / "last-attempt.json")
             if report["decision"] == "rejected":
-                raise RuntimeError("Publication rejected: " + ", ".join(report["reasons"]))
+                raise PublicationRejected("Publication rejected: " + ", ".join(report["reasons"]))
             _write_json(selected, latest_path)
             _write_json(selected["quality"], staged / "quality-report.json")
             # Verify JSON/CSV for every regenerated snapshot before commit.
@@ -154,6 +164,9 @@ def _compute_and_publish(
         try:
             bank_data = process_bank(bank, start_str, end_str)
             if bank_data is not None:
+                if cfg.fundamentals_policy == "yahoo_daily" and bank_data:
+                    latest_bank_day = max(bank_data)
+                    bank_data = {latest_bank_day:bank_data[latest_bank_day]}
                 all_results[bank.id] = {d:m for d,m in bank_data.items() if d >= UNIVERSE_MEMBERSHIP_AVAILABLE_FROM}
                 logger.info(f"  ✓ {bank.id} completed")
             else:
@@ -165,7 +178,10 @@ def _compute_and_publish(
 
     # Publish daily snapshots
     if not all_results:
-        raise RuntimeError(
+        # Unexpected per-bank exceptions remain hard failures; only a normal
+        # absence of provider data is an operational skip.
+        error_type = RuntimeError if failures else DataUnavailable
+        raise error_type(
             f"Pipeline produced no data: all {len(banks)} banks failed "
             f"({', '.join(failed_banks)})"
         )
@@ -180,6 +196,13 @@ def _compute_and_publish(
             if snap_date in metrics
         }
         if day_data:
+            if cfg.fundamentals_policy == "yahoo_daily":
+                import json
+                existing = Path(cfg.data_dir) / "history" / f"{snap_date}.json"
+                if existing.exists():
+                    prior_records = {b['bank_id']:b for b in json.loads(existing.read_text())['banks']}
+                    prior_records.update(day_data)
+                    day_data = prior_records
             # Add SRISK shares for the day
             srisk_vals = {bid: day_data[bid].get("srisk_usd_bn", float("nan"))
                           for bid in day_data}
@@ -188,6 +211,9 @@ def _compute_and_publish(
             for bid in day_data:
                 day_data[bid]["srisk_share_pct"] = shares.get(bid)
             publish_snapshot(snap_date, day_data, sys_srisk)
+            if cfg.fundamentals_policy == "yahoo_daily":
+                for bid, metrics in day_data.items():
+                    publish_bank_csv(BANK_BY_ID[bid], {snap_date:metrics})
 
     # Update latest.json from target_date. If today's prices are not published
     # yet (yfinance `end` is exclusive, so data only reaches the prior trading
@@ -210,6 +236,9 @@ def _compute_and_publish(
         if target_str in metrics
     }
     if latest_data:
+        if cfg.fundamentals_policy == "yahoo_daily":
+            import json
+            latest_data = {b['bank_id']:b for b in json.loads((Path(cfg.data_dir)/"history"/f"{target_str}.json").read_text())['banks']}
         srisk_vals = {bid: v.get("srisk_usd_bn", float("nan"))
                       for bid, v in latest_data.items()}
         shares = calc_srisk_shares(srisk_vals)
@@ -225,6 +254,8 @@ def _compute_and_publish(
             publish_bank_csv(bank, all_results[bank.id])
     logger.info("Pipeline complete.")
     return {bank.id: {"srisk_date": max((d for d,m in all_results.get(bank.id, {}).items() if m.get("srisk_usd_bn") is not None), default=None),
+                      "metric_dates": {metric: max((d for d,m in all_results.get(bank.id, {}).items() if m.get(metric) is not None), default=None)
+                                       for metric in ("mes", "lrmes", "covar", "delta_covar", "srisk_usd_bn")},
                       "failure": failures.get(bank.id)} for bank in banks}
 
 
@@ -248,6 +279,12 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
         logger.warning(f"  Missing index data {bank.index_yf} for {bank.id}")
         return None
 
+    if cfg.fundamentals_policy == "yahoo_daily":
+        from src.yahoo_daily import current_session
+        due = current_session(bank, end_str)
+        if not due: return None
+        prices = prices.loc[:due]
+        index_prices = index_prices.loc[:due]
     # Join closing dates first so returns cover identical calendar intervals.
     paired_prices = pd.concat([prices.rename("bank"), index_prices.rename("index")], axis=1).dropna().sort_index()
     paired_prices = paired_prices.where(paired_prices > 0).dropna()
@@ -255,11 +292,19 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
     bank_rets, index_rets = paired_returns["bank"], paired_returns["index"]
 
     # ----- Market cap & debt -----
-    mcap = fetch_market_cap_series(bank, start_str, end_str)
-    debt = fetch_debt_series(bank, start_str, end_str)
+    input_errors = []
+    def optional_input(fetch, label):
+        try:
+            return fetch(bank, start_str, end_str)
+        except Exception as exc:
+            input_errors.append(f"{label}: {type(exc).__name__}: {exc}")
+            logger.warning("%s %s unavailable: %s", bank.id, label, exc)
+            return pd.Series(dtype=float)
+    mcap = optional_input(fetch_market_cap_series, "market_cap")
+    debt = optional_input(fetch_debt_series, "liabilities")
 
     # ----- Data quality warnings -----
-    warnings_list: list[str] = []
+    warnings_list: list[str] = list(input_errors)
     if prices.attrs.get("quality"):
         warnings_list.append(prices.attrs["quality"])
     if prices.attrs.get("currency_override"):
@@ -270,6 +315,8 @@ def process_bank(bank, start_str: str, end_str: str) -> dict | None:
         warnings_list.append("publication_dated_liabilities_required")
     if mcap.attrs.get("quality"):
         warnings_list.append(mcap.attrs["quality"])
+    if debt.attrs.get("quality"):
+        warnings_list.append(debt.attrs["quality"])
     if not mcap.empty:
         median_mcap = float(mcap.median())
         if not np.isnan(median_mcap) and median_mcap > MCAP_UPPER_BOUND_USD_BN:

@@ -1,0 +1,32 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> systemic-risk@2.4.1 test
+> node --import tsx --test tests/*.test.ts
+
+✔ Worker distinguishes unconfigured MCP and historical status (6.444658ms)
+✔ Worker preserves upstream SSE, sessions and explicit origin failure (1.873216ms)
+✔ Unknown snapshot never silently returns future/latest data (1.549749ms)
+✔ Data preflight OPTIONS returns CORS headers (0.333962ms)
+✔ HTTP 200 with degraded data is not healthy (0.822497ms)
+✔ different snapshot is visible (0.173371ms)
+✔ different calibration is visible (0.217738ms)
+✔ missing identity is unverified (0.179971ms)
+✔ matching healthy snapshot is healthy (0.149665ms)
+✔ nullable payload parses without replacing unknown with zero (2.687901ms)
+✔ invalid/constant/mismatched correlation is unavailable (0.209465ms)
+✔ same region with no time-series evidence cannot create an edge (7.63683ms)
+✔ pairs align by actual dates before differencing and exclude future (2.416763ms)
+✔ insufficient common observations yield no edge (0.29292ms)
+✔ historical percentile changes with absolute cohort risk, not z-score mean (0.502316ms)
+✔ aggregate trend uses fixed current cohort, omits missing dates and versions (0.274613ms)
+✔ missing metric nodes do not inflate summary edges (0.359641ms)
+✔ date selector uses real eligibility, not 28 observed records (0.244298ms)
+✔ Canada nodes have a finite region anchor (0.560212ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 299.698829

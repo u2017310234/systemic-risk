@@ -12,11 +12,27 @@ jobs:
           python-version: '3.12'
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-      - run: pip install '.[test]'
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: python -m pip install '.[test]'
       - run: python -m pytest tests loc/test_branch_locator.py -q
-        env:
-          RISK_QA_OUTPUT: /tmp/systemic-risk-qa-data
       - run: python -m build --wheel
-      - run: npm ci && npm test && npm run typecheck && npm run build && npm run build:cloudflare && npx wrangler deploy --dry-run
+      - name: Install frontend
+        run: npm ci
+        working-directory: frontend
+      - name: Frontend tests
+        run: npm test
+        working-directory: frontend
+      - name: Frontend type check
+        run: npm run typecheck
+        working-directory: frontend
+      - name: Next.js build
+        run: npm run build
+        working-directory: frontend
+      - name: Cloudflare build
+        run: npm run build:cloudflare
+        working-directory: frontend
+      - name: Cloudflare dry run
+        run: npx wrangler deploy --dry-run
         working-directory: frontend

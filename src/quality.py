@@ -7,7 +7,7 @@ def assess_quality(payload:dict, previous:dict|None=None, today:date|None=None)-
     def add(code,message,bank=None,severity='warning'):
         alerts.append({'code':code,'severity':severity,'bank_id':bank,'message':message})
     coverage=payload.get('coverage',{});expected=coverage.get('expected_count',0);valid=coverage.get('srisk_count',0)
-    if not valid:add('NO_SRISK','No bank has valid SRISK inputs',severity='error')
+    if not valid:add('NO_SRISK','No bank has valid SRISK inputs',severity='warning' if payload.get('fundamentals_policy')=='yahoo_daily' else 'error')
     elif not expected or valid/expected<.8:add('LOW_COVERAGE',f'SRISK coverage {valid}/{expected}; threshold 80%')
     if not coverage.get('complete'):add('INCOMPLETE_UNIVERSE','Covered subtotal is not the full-system total')
     try:

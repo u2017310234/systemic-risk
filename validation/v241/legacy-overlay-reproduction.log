@@ -1,0 +1,11 @@
+
+> systemic-risk@2.4.0 sync-data
+> node scripts/sync-data.mjs
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+Failed to sync frontend data directory.
+Error: Mixed snapshot identity: 2026-01-19
+    at file://<validation-workspace>/systemic-risk/frontend/scripts/sync-data.mjs:61:173
+    at async Promise.all (index 2)
+    at async writeManifest (file://<validation-workspace>/systemic-risk/frontend/scripts/sync-data.mjs:58:21)
+    at async main (file://<validation-workspace>/systemic-risk/frontend/scripts/sync-data.mjs:23:3)

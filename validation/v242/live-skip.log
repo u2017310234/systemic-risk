@@ -1,0 +1,8 @@
+2026-10-07 09:49:23,625 [INFO] pipeline: Pipeline start: 2025-08-25 → 2026-10-07, 1 banks
+2026-10-07 09:49:23,625 [INFO] pipeline: Processing JPM (JPMorgan Chase)
+{
+  "started_at": "2026-10-07T16:49:23.625207+00:00",
+  "source": "live_yahoo",
+  "status": "unavailable",
+  "error": "DataUnavailable: Pipeline produced no data: all 1 banks failed (JPM)"
+}

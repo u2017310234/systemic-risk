@@ -6,6 +6,13 @@ from src.config import cfg
 def main():
     root = Path(cfg.fundamentals_dir)
     files = list(root.glob('*.json')) if root.is_dir() else []
+    if cfg.fundamentals_policy not in {'verified','yahoo_daily'}:
+        raise SystemExit('Unknown FUNDAMENTALS_POLICY')
+    if cfg.fundamentals_policy == 'yahoo_daily':
+        if cfg.market_inputs_dir:
+            raise SystemExit('yahoo_daily cannot be combined with an offline market feed')
+        print('Yahoo daily research enabled: vendor inputs are fetched during calculation; unavailable SRISK does not block market metrics.')
+        return
     if not files:
         raise SystemExit('Production inputs missing: add verified dated bank JSON files under '
                          f'{root}. See inputs/fundamentals.example.json and docs/REPAIR.md. '

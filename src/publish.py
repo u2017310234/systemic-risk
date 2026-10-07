@@ -131,7 +131,8 @@ def _build_payload(
             bank_status[bid]["status"] = "insufficient_input"
     payload = {
         "calibration_id": calibration_id(),
-        "data_policy_version": "2.4",
+        "data_policy_version": "2.4.1",
+        "fundamentals_policy": cfg.fundamentals_policy,
         "dataset_kind": cfg.dataset_kind,
         "date": snapshot_date.isoformat(),
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -144,6 +145,9 @@ def _build_payload(
             "lrmes_model": "ols_beta_scenario", "horizon_is_label_only": True,
         },
         "coverage": {
+            "metric_coverage": {metric: {"count":sum(_finite(r.get(metric)) for r in records.values()),
+                 "ids":sorted(bid for bid,r in records.items() if _finite(r.get(metric)))}
+                 for metric in ("mes", "lrmes", "covar", "delta_covar", "srisk_usd_bn")},
             "bank_status": bank_status,
             "universe_version": UNIVERSE_VERSION, "universe_source": membership["source"], "list_evidence": membership,
             "membership_available_from": UNIVERSE_MEMBERSHIP_AVAILABLE_FROM, "expected_ids": expected,
@@ -173,7 +177,7 @@ def _finite(value):
 
 def calibration_id():
     import hashlib
-    parameters = ["2.0-beta-scenario", "fundamentals-policy-2.4", cfg.dataset_kind, UNIVERSE_VERSION, cfg.srisk_k, cfg.covar_quantile,
+    parameters = ["2.0-beta-scenario", "fundamentals-policy-2.4.1", cfg.fundamentals_policy, cfg.dataset_kind, UNIVERSE_VERSION, cfg.srisk_k, cfg.covar_quantile,
                   cfg.covar_window, cfg.lrmes_h, cfg.lrmes_market_drop, cfg.mes_tail_pct]
     return hashlib.sha256(json.dumps(parameters).encode()).hexdigest()[:16]
 

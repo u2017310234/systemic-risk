@@ -20,7 +20,7 @@ export const bankMetricSchema = z.object({
   debt_usd_bn: metric, covar_beta: metric.optional(), beta_ols: metric.optional()
 });
 export const systemSnapshotSchema = z.object({
-  dataset_kind: z.string().optional(), calibration_id: z.string().optional(),
+  fundamentals_policy: z.string().optional(), dataset_kind: z.string().optional(), calibration_id: z.string().optional(),
   parameters: z.record(z.unknown()).optional(), generated_at: z.string().optional(),
   date: z.string(), methodology_version: z.literal("2.0-beta-scenario"),
   system_srisk_usd_bn: metric, covered_srisk_usd_bn: metric.optional(),

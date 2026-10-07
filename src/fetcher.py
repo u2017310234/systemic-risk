@@ -93,7 +93,7 @@ def fetch_prices(
     if external is not None:
         return external.rename(ticker)
     cache_path = _cache_path(ticker, start, end)
-    if use_cache:
+    if use_cache and end < date.today().isoformat():
         cached = _load_cache(cache_path)
         if cached is not None and "close" in cached.columns:
             logger.debug(f"Cache hit: {ticker}")
@@ -311,6 +311,9 @@ def fetch_market_cap_series(bank: Bank, start: str, end: str) -> pd.Series:
     if not bank.supported or bank.market_cap_policy == "verified_input":
         logger.warning("%s needs verified consolidated-group market cap", bank.id)
         return pd.Series(dtype=float)
+    if cfg.fundamentals_policy == "yahoo_daily":
+        from src.yahoo_daily import series
+        return series(bank, "market_cap", start, end)
     ticker = _yf().Ticker(bank.yf_ticker)
     # Separate price used for equity valuation from dividend-adjusted return prices.
     frame = ticker.history(start=start, end=(pd.Timestamp(end)+timedelta(days=1)).strftime("%Y-%m-%d"),
@@ -346,6 +349,9 @@ def fetch_debt_series(bank: Bank, start: str, end: str) -> pd.Series:
     Supply sourced input rather than silently introducing look-ahead bias.
     """
     verified = _verified_input(bank, "liabilities", start, end)
+    if verified is None and cfg.fundamentals_policy == "yahoo_daily":
+        from src.yahoo_daily import series
+        return series(bank, "liabilities", start, end)
     if verified is None:
         logger.warning("%s: publication-dated liabilities unavailable", bank.id)
         return pd.Series(dtype=float)

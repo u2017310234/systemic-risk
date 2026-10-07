@@ -144,6 +144,7 @@ export function AppShell({ children }: AppShellProps) {
         <strong>{manifestQuery.data.dataset_kind === "historical_reconstruction"
           ? (lang === "zh" ? "历史重建演示 · 非当日监测" : "Historical reconstruction · not current monitoring")
           : (lang === "zh" ? "研究模型估计" : "Research model estimates")}</strong>
+        {manifestQuery.data.fundamentals_policy === "yahoo_daily" && <p className="mt-1 text-muted">{lang === "zh" ? "Yahoo 日常研究估计：基本面按本次获取版本使用，未核验历史可知时点；SRISK 可部分缺失。" : "Yahoo daily research: fundamentals use the retrieved vendor version, not verified historical vintages. SRISK may be partially unavailable."}</p>}
         <p className="mt-1 text-muted">{selectedDate} · {manifestQuery.data.methodology_version} · {manifestQuery.data.calibration_id}</p>
         <p className="mt-1 text-muted">{lang === "zh" ? "缺失值不代表零。排名和汇总仅使用同日数据；历史不足时不生成趋势或网络连边。" : "Missing is not zero. Rankings and totals use same-day observations; insufficient history produces no trend or network edges."}</p>
       </aside>

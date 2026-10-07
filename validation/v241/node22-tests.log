@@ -1,0 +1,139 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+(node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:26) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Worker distinguishes unconfigured MCP and historical status
+ok 1 - Worker distinguishes unconfigured MCP and historical status
+  ---
+  duration_ms: 6.322725
+  type: 'test'
+  ...
+# Subtest: Worker preserves upstream SSE, sessions and explicit origin failure
+ok 2 - Worker preserves upstream SSE, sessions and explicit origin failure
+  ---
+  duration_ms: 1.520265
+  type: 'test'
+  ...
+# Subtest: Unknown snapshot never silently returns future/latest data
+ok 3 - Unknown snapshot never silently returns future/latest data
+  ---
+  duration_ms: 1.982049
+  type: 'test'
+  ...
+# Subtest: Data preflight OPTIONS returns CORS headers
+ok 4 - Data preflight OPTIONS returns CORS headers
+  ---
+  duration_ms: 0.549847
+  type: 'test'
+  ...
+# (node:26) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:27) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTP 200 with degraded data is not healthy
+ok 5 - HTTP 200 with degraded data is not healthy
+  ---
+  duration_ms: 0.645491
+  type: 'test'
+  ...
+# Subtest: different snapshot is visible
+ok 6 - different snapshot is visible
+  ---
+  duration_ms: 0.103866
+  type: 'test'
+  ...
+# Subtest: different calibration is visible
+ok 7 - different calibration is visible
+  ---
+  duration_ms: 0.081563
+  type: 'test'
+  ...
+# Subtest: missing identity is unverified
+ok 8 - missing identity is unverified
+  ---
+  duration_ms: 0.115033
+  type: 'test'
+  ...
+# Subtest: matching healthy snapshot is healthy
+ok 9 - matching healthy snapshot is healthy
+  ---
+  duration_ms: 0.145169
+  type: 'test'
+  ...
+# (node:27) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: nullable payload parses without replacing unknown with zero
+ok 10 - nullable payload parses without replacing unknown with zero
+  ---
+  duration_ms: 4.55018
+  type: 'test'
+  ...
+# Subtest: invalid/constant/mismatched correlation is unavailable
+ok 11 - invalid/constant/mismatched correlation is unavailable
+  ---
+  duration_ms: 0.280882
+  type: 'test'
+  ...
+# Subtest: same region with no time-series evidence cannot create an edge
+ok 12 - same region with no time-series evidence cannot create an edge
+  ---
+  duration_ms: 9.912411
+  type: 'test'
+  ...
+# Subtest: pairs align by actual dates before differencing and exclude future
+ok 13 - pairs align by actual dates before differencing and exclude future
+  ---
+  duration_ms: 1.553946
+  type: 'test'
+  ...
+# Subtest: insufficient common observations yield no edge
+ok 14 - insufficient common observations yield no edge
+  ---
+  duration_ms: 0.387993
+  type: 'test'
+  ...
+# Subtest: historical percentile changes with absolute cohort risk, not z-score mean
+ok 15 - historical percentile changes with absolute cohort risk, not z-score mean
+  ---
+  duration_ms: 0.587113
+  type: 'test'
+  ...
+# Subtest: aggregate trend uses fixed current cohort, omits missing dates and versions
+ok 16 - aggregate trend uses fixed current cohort, omits missing dates and versions
+  ---
+  duration_ms: 0.243276
+  type: 'test'
+  ...
+# Subtest: missing metric nodes do not inflate summary edges
+ok 17 - missing metric nodes do not inflate summary edges
+  ---
+  duration_ms: 0.415855
+  type: 'test'
+  ...
+# Subtest: date selector uses real eligibility, not 28 observed records
+ok 18 - date selector uses real eligibility, not 28 observed records
+  ---
+  duration_ms: 0.302956
+  type: 'test'
+  ...
+# Subtest: Canada nodes have a finite region anchor
+ok 19 - Canada nodes have a finite region anchor
+  ---
+  duration_ms: 0.429305
+  type: 'test'
+  ...
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 316.465288

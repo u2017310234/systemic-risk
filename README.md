@@ -1,10 +1,18 @@
-# Systemic Risk — v2.4
+# Systemic Risk — v2.4.2
 
 29 家银行研究样本的 MES、CoVaR/ΔCoVaR 与 OLS-beta 情景 SRISK 服务。包含 Python 计算流水线、MCP 接口及 Next.js / Cloudflare 前端。
 
 **本包默认即可运行历史演示。附带数据为 2025-05-16 的 27 家银行历史重建，并非当前风险数据。** 原始审计来源保留在 `examples/verified-disclosures-v23/`；没有改写其 v2.3 校准身份，也没有虚构后续时间序列。
 
-本次修改基于仓库 `bf3d7dea569600974088e37593ff49090c54de40`。完整交付说明见 [docs/DELIVERY_V24.md](docs/DELIVERY_V24.md)，历史修复记录见 `docs/REPAIR_V23.md` 等文件。
+本次修改基于仓库 `bf3d7dea569600974088e37593ff49090c54de40`。本次交付说明见 [docs/DELIVERY_V241.md](docs/DELIVERY_V241.md)，历史修复记录见 `docs/REPAIR_V23.md` 等文件。
+
+## v2.4.2：无数据时正常跳过
+
+Daily workflow 遇到行情不可用或发布覆盖不足时正常结束，明确记录 `skipped`，保留旧数据，不提交空批次。Live acceptance 遇到数据不可用时标记 `unavailable` 并跳过前端真实数据构建；这不代表真实验收通过。代码、测试、构建和配置错误仍然失败。详见 [docs/DELIVERY_V242.md](docs/DELIVERY_V242.md)。
+
+## v2.4.1 修正
+
+详见 [docs/DELIVERY_V241.md](docs/DELIVERY_V241.md)：恢复 Yahoo 日常研究基本面路径，按指标报告覆盖；新增独立演示批次指针，避免覆盖上传残留旧历史导致构建失败；新增真实 Yahoo → 计算 → MCP → 前端的独立验收工作流。**当前环境真实请求受到 Yahoo 429 限流，未宣称实时端到端已通过。**
 
 ## 本地启动
 
@@ -55,10 +63,17 @@ Cloudflare Git 集成根目录设为 `frontend`，构建命令 `npm ci && npm ru
 
 ## 启用真实生产更新
 
-1. 按 `inputs/fundamentals.example.json` 和 `docs/REPAIR.md`，准备有来源、真实可用日期、集团口径的 `inputs/fundamentals/BANK_ID.json`。示例是假数据，不能复制冒充生产输入。
-2. 行情默认由供应商抓取；离线输入用 `MARKET_INPUTS_DIR`，格式见 `docs/DATA_PIPELINE_V21.md`。确保已配置的数据路径在 GitHub runner 上实际存在。
-3. 在 Actions 手动执行验证。定时运行需要仓库变量 `RISK_PRODUCTION_ENABLED=true`；默认关闭，避免演示仓库反复发布空结果。计划为工作日 23:15 UTC。
-4. 本地显式生产命令：`python -m src.production_preflight`，然后 `python -m src.pipeline --mode production`。历史重算使用 `--mode historical --end YYYY-MM-DD`，并指定独立 `DATA_DIR`。
+先运行新增的 `Live Yahoo end-to-end acceptance` Actions 工作流，真实检验 JPM/BAC 的 SRISK、其他指标、MCP 和前端。再运行 Daily Pipeline 查看全体覆盖。
+
+Daily 显式启用 `FUNDAMENTALS_POLICY=yahoo_daily`、`PUBLICATION_BASIS=market_metrics`，不再要求预先提供人工基本面 JSON。日常估计使用 Yahoo 获取版本并标注未做严格时点核验；复杂集团市值等缺口保持 null。定时运行仍需 `RISK_PRODUCTION_ENABLED=true`。
+
+严格历史重算使用 `FUNDAMENTALS_POLICY=verified`，输入格式见 `inputs/fundamentals.example.json` 和 `docs/REPAIR.md`，必须使用独立数据目录。示例为合成数据，不能当生产输入。
+
+本地日常运行：
+
+```bash
+FUNDAMENTALS_POLICY=yahoo_daily PUBLICATION_BASIS=market_metrics python -m src.workflow_run
+```
 
 不同校准不可直接拼接。前端构建时用 `DATA_SOURCE_DIR`，后端用 `DATA_DIR` 指向同一已发布批次。此压缩包没有替你更新远端仓库、Cloudflare 或 Azure。
 

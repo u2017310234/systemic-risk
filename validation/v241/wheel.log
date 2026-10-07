@@ -1,0 +1,116 @@
+* Getting build dependencies for wheel...
+running egg_info
+writing gsib_systemic_risk.egg-info/PKG-INFO
+writing dependency_links to gsib_systemic_risk.egg-info/dependency_links.txt
+writing entry points to gsib_systemic_risk.egg-info/entry_points.txt
+writing requirements to gsib_systemic_risk.egg-info/requires.txt
+writing top-level names to gsib_systemic_risk.egg-info/top_level.txt
+reading manifest file 'gsib_systemic_risk.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'gsib_systemic_risk.egg-info/SOURCES.txt'
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+copying risk_mcp/server.py -> build/lib/risk_mcp
+copying src/calendar_status.py -> build/lib/src
+copying src/quality.py -> build/lib/src
+copying src/config.py -> build/lib/src
+copying src/production_preflight.py -> build/lib/src
+copying src/acceptance.py -> build/lib/src
+copying src/yahoo_daily.py -> build/lib/src
+copying src/fetcher.py -> build/lib/src
+copying src/publish.py -> build/lib/src
+copying src/pipeline.py -> build/lib/src
+running egg_info
+writing gsib_systemic_risk.egg-info/PKG-INFO
+writing dependency_links to gsib_systemic_risk.egg-info/dependency_links.txt
+writing entry points to gsib_systemic_risk.egg-info/entry_points.txt
+writing requirements to gsib_systemic_risk.egg-info/requires.txt
+writing top-level names to gsib_systemic_risk.egg-info/top_level.txt
+reading manifest file 'gsib_systemic_risk.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'gsib_systemic_risk.egg-info/SOURCES.txt'
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.linux-x86_64/wheel
+creating build/bdist.linux-x86_64/wheel/risk_mcp
+copying build/lib/risk_mcp/__init__.py -> build/bdist.linux-x86_64/wheel/./risk_mcp
+copying build/lib/risk_mcp/server.py -> build/bdist.linux-x86_64/wheel/./risk_mcp
+creating build/bdist.linux-x86_64/wheel/src
+copying build/lib/src/sec_inputs.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/utils.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/universe.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/calendar_status.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/yahoo_inputs.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/demo.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/__init__.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/storage.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/quality.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/market_inputs.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/config.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/production_preflight.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/acceptance.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/yahoo_daily.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/fundamentals.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/validation.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/fetcher.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/publish.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/pipeline.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/import_sec_batch.py -> build/bdist.linux-x86_64/wheel/./src
+copying build/lib/src/readiness.py -> build/bdist.linux-x86_64/wheel/./src
+creating build/bdist.linux-x86_64/wheel/src/metrics
+copying build/lib/src/metrics/mes.py -> build/bdist.linux-x86_64/wheel/./src/metrics
+copying build/lib/src/metrics/__init__.py -> build/bdist.linux-x86_64/wheel/./src/metrics
+copying build/lib/src/metrics/covar.py -> build/bdist.linux-x86_64/wheel/./src/metrics
+copying build/lib/src/metrics/srisk.py -> build/bdist.linux-x86_64/wheel/./src/metrics
+copying build/lib/src/analysis.py -> build/bdist.linux-x86_64/wheel/./src
+creating build/bdist.linux-x86_64/wheel/loc
+copying build/lib/loc/branch_locator.py -> build/bdist.linux-x86_64/wheel/./loc
+copying build/lib/loc/test_branch_locator.py -> build/bdist.linux-x86_64/wheel/./loc
+copying build/lib/loc/__init__.py -> build/bdist.linux-x86_64/wheel/./loc
+running install_egg_info
+Copying gsib_systemic_risk.egg-info to build/bdist.linux-x86_64/wheel/./gsib_systemic_risk-2.4.1-py3.12.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/gsib_systemic_risk-2.4.1.dist-info/WHEEL
+creating '<validation-workspace>/systemic-risk/dist/.tmp-rw5m3px0/gsib_systemic_risk-2.4.1-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+adding 'gsib_systemic_risk-2.4.1.dist-info/licenses/LICENSE'
+adding 'loc/__init__.py'
+adding 'loc/branch_locator.py'
+adding 'loc/test_branch_locator.py'
+adding 'risk_mcp/__init__.py'
+adding 'risk_mcp/server.py'
+adding 'src/__init__.py'
+adding 'src/acceptance.py'
+adding 'src/analysis.py'
+adding 'src/calendar_status.py'
+adding 'src/config.py'
+adding 'src/demo.py'
+adding 'src/fetcher.py'
+adding 'src/fundamentals.py'
+adding 'src/import_sec_batch.py'
+adding 'src/market_inputs.py'
+adding 'src/pipeline.py'
+adding 'src/production_preflight.py'
+adding 'src/publish.py'
+adding 'src/quality.py'
+adding 'src/readiness.py'
+adding 'src/sec_inputs.py'
+adding 'src/storage.py'
+adding 'src/universe.py'
+adding 'src/utils.py'
+adding 'src/validation.py'
+adding 'src/yahoo_daily.py'
+adding 'src/yahoo_inputs.py'
+adding 'src/metrics/__init__.py'
+adding 'src/metrics/covar.py'
+adding 'src/metrics/mes.py'
+adding 'src/metrics/srisk.py'
+adding 'gsib_systemic_risk-2.4.1.dist-info/METADATA'
+adding 'gsib_systemic_risk-2.4.1.dist-info/WHEEL'
+adding 'gsib_systemic_risk-2.4.1.dist-info/entry_points.txt'
+adding 'gsib_systemic_risk-2.4.1.dist-info/top_level.txt'
+adding 'gsib_systemic_risk-2.4.1.dist-info/RECORD'
+removing build/bdist.linux-x86_64/wheel
+Successfully built gsib_systemic_risk-2.4.1-py3-none-any.whl
