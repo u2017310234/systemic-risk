@@ -1,0 +1,353 @@
+{
+  "status": "warning",
+  "srisk_coverage_ratio": 0.3793103448275862,
+  "alerts": [
+    {
+      "code": "LOW_COVERAGE",
+      "severity": "warning",
+      "bank_id": null,
+      "message": "SRISK coverage 11/29; threshold 80%"
+    },
+    {
+      "code": "INCOMPLETE_UNIVERSE",
+      "severity": "warning",
+      "bank_id": null,
+      "message": "Covered subtotal is not the full-system total"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "ABC",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "ABC",
+      "message": "market_cap_unavailable_or_unverified_group_scope"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "ABC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "BAC",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "BAC",
+      "message": "publication_dated_liabilities_required"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "BAC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "BOC",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "BOC",
+      "message": "market_cap_unavailable_or_unverified_group_scope"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "BOC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "BOCOM",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "BOCOM",
+      "message": "market_cap_unavailable_or_unverified_group_scope"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "BOCOM",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "C",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "C",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "C",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "CCB",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "CCB",
+      "message": "market_cap_unavailable_or_unverified_group_scope"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "CCB",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "GS",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "GS",
+      "message": "publication_dated_liabilities_required"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "GS",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "ICBC",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "ICBC",
+      "message": "market_cap_unavailable_or_unverified_group_scope"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "ICBC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "JPM",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "JPM",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "JPM",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "MFG",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "MFG",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "MFG",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "MS",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "MS",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "MS",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "MUFG",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "MUFG",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "MUFG",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "RBC",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "RBC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "RBC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "SMFG",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "SMFG",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "SMFG",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "STT",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "STT",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "STT",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "TD",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "TD",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "TD",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "UBS",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "UBS",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "UBS",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "UNSPECIFIED_ACCOUNTING",
+      "severity": "warning",
+      "bank_id": "WFC",
+      "message": "Accounting basis not supplied"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "WFC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "INPUT_WARNING",
+      "severity": "warning",
+      "bank_id": "WFC",
+      "message": "yahoo_current_research_not_point_in_time_verified"
+    },
+    {
+      "code": "COVERAGE_LOSS",
+      "severity": "warning",
+      "bank_id": null,
+      "message": "Previously covered banks now missing: GS, SAN"
+    }
+  ],
+  "thresholds": {
+    "min_srisk_coverage": 0.8,
+    "snapshot_max_calendar_days": 7,
+    "fundamentals_warning_days": 100
+  }
+}
