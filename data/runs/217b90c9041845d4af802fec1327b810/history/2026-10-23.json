@@ -1,0 +1,2195 @@
+{
+  "calibration_id": "19ef0c617fe676c5",
+  "data_policy_version": "2.4.1",
+  "fundamentals_policy": "yahoo_daily",
+  "dataset_kind": "research_estimate",
+  "date": "2026-10-23",
+  "generated_at": "2026-10-27T02:07:03.654657+00:00",
+  "methodology_version": "2.0-beta-scenario",
+  "parameters": {
+    "srisk_k": 0.08,
+    "covar_quantile": 0.05,
+    "covar_window_days": 252,
+    "lrmes_horizon_days": 22,
+    "lrmes_market_drop": 0.4,
+    "mes_tail_pct": 0.05,
+    "covar_solver_policy": "quantile_irls_with_same_objective_highs_lp_fallback",
+    "lrmes_model": "ols_beta_scenario",
+    "horizon_is_label_only": true
+  },
+  "coverage": {
+    "metric_coverage": {
+      "mes": {
+        "count": 26,
+        "ids": [
+          "ABC",
+          "BAC",
+          "BARC",
+          "BNP",
+          "BOC",
+          "BOCOM",
+          "C",
+          "CCB",
+          "DBK",
+          "GLE",
+          "GS",
+          "HSBC",
+          "ICBC",
+          "ING",
+          "JPM",
+          "MFG",
+          "MS",
+          "MUFG",
+          "RBC",
+          "SAN",
+          "SMFG",
+          "STAN",
+          "STT",
+          "TD",
+          "UBS",
+          "WFC"
+        ]
+      },
+      "lrmes": {
+        "count": 26,
+        "ids": [
+          "ABC",
+          "BAC",
+          "BARC",
+          "BNP",
+          "BOC",
+          "BOCOM",
+          "C",
+          "CCB",
+          "DBK",
+          "GLE",
+          "GS",
+          "HSBC",
+          "ICBC",
+          "ING",
+          "JPM",
+          "MFG",
+          "MS",
+          "MUFG",
+          "RBC",
+          "SAN",
+          "SMFG",
+          "STAN",
+          "STT",
+          "TD",
+          "UBS",
+          "WFC"
+        ]
+      },
+      "covar": {
+        "count": 26,
+        "ids": [
+          "ABC",
+          "BAC",
+          "BARC",
+          "BNP",
+          "BOC",
+          "BOCOM",
+          "C",
+          "CCB",
+          "DBK",
+          "GLE",
+          "GS",
+          "HSBC",
+          "ICBC",
+          "ING",
+          "JPM",
+          "MFG",
+          "MS",
+          "MUFG",
+          "RBC",
+          "SAN",
+          "SMFG",
+          "STAN",
+          "STT",
+          "TD",
+          "UBS",
+          "WFC"
+        ]
+      },
+      "delta_covar": {
+        "count": 26,
+        "ids": [
+          "ABC",
+          "BAC",
+          "BARC",
+          "BNP",
+          "BOC",
+          "BOCOM",
+          "C",
+          "CCB",
+          "DBK",
+          "GLE",
+          "GS",
+          "HSBC",
+          "ICBC",
+          "ING",
+          "JPM",
+          "MFG",
+          "MS",
+          "MUFG",
+          "RBC",
+          "SAN",
+          "SMFG",
+          "STAN",
+          "STT",
+          "TD",
+          "UBS",
+          "WFC"
+        ]
+      },
+      "srisk_usd_bn": {
+        "count": 10,
+        "ids": [
+          "C",
+          "JPM",
+          "MFG",
+          "MS",
+          "MUFG",
+          "RBC",
+          "SMFG",
+          "STT",
+          "TD",
+          "WFC"
+        ]
+      }
+    },
+    "bank_status": {
+      "JPM": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "BAC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "C": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "WFC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "GS": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "MS": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "BK": {
+        "requested_date": "2026-10-23",
+        "observation_date": null,
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "missing_data",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": false
+      },
+      "STT": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XNYS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "ICBC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XHKG",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "CCB": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XHKG",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "ABC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XHKG",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "BOC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XHKG",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "BOCOM": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XHKG",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "HSBC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XLON",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "BARC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XLON",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "STAN": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XLON",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "BNP": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XPAR",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "ACA": {
+        "requested_date": "2026-10-23",
+        "observation_date": null,
+        "calendar": null,
+        "calendar_scope": "primary_equity",
+        "expected_session_date": null,
+        "status": "unsupported",
+        "reason": "listed_subsidiary_not_consolidated_group_equity"
+      },
+      "GLE": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XPAR",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "BPCE": {
+        "requested_date": "2026-10-23",
+        "observation_date": null,
+        "calendar": null,
+        "calendar_scope": "primary_equity",
+        "expected_session_date": null,
+        "status": "unsupported",
+        "reason": "unlisted_without_own_equity_data"
+      },
+      "DBK": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XETR",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "UBS": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XSWX",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "ING": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XAMS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "SAN": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XMAD",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "insufficient_input",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "RBC": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XTSE",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "TD": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XTSE",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "MUFG": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XTKS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "SMFG": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XTKS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      },
+      "MFG": {
+        "requested_date": "2026-10-23",
+        "observation_date": "2026-10-23",
+        "calendar": "XTKS",
+        "calendar_scope": "primary_equity",
+        "expected_session_date": "2026-10-23",
+        "status": "observed",
+        "calendar_version": "4.13.2",
+        "is_session": true,
+        "up_to_date": true
+      }
+    },
+    "universe_version": "fsb-2023-membership-verified-v2.2",
+    "universe_source": "https://www.fsb.org/uploads/P271125.pdf",
+    "list_evidence": {
+      "list_year": "2025",
+      "source": "https://www.fsb.org/uploads/P271125.pdf",
+      "available_date": "2025-11-28",
+      "published_date": "2025-11-27",
+      "membership_version": "fsb-2023-membership-verified-v2.2",
+      "scope": "verified_membership_not_regulatory_capital_bucket_calibration"
+    },
+    "membership_available_from": "2023-11-28",
+    "expected_ids": [
+      "JPM",
+      "BAC",
+      "C",
+      "WFC",
+      "GS",
+      "MS",
+      "BK",
+      "STT",
+      "ICBC",
+      "CCB",
+      "ABC",
+      "BOC",
+      "BOCOM",
+      "HSBC",
+      "BARC",
+      "STAN",
+      "BNP",
+      "ACA",
+      "GLE",
+      "BPCE",
+      "DBK",
+      "UBS",
+      "ING",
+      "SAN",
+      "RBC",
+      "TD",
+      "MUFG",
+      "SMFG",
+      "MFG"
+    ],
+    "eligible_count": 27,
+    "ineligible_ids": [
+      "ACA",
+      "BPCE"
+    ],
+    "eligible_complete": false,
+    "eligible_ids": [
+      "JPM",
+      "BAC",
+      "C",
+      "WFC",
+      "GS",
+      "MS",
+      "BK",
+      "STT",
+      "ICBC",
+      "CCB",
+      "ABC",
+      "BOC",
+      "BOCOM",
+      "HSBC",
+      "BARC",
+      "STAN",
+      "BNP",
+      "GLE",
+      "DBK",
+      "UBS",
+      "ING",
+      "SAN",
+      "RBC",
+      "TD",
+      "MUFG",
+      "SMFG",
+      "MFG"
+    ],
+    "observed_ids": [
+      "ABC",
+      "BAC",
+      "BARC",
+      "BNP",
+      "BOC",
+      "BOCOM",
+      "C",
+      "CCB",
+      "DBK",
+      "GLE",
+      "GS",
+      "HSBC",
+      "ICBC",
+      "ING",
+      "JPM",
+      "MFG",
+      "MS",
+      "MUFG",
+      "RBC",
+      "SAN",
+      "SMFG",
+      "STAN",
+      "STT",
+      "TD",
+      "UBS",
+      "WFC"
+    ],
+    "srisk_ids": [
+      "C",
+      "JPM",
+      "MFG",
+      "MS",
+      "MUFG",
+      "RBC",
+      "SMFG",
+      "STT",
+      "TD",
+      "WFC"
+    ],
+    "missing": {
+      "BAC": "srisk_inputs_unavailable",
+      "GS": "srisk_inputs_unavailable",
+      "BK": "no_record_for_date",
+      "ICBC": "srisk_inputs_unavailable",
+      "CCB": "srisk_inputs_unavailable",
+      "ABC": "srisk_inputs_unavailable",
+      "BOC": "srisk_inputs_unavailable",
+      "BOCOM": "srisk_inputs_unavailable",
+      "HSBC": "srisk_inputs_unavailable",
+      "BARC": "srisk_inputs_unavailable",
+      "STAN": "srisk_inputs_unavailable",
+      "BNP": "srisk_inputs_unavailable",
+      "ACA": "listed_subsidiary_not_consolidated_group_equity",
+      "GLE": "srisk_inputs_unavailable",
+      "BPCE": "unlisted_without_own_equity_data",
+      "DBK": "srisk_inputs_unavailable",
+      "UBS": "srisk_inputs_unavailable",
+      "ING": "srisk_inputs_unavailable",
+      "SAN": "srisk_inputs_unavailable"
+    },
+    "complete": false,
+    "expected_count": 29,
+    "srisk_count": 10
+  },
+  "system_srisk_usd_bn": null,
+  "covered_srisk_usd_bn": 320.7634,
+  "units": {
+    "monetary": "USD billions",
+    "returns": "log returns over matched closing-date intervals",
+    "shares": "percent"
+  },
+  "share_denominator": "covered_srisk_usd_bn",
+  "bank_count": 26,
+  "banks": [
+    {
+      "bank_name": "Agricultural Bank of China",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "1288.HK",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/1288.HK/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:01.246101+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "1977cbf065a1d6c0fd13286ea74b92a539b3d221906c1ed152007a8b34579a7e",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "1977cbf065a1d6c0fd13286ea74b92a539b3d221906c1ed152007a8b34579a7e",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.014495,
+      "lrmes": 0.245453,
+      "covar": -0.02423,
+      "delta_covar": -0.008273,
+      "covar_beta": 0.278707,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": 7165.124998,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "ABC"
+    },
+    {
+      "bank_name": "Bank of America",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "BAC",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/BAC/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:34.516285+00:00",
+        "report_period": "2026-03-31",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "ffb9cd94e1bae6ad3a66ec83f17ef54b1f82beeea9b79ba08f783b7fbcc90897",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 6992748365,
+        "price": 50.560001373291016,
+        "quote_currency": "USD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "ffb9cd94e1bae6ad3a66ec83f17ef54b1f82beeea9b79ba08f783b7fbcc90897",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "unavailable"
+      },
+      "mes": -0.013215,
+      "lrmes": 0.308528,
+      "covar": -0.017072,
+      "delta_covar": -0.005733,
+      "covar_beta": 0.208204,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": 353.553367,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "publication_dated_liabilities_required",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "BAC"
+    },
+    {
+      "bank_name": "Barclays",
+      "region": "GB",
+      "covar_index": "^FTSE",
+      "security_ticker": "BARC.L",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "5b130cf68bc88b2a9292024be6bc6f07e2b7763967d1516606db862c5ee8cc03",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.026871,
+      "lrmes": 0.578381,
+      "covar": -0.019702,
+      "delta_covar": -0.011438,
+      "covar_beta": 0.329004,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "BARC"
+    },
+    {
+      "bank_name": "BNP Paribas",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "BNP.PA",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "1f24f7d556bab7cf607bf33d22f2d1a61cd76cda0904e966149d57d32771fd28",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.028864,
+      "lrmes": 0.496783,
+      "covar": -0.021991,
+      "delta_covar": -0.011283,
+      "covar_beta": 0.375531,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "BNP"
+    },
+    {
+      "bank_name": "Bank of China",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "3988.HK",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/3988.HK/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:04.336539+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "165f0578e842a8b97968f7361a5a368b8584df73cfd0c92445ea511f6a4ebe95",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "165f0578e842a8b97968f7361a5a368b8584df73cfd0c92445ea511f6a4ebe95",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.01281,
+      "lrmes": 0.266853,
+      "covar": -0.024382,
+      "delta_covar": -0.007999,
+      "covar_beta": 0.36534,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": 5546.942601,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "BOC"
+    },
+    {
+      "bank_name": "Bank of Communications",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "3328.HK",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/3328.HK/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:07.525272+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "a04b4ef47ed07f5d7be4a9404f906d7bfc6369127f7737f9f38780e463f1743d",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "a04b4ef47ed07f5d7be4a9404f906d7bfc6369127f7737f9f38780e463f1743d",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.012874,
+      "lrmes": 0.229522,
+      "covar": -0.026792,
+      "delta_covar": -0.009117,
+      "covar_beta": 0.467091,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": 2245.479769,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "BOCOM"
+    },
+    {
+      "bank_name": "Citigroup",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "C",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/C/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:37.971530+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "e48d33f9ff012d7a17de5f3666fba3b3011c881074e18833b927a33b2d57210d",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 1677436783,
+        "price": 120.62000274658203,
+        "quote_currency": "USD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/C/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:37.971530+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "e48d33f9ff012d7a17de5f3666fba3b3011c881074e18833b927a33b2d57210d",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "e48d33f9ff012d7a17de5f3666fba3b3011c881074e18833b927a33b2d57210d",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.024041,
+      "lrmes": 0.493311,
+      "covar": -0.019804,
+      "delta_covar": -0.009628,
+      "covar_beta": 0.306349,
+      "srisk_usd_bn": 120.098187,
+      "market_cap_usd_bn": 202.332429,
+      "debt_usd_bn": 2680.204,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 37.4414,
+      "bank_id": "C"
+    },
+    {
+      "bank_name": "China Construction Bank",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "0939.HK",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/0939.HK/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:58.085717+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "04aa023efaf580968abcf6910621067110cfe1317bc483c83d6381c4b2e09283",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "04aa023efaf580968abcf6910621067110cfe1317bc483c83d6381c4b2e09283",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.015774,
+      "lrmes": 0.284223,
+      "covar": -0.0243,
+      "delta_covar": -0.00746,
+      "covar_beta": 0.333772,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": 6530.104899,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "CCB"
+    },
+    {
+      "bank_name": "Deutsche Bank",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "DBK.DE",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "43312922f079225f792f54ed52d8d70c2ab71afd5fda8c590ff026bf29125bf0",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.030934,
+      "lrmes": 0.550822,
+      "covar": -0.023301,
+      "delta_covar": -0.013397,
+      "covar_beta": 0.392344,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "DBK"
+    },
+    {
+      "bank_name": "Société Générale",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "GLE.PA",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "1f21ba8ef1fc2c0ced61833728d9192d88b5cb45e10ffda4b7a44a63d3eef808",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.038844,
+      "lrmes": 0.572114,
+      "covar": -0.019227,
+      "delta_covar": -0.009167,
+      "covar_beta": 0.24828,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "GLE"
+    },
+    {
+      "bank_name": "Goldman Sachs",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "GS",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/GS/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:44.213284+00:00",
+        "report_period": "2026-03-31",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "30a33c202c8a8c1c2a4fa6a6bc23684878b002e3e1a8aa51b7f52fdb478f45b6",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 291171408,
+        "price": 875.6799926757812,
+        "quote_currency": "USD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "30a33c202c8a8c1c2a4fa6a6bc23684878b002e3e1a8aa51b7f52fdb478f45b6",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "unavailable"
+      },
+      "mes": -0.027122,
+      "lrmes": 0.564644,
+      "covar": -0.018865,
+      "delta_covar": -0.009137,
+      "covar_beta": 0.279434,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": 254.972976,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "publication_dated_liabilities_required",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "GS"
+    },
+    {
+      "bank_name": "HSBC Holdings",
+      "region": "GB",
+      "covar_index": "^FTSE",
+      "security_ticker": "HSBA.L",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": null,
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "unavailable"
+      },
+      "mes": -0.025279,
+      "lrmes": 0.556744,
+      "covar": -0.018017,
+      "delta_covar": -0.008493,
+      "covar_beta": 0.328202,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "publication_dated_liabilities_required"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "HSBC"
+    },
+    {
+      "bank_name": "Industrial & Commercial Bank of China",
+      "region": "CN",
+      "covar_index": "^HSI",
+      "security_ticker": "1398.HK",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/1398.HK/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:54.858935+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "88a13bdce7cda6a11599be1a15d8629aed75d9193e699b4b634bcd71e539a132",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "88a13bdce7cda6a11599be1a15d8629aed75d9193e699b4b634bcd71e539a132",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.014215,
+      "lrmes": 0.266568,
+      "covar": -0.027597,
+      "delta_covar": -0.010095,
+      "covar_beta": 0.444799,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": 7914.414229,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "ICBC"
+    },
+    {
+      "bank_name": "ING Groep",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "INGA.AS",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "36ce38c89a9f23d7e0754d4c37d9e140da5e56e6b85a9407677a9f57967ac038",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.026256,
+      "lrmes": 0.471181,
+      "covar": -0.021439,
+      "delta_covar": -0.011852,
+      "covar_beta": 0.424988,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "ING"
+    },
+    {
+      "bank_name": "JPMorgan Chase",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "JPM",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/JPM/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:30.807332+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "dc3a6a1b139e8eefc37a15a7a497b562018be841c2e61e1f4796e1529f597f9b",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 2655600000,
+        "price": 331.5799865722656,
+        "quote_currency": "USD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/JPM/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:30.807332+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "dc3a6a1b139e8eefc37a15a7a497b562018be841c2e61e1f4796e1529f597f9b",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "dc3a6a1b139e8eefc37a15a7a497b562018be841c2e61e1f4796e1529f597f9b",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.015814,
+      "lrmes": 0.310359,
+      "covar": -0.017191,
+      "delta_covar": -0.004857,
+      "covar_beta": 0.190813,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 880.543812,
+      "debt_usd_bn": 4640.471,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "JPM"
+    },
+    {
+      "bank_name": "Mizuho Financial Group",
+      "region": "JP",
+      "covar_index": "^N225",
+      "security_ticker": "8411.T",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/8411.T/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:54.431539+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "bee2d051db27e872926b839aa899e38f0ad3f84ade36754366ad5c8b9cc0ccc0",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 2414479763,
+        "price": 7480.0,
+        "quote_currency": "JPY",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/8411.T/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:54.431539+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "bee2d051db27e872926b839aa899e38f0ad3f84ade36754366ad5c8b9cc0ccc0",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "bee2d051db27e872926b839aa899e38f0ad3f84ade36754366ad5c8b9cc0ccc0",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.039049,
+      "lrmes": 0.348181,
+      "covar": -0.041342,
+      "delta_covar": -0.017873,
+      "covar_beta": 0.401664,
+      "srisk_usd_bn": 80.256973,
+      "market_cap_usd_bn": 115.170258,
+      "debt_usd_bn": 1866.51917,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 25.0206,
+      "bank_id": "MFG"
+    },
+    {
+      "bank_name": "Morgan Stanley",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "MS",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/MS/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:47.479500+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "1ece82ced961d4a4d6d839658dd55ee6e75befcdb4e7cf0933ef0313c2d120e0",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 1570566292,
+        "price": 179.49000549316406,
+        "quote_currency": "USD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/MS/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:47.479500+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "1ece82ced961d4a4d6d839658dd55ee6e75befcdb4e7cf0933ef0313c2d120e0",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "1ece82ced961d4a4d6d839658dd55ee6e75befcdb4e7cf0933ef0313c2d120e0",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.022221,
+      "lrmes": 0.514091,
+      "covar": -0.017573,
+      "delta_covar": -0.00733,
+      "covar_beta": 0.240228,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 281.900952,
+      "debt_usd_bn": 1557.617,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "MS"
+    },
+    {
+      "bank_name": "Mitsubishi UFJ Financial",
+      "region": "JP",
+      "covar_index": "^N225",
+      "security_ticker": "8306.T",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/8306.T/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:47.912881+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "15e58f4dddc00acda8dd8e296e3d9133045717129c122e6153157c169fdad2ed",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 11255764758,
+        "price": 3295.0,
+        "quote_currency": "JPY",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/8306.T/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:47.912881+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "15e58f4dddc00acda8dd8e296e3d9133045717129c122e6153157c169fdad2ed",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "15e58f4dddc00acda8dd8e296e3d9133045717129c122e6153157c169fdad2ed",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.02876,
+      "lrmes": 0.254068,
+      "covar": -0.041864,
+      "delta_covar": -0.015845,
+      "covar_beta": 0.466195,
+      "srisk_usd_bn": 46.722662,
+      "market_cap_usd_bn": 236.507872,
+      "debt_usd_bn": 2612.849635,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 14.5661,
+      "bank_id": "MUFG"
+    },
+    {
+      "bank_name": "Royal Bank of Canada",
+      "region": "CA",
+      "covar_index": "^GSPTSE",
+      "security_ticker": "RY.TO",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/RY.TO/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:41.251084+00:00",
+        "report_period": "2026-07-31",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "0f97a188ec3096b1b933b851cb8638f3d46f9cf8b88094228e71f39573b27dc4",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 1384429799,
+        "price": 281.7699890136719,
+        "quote_currency": "CAD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/RY.TO/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:41.251084+00:00",
+        "report_period": "2026-07-31",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "0f97a188ec3096b1b933b851cb8638f3d46f9cf8b88094228e71f39573b27dc4",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "0f97a188ec3096b1b933b851cb8638f3d46f9cf8b88094228e71f39573b27dc4",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.01165,
+      "lrmes": 0.291278,
+      "covar": -0.021396,
+      "delta_covar": -0.011088,
+      "covar_beta": 0.69618,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 278.596464,
+      "debt_usd_bn": 1680.990573,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "RBC"
+    },
+    {
+      "bank_name": "Banco Santander",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "SAN.MC",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "211199c3b7ca19e7d1856e732d19e9349b5cde24023f0e0d378c5aca4634821e",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.035705,
+      "lrmes": 0.565556,
+      "covar": -0.019545,
+      "delta_covar": -0.010757,
+      "covar_beta": 0.371452,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "SAN"
+    },
+    {
+      "bank_name": "Sumitomo Mitsui Financial",
+      "region": "JP",
+      "covar_index": "^N225",
+      "security_ticker": "8316.T",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/8316.T/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:51.329057+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "e9663c37533471d1741fe300bf10cb24357a758b292d37a30e018e7df720dc84",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 7526675588,
+        "price": 3114.0,
+        "quote_currency": "JPY",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/8316.T/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:51.329057+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "e9663c37533471d1741fe300bf10cb24357a758b292d37a30e018e7df720dc84",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "e9663c37533471d1741fe300bf10cb24357a758b292d37a30e018e7df720dc84",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.032075,
+      "lrmes": 0.27813,
+      "covar": -0.037738,
+      "delta_covar": -0.01353,
+      "covar_beta": 0.386801,
+      "srisk_usd_bn": 59.51383,
+      "market_cap_usd_bn": 149.46413,
+      "debt_usd_bn": 1984.700781,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 18.5538,
+      "bank_id": "SMFG"
+    },
+    {
+      "bank_name": "Standard Chartered",
+      "region": "GB",
+      "covar_index": "^FTSE",
+      "security_ticker": "STAN.L",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "38bde13042b3e25ee2ab12c98a1c96920ed095a2e6a9d5d16f4d6255c0cd9904",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.027795,
+      "lrmes": 0.554743,
+      "covar": -0.017758,
+      "delta_covar": -0.008969,
+      "covar_beta": 0.269826,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "STAN"
+    },
+    {
+      "bank_name": "State Street",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "STT",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/STT/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:51.567838+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "43834595d177ecc37412aab83995ab1824380026b68c40eafcff735f49baddfb",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 274701765,
+        "price": 167.8300018310547,
+        "quote_currency": "USD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/STT/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:51.567838+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "43834595d177ecc37412aab83995ab1824380026b68c40eafcff735f49baddfb",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "43834595d177ecc37412aab83995ab1824380026b68c40eafcff735f49baddfb",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.015142,
+      "lrmes": 0.405495,
+      "covar": -0.018747,
+      "delta_covar": -0.007668,
+      "covar_beta": 0.26885,
+      "srisk_usd_bn": 5.993162,
+      "market_cap_usd_bn": 46.103198,
+      "debt_usd_bn": 390.113,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 1.8684,
+      "bank_id": "STT"
+    },
+    {
+      "bank_name": "Toronto-Dominion Bank",
+      "region": "CA",
+      "covar_index": "^GSPTSE",
+      "security_ticker": "TD.TO",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/TD.TO/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:44.622171+00:00",
+        "report_period": "2026-07-31",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "e4a13857e60ab44e4b22b94f7ca2b581f49b6b813b5851fad46afbb24e31c756",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 1633016726,
+        "price": 174.47000122070312,
+        "quote_currency": "CAD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/TD.TO/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:36:44.622171+00:00",
+        "report_period": "2026-07-31",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "e4a13857e60ab44e4b22b94f7ca2b581f49b6b813b5851fad46afbb24e31c756",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "e4a13857e60ab44e4b22b94f7ca2b581f49b6b813b5851fad46afbb24e31c756",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.013923,
+      "lrmes": 0.317929,
+      "covar": -0.021146,
+      "delta_covar": -0.012232,
+      "covar_beta": 0.630288,
+      "srisk_usd_bn": 0.0,
+      "market_cap_usd_bn": 203.47981,
+      "debt_usd_bn": 1417.544637,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 0.0,
+      "bank_id": "TD"
+    },
+    {
+      "bank_name": "UBS Group",
+      "region": "EU",
+      "covar_index": "^STOXX50E",
+      "security_ticker": "UBSG.SW",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": null,
+      "liabilities_evidence": null,
+      "fundamentals_input_sha256": "2163684c3e02611a88b187bf6efa9857b3f64466cb4ede06b5e20c4a6932ac42",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "unavailable",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.01728,
+      "lrmes": 0.375966,
+      "covar": -0.020134,
+      "delta_covar": -0.00769,
+      "covar_beta": 0.339168,
+      "srisk_usd_bn": null,
+      "market_cap_usd_bn": null,
+      "debt_usd_bn": null,
+      "data_quality_warnings": [
+        "market_cap_unavailable_or_unverified_group_scope",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": null,
+      "bank_id": "UBS"
+    },
+    {
+      "bank_name": "Wells Fargo",
+      "region": "US",
+      "covar_index": "^GSPC",
+      "security_ticker": "WFC",
+      "accounting_standard": "unspecified",
+      "market_cap_evidence": {
+        "source": "https://finance.yahoo.com/quote/WFC/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:41.085252+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "d48dc2e1047e38112d2edb01dded993ae70b2c9aea7b87161971ceb207902c2a",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only",
+        "shares": 3001638935,
+        "price": 82.38999938964844,
+        "quote_currency": "USD",
+        "share_basis": "current_vendor_shares_not_historical_vintage"
+      },
+      "liabilities_evidence": {
+        "source": "https://finance.yahoo.com/quote/WFC/balance-sheet/",
+        "retrieved_at": "2026-10-24T01:35:41.085252+00:00",
+        "report_period": "2026-06-30",
+        "disclosure_date": null,
+        "point_in_time_verified": false,
+        "liabilities_field": "TotalLiabilitiesNetMinorityInterest",
+        "input_sha256": "d48dc2e1047e38112d2edb01dded993ae70b2c9aea7b87161971ceb207902c2a",
+        "valuation_date": "2026-10-23",
+        "availability_policy": "current_retrieval_for_daily_research_only"
+      },
+      "fundamentals_input_sha256": "d48dc2e1047e38112d2edb01dded993ae70b2c9aea7b87161971ceb207902c2a",
+      "methodology_version": "2.0-beta-scenario",
+      "fundamentals_quality": {
+        "market_cap": "yahoo_current_research_not_point_in_time_verified",
+        "liabilities": "yahoo_current_research_not_point_in_time_verified"
+      },
+      "mes": -0.012522,
+      "lrmes": 0.297595,
+      "covar": -0.018122,
+      "delta_covar": -0.007036,
+      "covar_beta": 0.239354,
+      "srisk_usd_bn": 8.178612,
+      "market_cap_usd_bn": 247.30503,
+      "debt_usd_bn": 2099.878,
+      "data_quality_warnings": [
+        "yahoo_current_research_not_point_in_time_verified",
+        "yahoo_current_research_not_point_in_time_verified"
+      ],
+      "srisk_share_pct": 2.5497,
+      "bank_id": "WFC"
+    }
+  ],
+  "quality": {
+    "status": "warning",
+    "srisk_coverage_ratio": 0.3448275862068966,
+    "alerts": [
+      {
+        "code": "LOW_COVERAGE",
+        "severity": "warning",
+        "bank_id": null,
+        "message": "SRISK coverage 10/29; threshold 80%"
+      },
+      {
+        "code": "INCOMPLETE_UNIVERSE",
+        "severity": "warning",
+        "bank_id": null,
+        "message": "Covered subtotal is not the full-system total"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "ABC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ABC",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ABC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "BAC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BAC",
+        "message": "publication_dated_liabilities_required"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BAC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BARC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "BNP",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BNP",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BNP",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "BOC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOC",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "BOCOM",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOCOM",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "BOCOM",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "C",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "C",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "C",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "CCB",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "CCB",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "CCB",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "DBK",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "DBK",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "DBK",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "GLE",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GLE",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GLE",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "GS",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GS",
+        "message": "publication_dated_liabilities_required"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "GS",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "HSBC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "HSBC",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "HSBC",
+        "message": "publication_dated_liabilities_required"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ICBC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "ING",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ING",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "ING",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "JPM",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "JPM",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "JPM",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "MFG",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MFG",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MFG",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "MS",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MS",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MS",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "MUFG",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MUFG",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "MUFG",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "RBC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "RBC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "RBC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "SAN",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SAN",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SAN",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "SMFG",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "STAN",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STAN",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STAN",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "STT",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STT",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "STT",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "TD",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "TD",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "TD",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "UBS",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "UBS",
+        "message": "market_cap_unavailable_or_unverified_group_scope"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "UBS",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "UNSPECIFIED_ACCOUNTING",
+        "severity": "warning",
+        "bank_id": "WFC",
+        "message": "Accounting basis not supplied"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "WFC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      },
+      {
+        "code": "INPUT_WARNING",
+        "severity": "warning",
+        "bank_id": "WFC",
+        "message": "yahoo_current_research_not_point_in_time_verified"
+      }
+    ],
+    "thresholds": {
+      "min_srisk_coverage": 0.8,
+      "snapshot_max_calendar_days": 7,
+      "fundamentals_warning_days": 100
+    }
+  }
+}
